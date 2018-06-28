@@ -1,7 +1,7 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "project": {
-    "name": "pointing-poker"
+    "name": "pointPoker"
   },
   "apps": [
     {
@@ -19,6 +19,7 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
       "styles": [
+        "../node_modules/@totvs/thf-theme/css/thf-theme-default.min.css",
         "styles.css"
       ],
       "scripts": [],

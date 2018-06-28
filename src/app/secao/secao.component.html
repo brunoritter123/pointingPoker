@@ -1,0 +1,30 @@
+<thf-page-default t-title="Seção">
+  <div class="thf-row">
+    <div class="caixa thf-sm-12 thf-md-7 thf-lg-4 thf-xl-3"> 
+
+      <thf-button
+        [routerLink]="['/entrar-secao']"
+        class="thf-md-12"
+        t-label="Criar uma Seção"
+        t-type="default" >
+      </thf-button>
+
+      <h2 class="thf-md-12"> ...Ou... </h2>
+
+      <thf-input
+        class="thf-md-12"
+        name="codSecao"
+        t-required="true"
+        t-placeholder="Num. Seção">
+      </thf-input>
+
+      <thf-button
+        [routerLink]="['/entrar-secao']"
+        class="thf-md-12"
+        t-label="Entrar"
+        t-type="primary" >
+      </thf-button>
+
+    </div>
+  </div>
+</thf-page-default>

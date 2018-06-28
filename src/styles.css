@@ -1,1 +1,8 @@
-/* You can add global styles to this file, and also import other style files */
+.caixa{
+	background-color: #EEEEEE;
+	padding: 10px;
+}
+
+h2{
+	color: #4a5c60;
+}
