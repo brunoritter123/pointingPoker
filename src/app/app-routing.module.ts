@@ -3,11 +3,13 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { SecaoComponent } from './secao/secao.component';
 import { EntrarSecaoComponent } from './entrar-secao/entrar-secao.component';
+import { JogoComponent } from './jogo/jogo.component';
 
 const routes: Routes = [
 
   { path: '', component: SecaoComponent },
-  { path: 'entrar-secao', component: EntrarSecaoComponent }
+  { path: 'entrar-secao', component: EntrarSecaoComponent },
+  { path: 'jogo', component: JogoComponent }
 ];
 
 @NgModule({
