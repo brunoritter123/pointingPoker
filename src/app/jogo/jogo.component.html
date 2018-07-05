@@ -1,14 +1,9 @@
 <thf-page-default ng-if = "pontos !== 'undefined'">
-    <div  ng-if="1 === 2" class="thf-sm-12 thf-md-7 thf-lg-4 thf-xl-3"> 
+    <div  *ngIf="1 === 1" class="thf-sm-12 thf-md-7 thf-lg-4 thf-xl-3"> 
       <thf-widget t-title="Pontos">  
-          <thf-input
-            class="thf-md-12"
-            name="nome"
-            t-required="true"
-            t-placeholder="Nome">
-          </thf-input>
 
-          <div ng-repeat="ponto in pontos">
+          
+          <div *ngFor="let ponto of pontos">
             <thf-button 
               class= {{ponto.class}}
               t-label= {{ponto.label}}
@@ -16,15 +11,6 @@
             </thf-button>
           </div>
 
-         <!--
-          <div ng-repeat="pontos in ponto">
-            <thf-button 
-              class= {{ponto.class}}
-              t-label= {{ponto.label}}
-              t-type="default" >
-            </thf-button>
-          </div>
-        -->
         </thf-widget>
   
       </div>
