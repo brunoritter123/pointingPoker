@@ -1,50 +1,47 @@
 <thf-page-default>
-    <div class="thf-sm-12 thf-md-7 thf-lg-6 thf-xl-3"> 
+  <div class="thf-row">
+    <div class="pad-b-10 thf-sm-12 thf-md-7 thf-lg-6 thf-xl-3">
 
       <thf-widget t-title="Pontos">
+        <div class="thf-sm-12">
+          <thf-button *ngFor="let carta of cartas" (t-click)="cartaClick(carta.value)" class="pad-b-10 thf-sm-6 thf-md-6 thf-lg-4"
+            t-label={{carta.label}} t-type={{carta.type}}>
+          </thf-button>
+        </div>
 
-          <div class="thf-sm-12">
-            <thf-button
-              *ngFor="let carta of cartas"
-              class= "pad-b-10 thf-sm-12 thf-md-6 thf-lg-4"
-              t-label= {{carta.label}}
-              t-type="default" >
-            </thf-button>
-          </div>
+        <div>
+          <thf-button class="pad-b-10 thf-sm-12 thf-md-6 thf-lg-4 thf-xl-4" t-label="Resetar" t-type="primary">
+          </thf-button>
+          <thf-button class="pad-b-10 thf-sm-12 thf-md-6 thf-lg-4 thf-xl-4" t-label="Finalizar" t-type="primary">
+          </thf-button>
+        </div>
+      </thf-widget>
 
-          <div>
-              <thf-button 
-                  class= "pad-b-10 thf-sm-12 thf-md-6 thf-lg-3 thf-xl-2"
-                  t-label= "Resetar"
-                  t-type="primary" >
-              </thf-button>
-              <thf-button 
-                class= "pad-b-10 thf-sm-12 thf-md-6 thf-lg-3 thf-xl-2"
-                t-label= "Finalizar"
-                t-type="primary" >
-              </thf-button>
-            </div>
+    </div>
 
-        </thf-widget>
-  
+    <div class="pad-b-10 thf-sm-12 thf-md-5 thf-lg-3 thf-xl-3">
+      <thf-widget t-title="Estáticas">
+
+        <h3 class="thf-sm-12">Média: {{media}}</h3>
+        <h3 class="thf-sm-6 thf-md-6 thf-lg-6">Pontos</h3>
+        <h3 class="thf-sm-6 thf-md-6 thf-lg-6">Votos</h3>
+        <div *ngFor="let ponto of pontuacao">
+          <h4 class="thf-sm-6 thf-md-6 thf-lg-6">{{ponto.ponto}}</h4>
+          <h4 class="thf-sm-6 thf-md-6 thf-lg-6">{{ponto.votos}}</h4>
+        </div>
+      </thf-widget>
+    </div>
+  </div>
+
+  <div class="pad-b-10 thf-sm-12 thf-md-5 thf-lg-3 thf-xl-3">
+    <thf-widget t-title="Pontuação">
+      <h3 class="thf-sm-6 thf-md-6 thf-lg-6">Nome</h3>
+      <h3 class="thf-sm-6 thf-md-6 thf-lg-6">Voto</h3>
+      <div *ngFor="let jogador of jogadores">
+        <h4 class="thf-sm-6 thf-md-6 thf-lg-6">{{jogador.nome}}</h4>
+        <h4 class="thf-sm-6 thf-md-6 thf-lg-6">{{jogador.voto}}</h4>
       </div>
-
-      <div class="thf-sm-12 thf-md-5 thf-lg-3 thf-xl-3">
-        <thf-widget t-title="Estáticas">
-
-            <h3
-              class="thf-sm-12">
-                <span style="font-weight: bold;">Média: </span>{{media}}
-            </h3>
-            <h3 class="thf-sm-6 thf-md-6 thf-lg-6">Pontos</h3>
-            <h3 class="thf-sm-6 thf-md-6 thf-lg-6">Votos</h3>
-            <div *ngFor="let ponto of pontuacao">
-                <h4 class="thf-sm-6 thf-md-6 thf-lg-6">{{ponto.ponto}}</h4>
-                <h4 class="thf-sm-6 thf-md-6 thf-lg-6">{{ponto.votos}}</h4>
-            </div>
-
-
-        </thf-widget>
-      </div>
+    </thf-widget>
+  </div>
 
 </thf-page-default>
