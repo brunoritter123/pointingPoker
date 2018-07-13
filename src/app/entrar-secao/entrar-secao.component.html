@@ -1,28 +1,32 @@
 <thf-page-default>
     <div class="thf-sm-12 thf-md-7 thf-lg-4 thf-xl-3"> 
-      <thf-widget t-title="Entrar na Seção!">  
-        <thf-input
-          class="thf-md-12"
-          name="nome"
-          t-required="true"
-          t-placeholder="Nome">
-        </thf-input>
-  
-        <thf-button
-          [routerLink]="['/jogo']"
-          class="thf-md-12"
-          t-label="Entrar"
-          t-type="primary" >
-        </thf-button>
+      <form (ngSubmit)="onSubmit()" #f="ngForm">
+        <thf-widget t-title="Entrar na Seção!">  
+          <thf-input
+            class="thf-md-12"
+            name="nome"
+            t-required="true"
+            t-placeholder="Nome">
+          </thf-input>
+    
+          <thf-button
+            [routerLink]="['/jogo']"
+            class="thf-md-12"
+            t-label="Entrar"
+            t-type="primary" >
+          </thf-button>
 
-        <thf-switch
-          class="thf-md-12"
-          t-label-off="Observador"
-          t-label-on="Jogador"
-          name="jogador"
-          t-required="true" >
-        </thf-switch>
-      </thf-widget>
-  
-      </div>
+          <thf-switch
+            name="jogador"
+            class="thf-md-12"
+            id="jogador"
+            [(ngModel)]="jogador"
+            t-label-off="Observador"
+            t-label-on="Jogador"
+            t-required="true" >
+          </thf-switch>
+
+        </thf-widget>
+      </form>
+    </div>
 </thf-page-default>

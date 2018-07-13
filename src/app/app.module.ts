@@ -8,6 +8,7 @@ import { SecaoComponent } from './secao/secao.component';
 import { EntrarSecaoComponent } from './entrar-secao/entrar-secao.component';
 import { ConfigSecaoComponent } from './config-secao/config-secao.component';
 import { JogoComponent } from './jogo/jogo.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { JogoComponent } from './jogo/jogo.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    ThfModule
+    ThfModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
