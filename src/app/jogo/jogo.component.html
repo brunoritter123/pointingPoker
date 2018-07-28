@@ -38,8 +38,10 @@
       <h3 class="thf-sm-6 thf-md-6 thf-lg-6">Nome</h3>
       <h3 class="thf-sm-6 thf-md-6 thf-lg-6">Voto</h3>
       <div *ngFor="let jogador of jogadores">
-        <h4 class="thf-sm-6 thf-md-6 thf-lg-6">{{jogador.nome}}</h4>
-        <h4 class="thf-sm-6 thf-md-6 thf-lg-6">{{jogador.voto}}</h4>
+        <div class="thf-row">
+          <h4 class="thf-sm-6 thf-md-6 thf-lg-6">{{jogador.nome}}</h4>
+          <h4 class="thf-sm-6 thf-md-6 thf-lg-6">{{jogador.voto}}</h4>
+        </div>
       </div>
     </thf-widget>
   </div>
