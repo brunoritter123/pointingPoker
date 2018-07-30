@@ -1,5 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { JogoService } from './jogo.service';
+import { ActivatedRoute } from '@angular/router';
+import { Carta } from '../models/carta.model';
+import { User } from '../models/user.model';
 
 @Component({
   selector: 'app-jogo',
@@ -8,61 +11,52 @@ import { JogoService } from './jogo.service';
   providers: [JogoService]
 })
 export class JogoComponent implements OnInit, OnDestroy {
+
   constructor(
-    private jogoService: JogoService
+    private jogoService: JogoService,
+    private route: ActivatedRoute
   ) { }
 
-  public cartas: Array<any> = [
-    {value: 1 , label: '1'  , type: 'default'},
-    {value: 2 , label: '2'  , type: 'default'},
-    {value: 3 , label: '3'  , type: 'default'},
-    {value: 5 , label: '5'  , type: 'default'},
-    {value: 8 , label: '8'  , type: 'default'},
-    {value: 13 , label: '13', type: 'default'},
-    {value: 21 , label: '21', type: 'default'},
-    {value: 54 , label: '54', type: 'default'},
-    {value: undefined   , label: '?'},
-  ];
-
+  public cartas: Array<Carta> = [];
+  public jogadores: Array<User> = [];
+  public media = 13;
   public pontuacao: Array<any> = [
     {ponto: '1' , votos: 3},
     {ponto: '2' , votos: 2},
     {ponto: '?' , votos: 1}
   ];
 
-  public jogadores: Array<any> = [];
-
-  public media = 13;
-
-  private conVotos;
   private conUsers;
+  private conCartas;
 
   ngOnInit() {
-    this.conVotos = this.jogoService.getVotos().subscribe( (voto: number) => {
-      console.log(voto);
+    const nomeUser = this.route.snapshot.params['nomeUser'];
+
+    this.conUsers = this.jogoService.getUsersConnect(nomeUser).subscribe( (users: Array<User>) => {
+      this.jogadores = users;
     });
 
-    this.conUsers = this.jogoService.getUsersConnect('Bruno').subscribe( (users: Array<any>) => {
-      this.jogadores = users;
-      console.log(users);
+    this.conCartas = this.jogoService.getCartas().subscribe( (cartas: Array<Carta>) => {
+      this.cartas = cartas;
     });
   }
 
   ngOnDestroy() {
-    this.conVotos.unsubscribe();
     this.conUsers.unsubscribe();
+    this.conCartas.unsubscribe();
   }
 
-  public cartaClick(value: number): void {
+  public cartaClick(carta: Carta): void {
+
     for (let i = 0; i < this.cartas.length; i++) {
-      if (this.cartas[i].value === value) {
+      if (this.cartas[i].value === carta.value) {
         this.cartas[i].type = 'danger';
       } else {
         this.cartas[i].type = 'default';
       }
     }
 
-    this.jogoService.sendVoto(value);
+    this.jogoService.sendVoto(carta);
 
   }
 }

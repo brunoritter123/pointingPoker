@@ -4,7 +4,7 @@
 
       <thf-widget t-title="Pontos">
         <div class="thf-sm-12">
-          <thf-button *ngFor="let carta of cartas" (t-click)="cartaClick(carta.value)" class="pad-b-10 thf-sm-6 thf-md-6 thf-lg-4"
+          <thf-button *ngFor="let carta of cartas" (t-click)="cartaClick(carta)" class="pad-b-10 thf-sm-6 thf-md-6 thf-lg-4"
             t-label={{carta.label}} t-type={{carta.type}}>
           </thf-button>
         </div>
@@ -40,7 +40,7 @@
       <div *ngFor="let jogador of jogadores">
         <div class="thf-row">
           <h4 class="thf-sm-6 thf-md-6 thf-lg-6">{{jogador.nome}}</h4>
-          <h4 class="thf-sm-6 thf-md-6 thf-lg-6">{{jogador.voto}}</h4>
+          <h4 class="thf-sm-6 thf-md-6 thf-lg-6">{{jogador.voto.label}}</h4>
         </div>
       </div>
     </thf-widget>
