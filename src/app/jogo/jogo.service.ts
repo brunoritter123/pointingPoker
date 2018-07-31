@@ -32,8 +32,24 @@ export class JogoService {
         observer.next(data);
       });
     });
-
     return observable;
+  }
+
+  getFimJogo() {
+    const observable = new Observable(observer => {
+      this.socket.on('get-FimJogo', (data) => {
+        observer.next(data);
+      });
+    });
+    return observable;
+  }
+
+  sendFimJogo() {
+    this.socket.emit('add-FimJogo', true);
+  }
+
+  sendReset() {
+    this.socket.emit('add-FimJogo', false);
   }
 
 }

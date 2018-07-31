@@ -10,9 +10,9 @@
         </div>
 
         <div>
-          <thf-button class="pad-b-10 thf-sm-12 thf-md-6 thf-lg-4 thf-xl-4" t-label="Resetar" t-type="primary">
+          <thf-button class="pad-b-10 thf-sm-12 thf-md-6 thf-lg-4 thf-xl-4" (t-click)="resetClick()" t-label="Resetar" t-type="primary">
           </thf-button>
-          <thf-button class="pad-b-10 thf-sm-12 thf-md-6 thf-lg-4 thf-xl-4" t-label="Finalizar" t-type="primary">
+          <thf-button class="pad-b-10 thf-sm-12 thf-md-6 thf-lg-4 thf-xl-4" (t-click)="fimClick()" t-label="Finalizar" t-type="primary">
           </thf-button>
         </div>
       </thf-widget>
@@ -40,7 +40,11 @@
       <div *ngFor="let jogador of jogadores">
         <div class="thf-row">
           <h4 class="thf-sm-6 thf-md-6 thf-lg-6">{{jogador.nome}}</h4>
-          <h4 class="thf-sm-6 thf-md-6 thf-lg-6">{{jogador.voto.label}}<span class="thf-icon thf-icon-ok"></span></h4>
+          <h4 class="thf-sm-6 thf-md-6 thf-lg-6">
+            <span *ngIf="fimJogo">{{jogador.voto.label}}</span>
+            <span *ngIf="!fimJogo && !jogador.voto.label" class="txt-vermelho"> - </span>
+            <span *ngIf="!fimJogo && jogador.voto.label > ''" class="thf-icon thf-icon-ok txt-verde"> </span>
+          </h4>
         </div>
       </div>
     </thf-widget>
