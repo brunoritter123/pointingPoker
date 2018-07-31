@@ -20,13 +20,16 @@
     </div>
 
     <div class="pad-b-10 thf-sm-12 thf-md-5 thf-lg-3 thf-xl-3">
-      <thf-widget t-title="Estáticas">
+      <thf-widget t-title="Estáticas" *ngIf="pontuacao !== undefined">
 
-        <h3 class="thf-sm-12">Média: {{media}}</h3>
+        <h3 class="thf-sm-12 txt-vermelho">Mais Votado: {{maisVotado}}</h3>
         <h3 class="thf-sm-6 thf-md-6 thf-lg-6">Pontos</h3>
         <h3 class="thf-sm-6 thf-md-6 thf-lg-6">Votos</h3>
         <div *ngFor="let ponto of pontuacao">
-          <h4 class="thf-sm-6 thf-md-6 thf-lg-6">{{ponto.ponto}}</h4>
+          <h4 class="thf-sm-6 thf-md-6 thf-lg-6">
+              <span *ngIf="ponto.label > ''">{{ponto.label}}</span>
+              <span *ngIf="!ponto.label" class="txt-vermelho"> - </span>
+          </h4>
           <h4 class="thf-sm-6 thf-md-6 thf-lg-6">{{ponto.votos}}</h4>
         </div>
       </thf-widget>
