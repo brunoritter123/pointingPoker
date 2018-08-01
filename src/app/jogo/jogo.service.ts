@@ -2,7 +2,7 @@ import { Observable } from 'rxjs/Observable';
 import * as io from 'socket.io-client';
 
 export class JogoService {
-  private url = 'http://localhost:5000';
+  private url = 'http://www.scrumpoker.com.br:3000';
   private socket = io(this.url);
 
   sendVoto(carta: any) {

@@ -94,27 +94,27 @@ export class JogoComponent implements OnInit, OnDestroy {
       existeArray = false;
 
       this.pontuacao.forEach(ponto => {
-        if (ponto.label === jogador.voto.label ) {
+        if (ponto.carta.label === jogador.voto.label ) {
           existeArray = true;
           ponto.votos += 1;
         }
       });
 
       if (!existeArray) {
-        novoPonto = new Estatistica(jogador.voto.label, 1);
+        novoPonto = new Estatistica(jogador.voto, 1);
         this.pontuacao.push(novoPonto);
       }
 
       this.pontuacao.sort( (a: Estatistica , b: Estatistica) => {
         let ret: number = b.votos - a.votos;
         if (ret === 0) {
-          ret = b. - a.votos
+          ret = b.carta.value - a.carta.value;
         }
 
-        return (b.votos - a.votos);
+        return ret;
       });
 
-      this.maisVotado = this.pontuacao[0].label;
+      this.maisVotado = this.pontuacao[0].carta.label;
     });
 
   }
