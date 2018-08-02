@@ -1,9 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { JogoService } from './jogo.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Carta } from '../models/carta.model';
 import { User } from '../models/user.model';
 import { Estatistica } from '../models/estatistica.model';
+import { interval } from 'rxjs/observable/interval';
 
 @Component({
   selector: 'app-jogo',
@@ -15,7 +16,9 @@ export class JogoComponent implements OnInit, OnDestroy {
 
   constructor(
     private jogoService: JogoService,
-    private route: ActivatedRoute
+    private activateRoute: ActivatedRoute,
+    private route: Router
+
   ) { }
 
   public fimJogo: boolean;
@@ -23,17 +26,21 @@ export class JogoComponent implements OnInit, OnDestroy {
   public jogadores: Array<User> = [];
   public maisVotado: string = undefined;
   public pontuacao: Array<Estatistica> = undefined;
+  public isConnected =  false;
 
   private conUsers;
   private conCartas;
   private conFimJogo;
+  private conRecnnect;
+  private conRecnnectSub;
 
   ngOnInit() {
     this.fimJogo = false;
     this.pontuacao = undefined;
-    const nomeUser = this.route.snapshot.params['nomeUser'];
+    const nameUser = this.activateRoute.snapshot.params['nameUser'];
+    this.jogoService.setUserName( nameUser );
 
-    this.conUsers = this.jogoService.getUsersConnect(nomeUser).subscribe( (users: Array<User>) => {
+    this.conUsers = this.jogoService.getUsersConnect().subscribe( (users: Array<User>) => {
       this.jogadores = users;
     });
 
@@ -55,11 +62,19 @@ export class JogoComponent implements OnInit, OnDestroy {
       }
     });
 
+    this.conRecnnect = interval(2000);
+    this.conRecnnectSub = this.conRecnnect.subscribe(() => {
+      if (!this.jogoService.isConnected()) {
+        this.route.navigate(['/entrar-secao/' + nameUser]);
+      }
+    });
   }
 
   ngOnDestroy() {
+    this.conRecnnectSub.unsubscribe();
     this.conUsers.unsubscribe();
     this.conCartas.unsubscribe();
+    this.conFimJogo.unsubscribe();
   }
 
   public cartaClick(carta: Carta): void {

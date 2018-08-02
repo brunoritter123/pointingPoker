@@ -35,7 +35,7 @@ io.on('connection', (socket) => {
     });
     io.emit('get-user', users);
   });
-  
+
   socket.on('add-voto', (carta) => {
     let acabouJogo = true;
     users.forEach( (user) => {
@@ -53,9 +53,22 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('add-user', (userName) => {
-    users.push({id: socket.id, nome: userName, voto: votoNull})
-    io.emit('get-user', users);
+  socket.on('add-user', (userName, idUser) => {
+    let achou = false;
+
+    if ( idUser > ''){
+      users.forEach(us => {
+        if (us.idUser == idUser) {
+          achou = true
+        }
+      })
+    }
+
+    if (!achou){
+      console.log("add-user não achou: "+socket.id + " - "+userName+" - "+userName.length )
+      users.push({id: socket.id, nome: userName, voto: votoNull})
+      io.emit('get-user', users);
+    }
   });
 
   socket.on('obs-cartas', () => {

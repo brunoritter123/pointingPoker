@@ -9,8 +9,9 @@ const routes: Routes = [
 
   { path: '', component: SecaoComponent },
   { path: 'entrar-secao', component: EntrarSecaoComponent },
+  { path: 'entrar-secao/:nameUser', component: EntrarSecaoComponent },
   { path: 'jogo', component: EntrarSecaoComponent },
-  { path: 'jogo/:nomeUser', component: JogoComponent }
+  { path: 'jogo/:nameUser', component: JogoComponent }
 ];
 
 @NgModule({
