@@ -9,6 +9,7 @@ import { EntrarSecaoComponent } from './entrar-secao/entrar-secao.component';
 import { ConfigSecaoComponent } from './config-secao/config-secao.component';
 import { JogoComponent } from './jogo/jogo.component';
 import { FormsModule } from '@angular/forms';
+import { ContatoComponent } from './contato/contato.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { FormsModule } from '@angular/forms';
     SecaoComponent,
     EntrarSecaoComponent,
     ConfigSecaoComponent,
-    JogoComponent
+    JogoComponent,
+    ContatoComponent
   ],
   imports: [
     BrowserModule,

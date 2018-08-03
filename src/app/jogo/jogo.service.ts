@@ -2,7 +2,8 @@ import {Observable} from 'rxjs/Observable';
 import * as io from 'socket.io-client';
 
 export class JogoService {
-  private url = 'http://10.172.14.46:3000';
+  // private url = 'http://10.172.14.46:3000';
+  private url = 'http://www.scrumpoker.com.br:80';
   private socket = io(this.url, {reconnection: false});
   private userName: string;
 

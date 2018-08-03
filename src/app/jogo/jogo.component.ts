@@ -5,19 +5,21 @@ import { Carta } from '../models/carta.model';
 import { User } from '../models/user.model';
 import { Estatistica } from '../models/estatistica.model';
 import { interval } from 'rxjs/observable/interval';
+import { ThfNotificationService } from '@totvs/thf-ui/services/thf-notification/thf-notification.service';
 
 @Component({
   selector: 'app-jogo',
   templateUrl: './jogo.component.html',
   styleUrls: ['./jogo.component.css'],
-  providers: [JogoService]
+  providers: [JogoService, ThfNotificationService]
 })
 export class JogoComponent implements OnInit, OnDestroy {
 
   constructor(
     private jogoService: JogoService,
     private activateRoute: ActivatedRoute,
-    private route: Router
+    private route: Router,
+    private  thfNotification: ThfNotificationService
 
   ) { }
 
@@ -65,6 +67,7 @@ export class JogoComponent implements OnInit, OnDestroy {
     this.conRecnnect = interval(2000);
     this.conRecnnectSub = this.conRecnnect.subscribe(() => {
       if (!this.jogoService.isConnected()) {
+        this.thfNotification.error('Xi... Você foi desconectado! :(');
         this.route.navigate(['/entrar-secao/' + nameUser]);
       }
     });

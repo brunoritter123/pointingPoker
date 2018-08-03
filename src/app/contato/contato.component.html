@@ -1,0 +1,21 @@
+<div class="thf-row">
+  <thf-widget
+    class="thf-sm-12 thf-md-12 thf-lg-12"
+    t-title="Contato"
+    t-primary-label="Enviar e-mail"
+    (t-primary-action)="sendContact(contact.email)">
+
+    <thf-avatar
+      class="thf-md-4"
+      t-size="lg"
+      t-src="../../assets/eu.jpg">
+    </thf-avatar>
+
+    <div class="thf-md-8">
+      <p><strong>Nome:</strong> {{ contact.name }}</p>
+      <p><strong>E-mail:</strong> {{ contact.email }}</p>
+      <p><strong>Versão:</strong> 1.0</p>
+    </div>
+
+  </thf-widget>
+</div>

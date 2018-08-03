@@ -1,11 +1,22 @@
-<div class="thf-wrapper-menu-panel">
+<div class="thf-wrapper">
   <thf-toolbar t-title="Scrum Poker"></thf-toolbar>
 
-  <thf-menu-panel display = "none"
+  <thf-menu display = "none"
     [t-menus]="menus" >
-  </thf-menu-panel>
+  </thf-menu>
 
   <router-outlet></router-outlet>
 </div>
 
 
+<thf-modal
+  t-click-out="true"
+  t-hide-close="true"
+  t-size="md"
+  t-title="Sobre"
+  [t-primary-action]="primaryAction">
+
+  <app-contato></app-contato>
+
+
+</thf-modal>
