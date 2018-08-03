@@ -67,8 +67,8 @@ export class JogoComponent implements OnInit, OnDestroy {
     this.conRecnnect = interval(2000);
     this.conRecnnectSub = this.conRecnnect.subscribe(() => {
       if (!this.jogoService.isConnected()) {
-        this.thfNotification.error('Xi... Você foi desconectado! :(');
-        this.route.navigate(['/entrar-secao/' + nameUser]);
+        this.thfNotification.error('Xiiiii... Você foi desconectado! :(');
+        this.route.navigate(['/entrar-sala/' + nameUser]);
       }
     });
   }

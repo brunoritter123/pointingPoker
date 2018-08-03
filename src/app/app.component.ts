@@ -21,7 +21,7 @@ export class AppComponent {
     action: () => {
       this.thfModal.close();
     },
-    label: 'Close'
+    label: 'Fechar'
   };
 
   openModal(): boolean {

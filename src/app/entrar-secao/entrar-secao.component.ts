@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ThfSwitchLabelPosition } from '@totvs/thf-ui/components/thf-field';
-import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '../../../node_modules/@angular/router';
 
 @Component({
@@ -19,7 +17,9 @@ export class EntrarSecaoComponent implements OnInit {
 
   ngOnInit() {
     const nameUser = this.activateRoute.snapshot.params['nameUser'];
-    this.nome = nameUser;
+    if (nameUser > '') {
+      this.nome = nameUser;
+    }
   }
 
   onSubmit() {  }

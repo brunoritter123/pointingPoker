@@ -8,8 +8,8 @@ import { JogoComponent } from './jogo/jogo.component';
 const routes: Routes = [
 
   { path: '', component: SecaoComponent },
-  { path: 'entrar-secao', component: EntrarSecaoComponent },
-  { path: 'entrar-secao/:nameUser', component: EntrarSecaoComponent },
+  { path: 'entrar-sala', component: EntrarSecaoComponent },
+  { path: 'entrar-sala/:nameUser', component: EntrarSecaoComponent },
   { path: 'jogo', component: EntrarSecaoComponent },
   { path: 'jogo/:nameUser', component: JogoComponent }
 ];

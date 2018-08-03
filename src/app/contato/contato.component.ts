@@ -9,7 +9,7 @@ export class ContatoComponent {
 
   public contact = {
     name: 'Bruno de Lima Ritter',
-    email: 'bruno@scrumpoker.com.br',
+    email: 'contato@scrumpoker.com.br',
     phone: '11980875041'
   };
 
