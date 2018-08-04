@@ -14,9 +14,12 @@ h2{
 	padding-bottom: 10px;
 }
 
-:host /deep/
-.thf-menu-logo{
-	background:url(./assets/icone.ico) no-repeat 10% 66%;
-	height:60px;
-	background-color: red;
+.txt-verde{
+  color: #0f0;
+  font-weight: bold;
+}
+
+.txt-vermelho{
+  color: red;
+  font-weight: bold;
 }

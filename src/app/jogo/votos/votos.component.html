@@ -1,0 +1,14 @@
+<thf-widget t-title="Pontuação">
+  <h3 class="thf-sm-6 thf-md-6 thf-lg-6">Nome</h3>
+  <h3 class="thf-sm-6 thf-md-6 thf-lg-6">Voto</h3>
+  <div *ngFor="let jogador of jogadores">
+    <div class="thf-row">
+      <h4 class="thf-sm-6 thf-md-6 thf-lg-6">{{jogador.nome}}</h4>
+      <h4 class="thf-sm-6 thf-md-6 thf-lg-6">
+        <span *ngIf="fimJogo">{{jogador.voto.label}}</span>
+        <span *ngIf="!fimJogo && !jogador.voto.label" class="txt-vermelho"> - </span>
+        <span *ngIf="!fimJogo && jogador.voto.label > ''" class="thf-icon thf-icon-ok txt-verde"> </span>
+      </h4>
+    </div>
+  </div>
+</thf-widget>

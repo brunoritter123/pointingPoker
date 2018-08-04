@@ -9,20 +9,15 @@ export class ContatoComponent {
 
   public contact = {
     name: 'Bruno de Lima Ritter',
-    email: 'contato@scrumpoker.com.br',
-    phone: '11980875041'
+    email: 'contato@scrumpoker.com.br'
   };
-
-  callContact(phone) {
-    window.open(`tel:${phone}`, '_self');
-  }
 
   sendContact(email) {
     window.open(`mailto:${email}`, '_self');
   }
 
-  formatPhoneNumber(phone) {
-    return `(${phone.substring(0, 2)}) ${phone.substring(2, 7)}-${phone.substring(7)}`;
+  apoiar() {
+    window.open('https://apoia.se/scrum-poker', '_blank');
   }
 
 }

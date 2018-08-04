@@ -1,56 +1,42 @@
 <thf-page-default>
   <div class="thf-row">
-    <div class="pad-b-10 thf-sm-12 thf-md-7 thf-lg-6 thf-xl-3">
+    <!--"Estatísticas"-->
 
+    <div class="pad-b-10 thf-sm-12 thf-md-7 thf-lg-6 thf-xl-3">
       <thf-widget t-title="Pontos">
-        <div class="thf-sm-12">
-          <thf-button *ngFor="let carta of cartas" (t-click)="cartaClick(carta)" class="pad-b-10 thf-sm-6 thf-md-6 thf-lg-4"
-            t-label={{carta.label}} t-type={{carta.type}}>
-          </thf-button>
+
+        <div class="row">
+          <div *ngIf="!fimJogo">
+            <div class="thf-sm-12">
+              <thf-button *ngFor="let carta of cartas" (t-click)="cartaClick(carta)" class="pad-b-10 thf-sm-6 thf-md-6 thf-lg-4" t-label={{carta.label}}
+                t-type={{carta.type}}>
+              </thf-button>
+            </div>
+          </div>
+
+          <div *ngIf="fimJogo">
+            <app-estatistica [maisVotado]='maisVotado' [pontuacao]='pontuacao'>
+            </app-estatistica>
+          </div>
         </div>
 
-        <div>
+        <div class="row">
+          <p>&#160;</p>
+
           <thf-button class="pad-b-10 thf-sm-12 thf-md-6 thf-lg-4 thf-xl-4" (t-click)="resetClick()" t-label="Resetar" t-type="primary">
           </thf-button>
           <thf-button class="pad-b-10 thf-sm-12 thf-md-6 thf-lg-4 thf-xl-4" (t-click)="fimClick()" t-label="Finalizar" t-type="primary">
           </thf-button>
         </div>
+
       </thf-widget>
 
     </div>
 
     <div class="pad-b-10 thf-sm-12 thf-md-5 thf-lg-3 thf-xl-3">
-      <thf-widget t-title="Estatísticas" *ngIf="pontuacao !== undefined">
-
-        <h3 class="thf-sm-12 txt-vermelho">Mais Votado: {{maisVotado}}</h3>
-        <h3 class="thf-sm-6 thf-md-6 thf-lg-6">Ponto</h3>
-        <h3 class="thf-sm-6 thf-md-6 thf-lg-6">Votos</h3>
-        <div *ngFor="let ponto of pontuacao">
-          <h4 class="thf-sm-6 thf-md-6 thf-lg-6">
-              <span *ngIf="ponto.carta.label > ''">{{ponto.carta.label}}</span>
-              <span *ngIf="!ponto.carta.label" class="txt-vermelho"> - </span>
-          </h4>
-          <h4 class="thf-sm-6 thf-md-6 thf-lg-6">{{ponto.votos}}</h4>
-        </div>
-      </thf-widget>
+      <app-votos [jogadores]="jogadores" [fimJogo]="fimJogo">
+      </app-votos>
     </div>
-  </div>
 
-  <div class="pad-b-10 thf-sm-12 thf-md-5 thf-lg-3 thf-xl-3">
-    <thf-widget t-title="Pontuação">
-      <h3 class="thf-sm-6 thf-md-6 thf-lg-6">Nome</h3>
-      <h3 class="thf-sm-6 thf-md-6 thf-lg-6">Voto</h3>
-      <div *ngFor="let jogador of jogadores">
-        <div class="thf-row">
-          <h4 class="thf-sm-6 thf-md-6 thf-lg-6">{{jogador.nome}}</h4>
-          <h4 class="thf-sm-6 thf-md-6 thf-lg-6">
-            <span *ngIf="fimJogo">{{jogador.voto.label}}</span>
-            <span *ngIf="!fimJogo && !jogador.voto.label" class="txt-vermelho"> - </span>
-            <span *ngIf="!fimJogo && jogador.voto.label > ''" class="thf-icon thf-icon-ok txt-verde"> </span>
-          </h4>
-        </div>
-      </div>
-    </thf-widget>
   </div>
-
 </thf-page-default>
