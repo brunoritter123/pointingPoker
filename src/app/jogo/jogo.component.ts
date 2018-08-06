@@ -24,6 +24,7 @@ export class JogoComponent implements OnInit, OnDestroy {
   ) { }
 
   public fimJogo: boolean;
+  public descWidget: string;
   public cartas: Array<Carta> = [];
   public jogadores: Array<User> = [];
   public maisVotado: string = undefined;
@@ -37,7 +38,7 @@ export class JogoComponent implements OnInit, OnDestroy {
   private conRecnnectSub;
 
   ngOnInit() {
-    this.fimJogo = false;
+    this.fimDeJogo(false);
     this.pontuacao = undefined;
     const nameUser = this.activateRoute.snapshot.params['nameUser'];
     this.jogoService.setUserName( nameUser );
@@ -51,7 +52,7 @@ export class JogoComponent implements OnInit, OnDestroy {
     });
 
     this.conFimJogo = this.jogoService.getFimJogo().subscribe( (fimJogo: boolean) => {
-      this.fimJogo = fimJogo;
+      this.fimDeJogo(fimJogo);
       if (!fimJogo) {
         for (let i = 0; i < this.cartas.length; i++) {
           this.cartas[i].type = 'default';
@@ -71,6 +72,11 @@ export class JogoComponent implements OnInit, OnDestroy {
         this.route.navigate(['/entrar-sala/' + nameUser]);
       }
     });
+  }
+
+  private fimDeJogo(acabou: boolean): void {
+    this.fimJogo = acabou;
+    this.descWidget = this.fimJogo ? 'Estatísticas' : 'Pontos';
   }
 
   ngOnDestroy() {
