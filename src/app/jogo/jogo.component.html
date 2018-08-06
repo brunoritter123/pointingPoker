@@ -5,7 +5,7 @@
       <thf-widget t-title={{descWidget}}>
 
         <div class="row">
-          <div *ngIf="!fimJogo">
+          <div *ngIf="isJogador && !fimJogo">
             <div class="thf-sm-12">
               <thf-button *ngFor="let carta of cartas" (t-click)="cartaClick(carta)" class="pad-b-10 thf-sm-6 thf-md-6 thf-lg-4" t-label={{carta.label}}
                 t-type={{carta.type}}>

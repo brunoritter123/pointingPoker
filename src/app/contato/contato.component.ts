@@ -17,7 +17,7 @@ export class ContatoComponent {
   }
 
   apoiar() {
-    window.open('https://apoia.se/scrum-poker', '_blank');
+    window.open('http://vaka.me/n6dus6', '_blank');
   }
 
 }

@@ -14,22 +14,14 @@ import { ThfNotificationService } from '@totvs/thf-ui/services/thf-notification/
   providers: [JogoService, ThfNotificationService]
 })
 export class JogoComponent implements OnInit, OnDestroy {
-
-  constructor(
-    private jogoService: JogoService,
-    private activateRoute: ActivatedRoute,
-    private route: Router,
-    private  thfNotification: ThfNotificationService
-
-  ) { }
-
   public fimJogo: boolean;
   public descWidget: string;
   public cartas: Array<Carta> = [];
   public jogadores: Array<User> = [];
   public maisVotado: string = undefined;
   public pontuacao: Array<Estatistica> = undefined;
-  public isConnected =  false;
+  public isConnected = false;
+  public isJogador = false;
 
   private conUsers;
   private conCartas;
@@ -37,10 +29,19 @@ export class JogoComponent implements OnInit, OnDestroy {
   private conRecnnect;
   private conRecnnectSub;
 
+  constructor(
+    private jogoService: JogoService,
+    private activateRoute: ActivatedRoute,
+    private route: Router,
+    private thfNotification: ThfNotificationService
+  ) { }
+
+
   ngOnInit() {
     this.fimDeJogo(false);
     this.pontuacao = undefined;
     const nameUser = this.activateRoute.snapshot.params['nameUser'];
+    this.isJogador = this.activateRoute.snapshot.params['isJogador'];
     this.jogoService.setUserName( nameUser );
 
     this.conUsers = this.jogoService.getUsersConnect().subscribe( (users: Array<User>) => {
