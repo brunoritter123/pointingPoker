@@ -18,6 +18,7 @@ export class JogoComponent implements OnInit, OnDestroy {
   public descWidget: string;
   public cartas: Array<Carta> = [];
   public jogadores: Array<User> = [];
+  public observadores: Array<User> = [];
   public maisVotado: string = undefined;
   public pontuacao: Array<Estatistica> = undefined;
   public isConnected = false;
@@ -41,11 +42,21 @@ export class JogoComponent implements OnInit, OnDestroy {
     this.fimDeJogo(false);
     this.pontuacao = undefined;
     const nameUser = this.activateRoute.snapshot.params['nameUser'];
-    this.isJogador = this.activateRoute.snapshot.params['isJogador'];
-    this.jogoService.setUserName( nameUser );
+    this.isJogador = this.activateRoute.snapshot.params['isJogador'] === 'true';
+    this.jogoService.setUser( nameUser, this.isJogador );
 
     this.conUsers = this.jogoService.getUsersConnect().subscribe( (users: Array<User>) => {
-      this.jogadores = users;
+      this.jogadores = [];
+      this.observadores = [];
+
+      users.forEach((us: User) => {
+        if (us.isJogador) {
+          this.jogadores.push(us);
+        } else {
+          this.observadores.push(us);
+        }
+      });
+
     });
 
     this.conCartas = this.jogoService.getCartas().subscribe( (cartas: Array<Carta>) => {
@@ -70,7 +81,7 @@ export class JogoComponent implements OnInit, OnDestroy {
     this.conRecnnectSub = this.conRecnnect.subscribe(() => {
       if (!this.jogoService.isConnected()) {
         this.thfNotification.error('Xiiiii... Você foi desconectado! :(');
-        this.route.navigate(['/entrar-sala/' + nameUser]);
+        this.route.navigate([`/entrar-sala/${nameUser}/${this.isJogador}`]);
       }
     });
   }

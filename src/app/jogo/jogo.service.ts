@@ -2,15 +2,17 @@ import {Observable} from 'rxjs/Observable';
 import * as io from 'socket.io-client';
 
 export class JogoService {
-  private url = 'http://10.172.14.46:3000';
+  // private url = 'http://10.172.14.46:3000';
   // private url = 'http://www.scrumpoker.com.br:80';
-  // private url = 'localhost:3000';
+   private url = 'localhost:3000';
   private socket = io(this.url, {reconnection: false});
   private userName: string;
+  private isJogador: boolean;
 
-  setUserName(userName: string): void {
+  setUser(userName: string, isJogador: boolean): void {
     this.userName = userName;
-    this.socket.emit('add-user', this.userName, this.socket.id);
+    this.isJogador = isJogador;
+    this.socket.emit('add-user', this.userName, this.isJogador);
   }
 
   sendVoto(carta: any) {

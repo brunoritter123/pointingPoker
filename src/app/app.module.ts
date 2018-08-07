@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { ContatoComponent } from './contato/contato.component';
 import { EstatisticaComponent } from './jogo/estatistica/estatistica.component';
 import { VotosComponent } from './jogo/votos/votos.component';
+import { ObservadorComponent } from './jogo/observador/observador.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { VotosComponent } from './jogo/votos/votos.component';
     JogoComponent,
     ContatoComponent,
     EstatisticaComponent,
-    VotosComponent
+    VotosComponent,
+    ObservadorComponent
   ],
   imports: [
     BrowserModule,
