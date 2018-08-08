@@ -29,6 +29,7 @@ export class JogoComponent implements OnInit, OnDestroy {
   private conFimJogo;
   private conRecnnect;
   private conRecnnectSub;
+  private vlCartaSelecionada: number;
 
   constructor(
     private jogoService: JogoService,
@@ -43,6 +44,7 @@ export class JogoComponent implements OnInit, OnDestroy {
     this.pontuacao = undefined;
     const nameUser = this.activateRoute.snapshot.params['nameUser'];
     this.isJogador = this.activateRoute.snapshot.params['isJogador'] === 'true';
+    this.vlCartaSelecionada = parseInt(this.activateRoute.snapshot.queryParams['vlCarta']);
     this.jogoService.setUser( nameUser, this.isJogador );
 
     this.conUsers = this.jogoService.getUsersConnect().subscribe( (users: Array<User>) => {
@@ -61,6 +63,17 @@ export class JogoComponent implements OnInit, OnDestroy {
 
     this.conCartas = this.jogoService.getCartas().subscribe( (cartas: Array<Carta>) => {
       this.cartas = cartas;
+
+      if (this.vlCartaSelecionada !== undefined) {
+        const cartaSelecionada: Carta = this.cartas.find(ct => {
+          return ct.value === this.vlCartaSelecionada;
+        });
+
+        if (cartaSelecionada !== undefined) {
+          this.cartaClick(cartaSelecionada);
+          // ver o skipLocationChange para apagar a queryparam
+        }
+      }
     });
 
     this.conFimJogo = this.jogoService.getFimJogo().subscribe( (fimJogo: boolean) => {
@@ -71,6 +84,7 @@ export class JogoComponent implements OnInit, OnDestroy {
         }
         this.pontuacao = undefined;
         this.maisVotado = undefined;
+        this.vlCartaSelecionada = undefined;
 
       } else {
         this.geraEstatistica();
@@ -81,7 +95,7 @@ export class JogoComponent implements OnInit, OnDestroy {
     this.conRecnnectSub = this.conRecnnect.subscribe(() => {
       if (!this.jogoService.isConnected()) {
         this.thfNotification.error('Xiiiii... Você foi desconectado! :(');
-        this.route.navigate([`/entrar-sala/${nameUser}/${this.isJogador}`]);
+        this.route.navigate([`/entrar-sala/${nameUser}/${this.isJogador}`], { queryParams: { vlCarta: this.vlCartaSelecionada }});
       }
     });
   }
@@ -104,6 +118,7 @@ export class JogoComponent implements OnInit, OnDestroy {
       for (let i = 0; i < this.cartas.length; i++) {
         if (this.cartas[i].value === carta.value) {
           this.cartas[i].type = 'danger';
+          this.vlCartaSelecionada = this.cartas[i].value;
         } else {
           this.cartas[i].type = 'default';
         }
