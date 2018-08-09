@@ -44,7 +44,7 @@ export class JogoComponent implements OnInit, OnDestroy {
     this.pontuacao = undefined;
     const nameUser = this.activateRoute.snapshot.params['nameUser'];
     this.isJogador = this.activateRoute.snapshot.params['isJogador'] === 'true';
-    this.vlCartaSelecionada = parseInt(this.activateRoute.snapshot.queryParams['vlCarta']);
+    this.vlCartaSelecionada = Number(this.activateRoute.snapshot.queryParams['vlCarta']);
     this.jogoService.setUser( nameUser, this.isJogador );
 
     this.conUsers = this.jogoService.getUsersConnect().subscribe( (users: Array<User>) => {
