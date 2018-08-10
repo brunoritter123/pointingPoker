@@ -20,7 +20,6 @@ export class JogoComponent implements OnInit, OnDestroy {
   public jogadores: Array<User> = [];
   public observadores: Array<User> = [];
   public maisVotado: string = undefined;
-  public pontuacao: Array<Estatistica> = undefined;
   public isConnected = false;
   public isJogador = false;
 
@@ -39,17 +38,22 @@ export class JogoComponent implements OnInit, OnDestroy {
   ) { }
 
 
+  /**
+   * ngOnInit
+   * Inicializador do componente
+   */
   ngOnInit() {
-    this.fimDeJogo(false);
-    this.pontuacao = undefined;
     const nameUser = this.activateRoute.snapshot.params['nameUser'];
+    this.fimDeJogo(false);
     this.isJogador = this.activateRoute.snapshot.params['isJogador'] === 'true';
     this.vlCartaSelecionada = Number(this.activateRoute.snapshot.queryParams['vlCarta']);
     this.jogoService.setUser( nameUser, this.isJogador );
 
+    // Quando um usuário sai ou entra na seção.
     this.conUsers = this.jogoService.getUsersConnect().subscribe( (users: Array<User>) => {
       this.jogadores = [];
       this.observadores = [];
+      this.fimDeJogo(false);
 
       users.forEach((us: User) => {
         if (us.isJogador) {
@@ -61,6 +65,7 @@ export class JogoComponent implements OnInit, OnDestroy {
 
     });
 
+    // Observa recebe a configuração das cartas
     this.conCartas = this.jogoService.getCartas().subscribe( (cartas: Array<Carta>) => {
       this.cartas = cartas;
 
@@ -71,23 +76,19 @@ export class JogoComponent implements OnInit, OnDestroy {
 
         if (cartaSelecionada !== undefined) {
           this.cartaClick(cartaSelecionada);
-          // ver o skipLocationChange para apagar a queryparam
         }
       }
     });
 
+    // Observa se acabou o jogo
     this.conFimJogo = this.jogoService.getFimJogo().subscribe( (fimJogo: boolean) => {
       this.fimDeJogo(fimJogo);
       if (!fimJogo) {
         for (let i = 0; i < this.cartas.length; i++) {
           this.cartas[i].type = 'default';
         }
-        this.pontuacao = undefined;
         this.maisVotado = undefined;
         this.vlCartaSelecionada = undefined;
-
-      } else {
-        this.geraEstatistica();
       }
     });
 
@@ -100,11 +101,19 @@ export class JogoComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * fimDeJogo
+   * Metodo para alterar o valor da propriedade fimJogo
+   */
   private fimDeJogo(acabou: boolean): void {
     this.fimJogo = acabou;
     this.descWidget = this.fimJogo ? 'Estatísticas' : 'Pontos';
   }
 
+  /**
+   * ngOnDestroy()
+   * Metodo para executar ao destruir o componente.
+   */
   ngOnDestroy() {
     this.conRecnnectSub.unsubscribe();
     this.conUsers.unsubscribe();
@@ -112,62 +121,40 @@ export class JogoComponent implements OnInit, OnDestroy {
     this.conFimJogo.unsubscribe();
   }
 
+  /**
+   * cartaClick()
+   * Função para executar ao clicar em uma carta
+   */
   public cartaClick(carta: Carta): void {
+    if (!this.fimJogo && carta !== undefined) {
 
-    if (!this.fimJogo) {
-      for (let i = 0; i < this.cartas.length; i++) {
-        if (this.cartas[i].value === carta.value) {
-          this.cartas[i].type = 'danger';
-          this.vlCartaSelecionada = this.cartas[i].value;
+      this.cartas.forEach( ct => {
+
+        if (ct.value === carta.value) {
+          ct.type = 'danger';
+          this.vlCartaSelecionada = ct.value;
         } else {
-          this.cartas[i].type = 'default';
+          ct.type = 'default';
         }
-      }
+      });
+
       this.jogoService.sendVoto(carta);
     }
   }
 
+  /**
+   * fimClick()
+   * Função para força a finalização do jogo
+   */
   public fimClick(): void {
     this.jogoService.sendFimJogo();
   }
 
+  /**
+   * resetClick()
+   * Função para resetar o jogo
+   */
   public resetClick(): void {
     this.jogoService.sendReset();
   }
-
-  private geraEstatistica(): void {
-    let existeArray: boolean;
-    let novoPonto: Estatistica;
-
-    this.pontuacao = [];
-
-    this.jogadores.forEach(jogador => {
-      existeArray = false;
-
-      this.pontuacao.forEach(ponto => {
-        if (ponto.carta.label === jogador.voto.label ) {
-          existeArray = true;
-          ponto.votos += 1;
-        }
-      });
-
-      if (!existeArray) {
-        novoPonto = new Estatistica(jogador.voto, 1);
-        this.pontuacao.push(novoPonto);
-      }
-
-      this.pontuacao.sort( (a: Estatistica , b: Estatistica) => {
-        let ret: number = b.votos - a.votos;
-        if (ret === 0) {
-          ret = b.carta.value - a.carta.value;
-        }
-
-        return ret;
-      });
-
-      this.maisVotado = this.pontuacao[0].carta.label;
-    });
-
-  }
-
 }

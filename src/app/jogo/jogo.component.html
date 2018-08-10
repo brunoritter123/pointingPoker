@@ -7,25 +7,26 @@
         <div class="row">
           <div *ngIf="isJogador && !fimJogo">
             <div class="thf-sm-12">
-              <thf-button *ngFor="let carta of cartas" (t-click)="cartaClick(carta)" class="pad-b-10 thf-sm-6 thf-md-6 thf-lg-4" t-label={{carta.label}}
-                t-type={{carta.type}}>
+              <thf-button *ngFor="let carta of cartas" (t-click)="cartaClick(carta)" class="pad-b-10 thf-sm-6 thf-md-6 thf-lg-4 cartaSelec"
+                t-label={{carta.label}} t-type={{carta.type}}>
               </thf-button>
             </div>
           </div>
 
           <div *ngIf="fimJogo">
-            <app-estatistica [maisVotado]='maisVotado' [pontuacao]='pontuacao'>
-            </app-estatistica>
+            <app-estatistica [jogadores]='jogadores'></app-estatistica>
           </div>
         </div>
 
-        <p>&#160;</p>
+        <div *ngIf="!isJogador">
+          <p>&#160;</p>
 
-        <div class="row">
-          <thf-button class="pad-b-10 thf-sm-12 thf-md-6 thf-lg-6 thf-xl-6" (t-click)="resetClick()" t-label="Resetar" t-type="primary">
-          </thf-button>
-          <thf-button class="pad-b-10 thf-sm-12 thf-md-6 thf-lg-6 thf-xl-6" (t-click)="fimClick()" t-label="Finalizar" t-type="primary">
-          </thf-button>
+          <div class="row">
+            <thf-button class="pad-b-10 thf-sm-12 thf-md-6 thf-lg-6 thf-xl-6" (t-click)="resetClick()" t-label="Resetar" t-type="primary">
+            </thf-button>
+            <thf-button class="pad-b-10 thf-sm-12 thf-md-6 thf-lg-6 thf-xl-6" (t-click)="fimClick()" t-label="Finalizar" t-type="primary">
+            </thf-button>
+          </div>
         </div>
 
       </thf-widget>
