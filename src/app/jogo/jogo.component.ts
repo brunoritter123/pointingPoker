@@ -3,7 +3,6 @@ import { JogoService } from './jogo.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Carta } from '../models/carta.model';
 import { User } from '../models/user.model';
-import { Estatistica } from '../models/estatistica.model';
 import { interval } from 'rxjs/observable/interval';
 import { ThfNotificationService } from '@totvs/thf-ui/services/thf-notification/thf-notification.service';
 
@@ -13,7 +12,9 @@ import { ThfNotificationService } from '@totvs/thf-ui/services/thf-notification/
   styleUrls: ['./jogo.component.css'],
   providers: [JogoService, ThfNotificationService]
 })
+
 export class JogoComponent implements OnInit, OnDestroy {
+
   public fimJogo: boolean;
   public descWidget: string;
   public cartas: Array<Carta> = [];
@@ -36,7 +37,6 @@ export class JogoComponent implements OnInit, OnDestroy {
     private route: Router,
     private thfNotification: ThfNotificationService
   ) { }
-
 
   /**
    * ngOnInit
@@ -102,15 +102,6 @@ export class JogoComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * fimDeJogo
-   * Metodo para alterar o valor da propriedade fimJogo
-   */
-  private fimDeJogo(acabou: boolean): void {
-    this.fimJogo = acabou;
-    this.descWidget = this.fimJogo ? 'Estatísticas' : 'Pontos';
-  }
-
-  /**
    * ngOnDestroy()
    * Metodo para executar ao destruir o componente.
    */
@@ -119,6 +110,15 @@ export class JogoComponent implements OnInit, OnDestroy {
     this.conUsers.unsubscribe();
     this.conCartas.unsubscribe();
     this.conFimJogo.unsubscribe();
+  }
+
+  /**
+   * fimDeJogo
+   * Metodo para alterar o valor da propriedade fimJogo
+   */
+  private fimDeJogo(acabou: boolean): void {
+    this.fimJogo = acabou;
+    this.descWidget = this.fimJogo ? 'Estatísticas' : 'Pontos';
   }
 
   /**
