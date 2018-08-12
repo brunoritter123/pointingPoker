@@ -27,19 +27,19 @@ const cartas = [
   {value: undefined   , label: '?'},
 ]
 
-io.on('connection', (socket) => {
+io.on('connection', (client) => {
 
-  socket.on('disconnect', () => {
+  client.on('disconnect', () => {
     users = users.filter(function(us) {
-      return us.id !== socket.id;
+      return us.id !== client.id;
     });
     io.emit('get-user', users);
   });
   
-  socket.on('add-voto', (carta) => {
+  client.on('add-voto', (carta) => {
     let acabouJogo = true;
     users.forEach( (user) => {
-      if(user.id == socket.id) {
+      if(user.id == client.id) {
         user.voto = carta;
       }
       if(user.isJogador && !user.voto.label) {
@@ -53,16 +53,16 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('add-user', (userName, isJogador) => {
-    users.push({id: socket.id, nome: userName, isJogador: isJogador, voto: votoNull})
+  client.on('add-user', (userName, isJogador) => {
+    users.push({id: client.id, nome: userName, isJogador: isJogador, voto: votoNull})
     io.emit('get-user', users);
   });
 
-  socket.on('obs-cartas', () => {
+  client.on('obs-cartas', () => {
     io.emit('get-cartas', cartas);
   });
 
-  socket.on('add-FimJogo', (fimJogo) => {
+  client.on('add-FimJogo', (fimJogo) => {
     io.emit('get-FimJogo', fimJogo);
     if (!fimJogo) {
       users.forEach( (user) => {
