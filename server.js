@@ -4,7 +4,6 @@ const http = require('http');
 const path = require('path');
 const app = express();
 
-
 const port = process.env.PORT || 3000;
 app.use(express.static(__dirname + '/dist'))
 app.get('/*', (req,res) => res.sendFile(path.join(__dirname)));
@@ -27,19 +26,22 @@ const cartas = [
   {value: undefined   , label: '?'},
 ]
 
-io.on('connection', (client) => {
+io.on('connection', (socket) => {
+  console.log("on: "+socket.handshake.address)
 
-  client.on('disconnect', () => {
-    users = users.filter(function(us) {
-      return us.id !== client.id;
+  socket.on('disconnect', () => {
+    users.forEach(function(us) {
+      if (us.id == socket.handshake.address) {
+        us.status = "OFF"
+      }
     });
     io.emit('get-user', users);
   });
   
-  client.on('add-voto', (carta) => {
+  socket.on('add-voto', (carta) => {
     let acabouJogo = true;
     users.forEach( (user) => {
-      if(user.id == client.id) {
+      if(user.id == socket.handshake.address) {
         user.voto = carta;
       }
       if(user.isJogador && !user.voto.label) {
@@ -53,16 +55,34 @@ io.on('connection', (client) => {
     }
   });
 
-  client.on('add-user', (userName, isJogador) => {
-    users.push({id: client.id, nome: userName, isJogador: isJogador, voto: votoNull})
+  socket.on('add-user', (userName, isJogador) => {
+    let achou = false;
+
+    users.forEach(function(us) {
+      if (us.id == socket.handshake.address) {
+        let oldSocket = us.socket;
+
+        us.nome = userName;
+        us.isJogador = isJogador;
+        us.status = "ON";
+        us.socket = socket.id
+        achou = true;
+        io.to(oldSocket).emit('disconnect');
+      }
+    });
+
+    if (!achou) {
+      users.push({id: socket.handshake.address, status: "ON", socket: socket.id, nome: userName, isJogador: isJogador, voto: votoNull});
+    }
+
     io.emit('get-user', users);
   });
 
-  client.on('obs-cartas', () => {
+  socket.on('obs-cartas', () => {
     io.emit('get-cartas', cartas);
   });
 
-  client.on('add-FimJogo', (fimJogo) => {
+  socket.on('add-FimJogo', (fimJogo) => {
     io.emit('get-FimJogo', fimJogo);
     if (!fimJogo) {
       users.forEach( (user) => {
