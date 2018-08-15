@@ -27,12 +27,22 @@ const cartas = [
 ]
 
 io.on('connection', (socket) => {
+  console.log(`ON: ${socket.id}`)
 
   socket.on('disconnect', () => {
+    console.log(`disconnect: ${socket.id}`)
     users.forEach(function(us) {
-      if (us.id == socket.handshake.address) {
+      if (us.id == socket.id) {
         us.status = "OFF"
       }
+    });
+    io.emit('get-user', users);
+  });
+
+  socket.on('remove', () => {
+    console.log(`remove: ${socket.id}`)
+    users = users.filter(function(us) {
+      return us.id !== socket.id;
     });
     io.emit('get-user', users);
   });
@@ -40,7 +50,7 @@ io.on('connection', (socket) => {
   socket.on('add-voto', (carta) => {
     let acabouJogo = true;
     users.forEach( (user) => {
-      if(user.id == socket.handshake.address) {
+      if(user.id == socket.id) {
         user.voto = carta;
       }
       if(user.isJogador && !user.voto.label) {
@@ -54,24 +64,27 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('add-user', (userName, isJogador) => {
+  socket.on('add-user', (userName, isJogador, oldId) => {
     let achou = false;
+    console.log(`add new id: ${socket.id}`)
+    console.log(`add old id: ${oldId}`)
 
-    users.forEach(function(us) {
-      if (us.id == socket.handshake.address) {
-        let oldSocket = us.socket;
+    if (oldId !== undefined) {
+      users.forEach(function(us) {
+        if (us.id == oldId) {
 
-        us.nome = userName;
-        us.isJogador = isJogador;
-        us.status = "ON";
-        us.socket = socket.id
-        achou = true;
-        io.to(oldSocket).emit('disconnect');
-      }
-    });
+          us.id = socket.id
+          us.nome = userName;
+          us.isJogador = isJogador;
+          us.status = "ON";
+          us.socket = socket.id
+          achou = true;
+        }
+      });
+    }
 
     if (!achou) {
-      users.push({id: socket.handshake.address, status: "ON", socket: socket.id, nome: userName, isJogador: isJogador, voto: votoNull});
+      users.push({id: socket.id, status: "ON", socket: socket.id, nome: userName, isJogador: isJogador, voto: votoNull});
     }
 
     io.emit('get-user', users);

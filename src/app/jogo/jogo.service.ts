@@ -4,7 +4,8 @@ import { User } from '../models/user.model';
 
 export class JogoService {
   // private url = 'http://192.168.25.47:3000';
-  private url = 'http://www.scrumpoker.com.br:80';
+  private url = 'http://10.172.14.46:3000';
+  // private url = 'http://www.scrumpoker.com.br:80';
   // private url = 'localhost:3000';
   private socket = io(this.url, {
     reconnection: true,
@@ -14,13 +15,14 @@ export class JogoService {
   } );
   private userName: string;
   private isJogador: boolean;
-  private myIp: string;
   private conectado = true;
+  private myId: string;
 
   setUser(userName: string, isJogador: boolean): void {
     this.userName = userName;
     this.isJogador = isJogador;
     this.socket.emit('add-user', this.userName, this.isJogador);
+    this.myId = this.socket.id;
   }
 
   sendVoto(carta: any) {
@@ -31,7 +33,8 @@ export class JogoService {
     if (this.conectado !== this.socket.connected) {
       if (this.socket.connected) {
         // Reconectou
-        this.socket.emit('add-user', this.userName, this.isJogador);
+        this.socket.emit('add-user', this.userName, this.isJogador, this.myId);
+        this.myId = this.socket.id;
       }
     }
     this.conectado = this.socket.connected;
@@ -41,14 +44,10 @@ export class JogoService {
   getUsersConnect() {
     const observable = new Observable(observer => {
       this.socket.on('get-user', (data: Array < User > ) => {
-        data.forEach(us => {
-          if (us.socket === this.socket.id) {
-            this.myIp = us.id;
-          }
-        });
         observer.next(data);
       });
       return () => {
+        this.socket.emit('remove');
         this.socket.disconnect();
       };
     });
