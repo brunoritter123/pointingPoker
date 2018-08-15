@@ -3,7 +3,8 @@ import { User } from '../../models/user.model';
 
 @Component({
   selector: 'app-votos',
-  templateUrl: './votos.component.html'
+  templateUrl: './votos.component.html',
+  styleUrls: ['./votos.component.css']
 })
 export class VotosComponent {
   @Input() jogadores: Array<User>;

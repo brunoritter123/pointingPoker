@@ -27,7 +27,6 @@ const cartas = [
 ]
 
 io.on('connection', (socket) => {
-  console.log("on: "+socket.handshake.address)
 
   socket.on('disconnect', () => {
     users.forEach(function(us) {
@@ -37,7 +36,7 @@ io.on('connection', (socket) => {
     });
     io.emit('get-user', users);
   });
-  
+
   socket.on('add-voto', (carta) => {
     let acabouJogo = true;
     users.forEach( (user) => {
