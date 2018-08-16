@@ -4,9 +4,10 @@ import { User } from '../models/user.model';
 
 export class JogoService {
   // private url = 'http://192.168.25.47:3000';
-  private url = 'http://10.172.14.46:3000';
-  // private url = 'http://www.scrumpoker.com.br:80';
+  // private url = 'http://10.172.14.46:3000';
+  private url = 'http://www.scrumpoker.com.br:80';
   // private url = 'localhost:3000';
+
   private socket = io(this.url, {
     reconnection: true,
     reconnectionDelay: 1000,
@@ -16,29 +17,33 @@ export class JogoService {
   private userName: string;
   private isJogador: boolean;
   private conectado = true;
-  private myId: string;
+
+  public myId: string;
 
   setUser(userName: string, isJogador: boolean): void {
     this.userName = userName;
     this.isJogador = isJogador;
     this.socket.emit('add-user', this.userName, this.isJogador);
-    this.myId = this.socket.id;
   }
 
   sendVoto(carta: any) {
     this.socket.emit('add-voto', carta);
   }
 
-  isConnected(): boolean {
-    if (this.conectado !== this.socket.connected) {
-      if (this.socket.connected) {
-        // Reconectou
-        this.socket.emit('add-user', this.userName, this.isJogador, this.myId);
-        this.myId = this.socket.id;
-      }
+  isConnected(): string {
+    const socketConnected = this.socket.connected;
+
+    if (!this.conectado && socketConnected) {
+      // Reconectou
+      this.socket.emit('add-user', this.userName, this.isJogador, this.myId);
     }
-    this.conectado = this.socket.connected;
-    return this.conectado;
+
+    if (socketConnected) {
+      this.myId = this.socket.io.engine.id;
+    }
+
+    this.conectado = socketConnected;
+    return this.myId;
   }
 
   getUsersConnect() {

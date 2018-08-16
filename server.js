@@ -9,7 +9,6 @@ app.use(express.static(__dirname + '/dist'))
 app.get('/*', (req,res) => res.sendFile(path.join(__dirname)));
 const server = http.createServer(app);
 
-server.listen(port, () => console.log('Running...'));
 let io = require('socket.io').listen(server);
 
 let users  = []
@@ -27,20 +26,30 @@ const cartas = [
 ]
 
 io.on('connection', (socket) => {
-  console.log(`ON: ${socket.id}`)
+  console.log('Conectado: '+socket.id);
 
   socket.on('disconnect', () => {
-    console.log(`disconnect: ${socket.id}`)
+    let remover = false;
     users.forEach(function(us) {
       if (us.id == socket.id) {
-        us.status = "OFF"
+        if (us.voto.value === null || us.voto.value === undefined) {
+          remover = true;
+        } else {
+          us.status = "OFF"
+        }
       }
     });
+
+    if (remover) {
+      users = users.filter(function(us) {
+        return us.id !== socket.id;
+      });
+    }
+
     io.emit('get-user', users);
   });
 
   socket.on('remove', () => {
-    console.log(`remove: ${socket.id}`)
     users = users.filter(function(us) {
       return us.id !== socket.id;
     });
@@ -66,8 +75,6 @@ io.on('connection', (socket) => {
 
   socket.on('add-user', (userName, isJogador, oldId) => {
     let achou = false;
-    console.log(`add new id: ${socket.id}`)
-    console.log(`add old id: ${oldId}`)
 
     if (oldId !== undefined) {
       users.forEach(function(us) {
@@ -97,15 +104,18 @@ io.on('connection', (socket) => {
   socket.on('add-FimJogo', (fimJogo) => {
     io.emit('get-FimJogo', fimJogo);
     if (!fimJogo) {
+      let retUsers = [];
       users.forEach( (user) => {
-        (user.voto = votoNull)
+        user.voto = votoNull
+        if (user.status === 'ON') {
+          retUsers.push(user);
+        }
       });
+      users = retUsers;
       io.emit('get-user', users);
     }
   });
 
 });
 
-server.listen(3000, () => {
-  console.log('started on port 3000');
-});
+server.listen(port, () => console.log('Running...'));
