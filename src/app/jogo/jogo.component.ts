@@ -27,6 +27,7 @@ export class JogoComponent implements OnInit, OnDestroy {
   public isConnected = false;
   public isJogador = false;
   public myId: string;
+  public vlCartaSelecionada: number;
   public primaryAction: ThfModalAction = {
     action: () => {
       this.thfModal.close();
@@ -48,7 +49,6 @@ export class JogoComponent implements OnInit, OnDestroy {
   private conFimJogo;
   private conRecnnect;
   private conRecnnectSub;
-  private vlCartaSelecionada: number;
 
 
   constructor(
@@ -66,7 +66,6 @@ export class JogoComponent implements OnInit, OnDestroy {
     this.nameUser = this.activateRoute.snapshot.params['nameUser'];
     this.fimDeJogo(false);
     this.isJogador = this.activateRoute.snapshot.params['isJogador'] === 'true';
-    this.vlCartaSelecionada = Number(this.activateRoute.snapshot.queryParams['vlCarta']);
     this.jogoService.setUser( this.nameUser, this.isJogador );
 
     // Quando um usuário sai ou entra na seção.
@@ -76,10 +75,16 @@ export class JogoComponent implements OnInit, OnDestroy {
       this.fimDeJogo(false);
 
       users.forEach((us: User) => {
+        // Separa o tipo de usuário
         if (us.isJogador) {
           this.jogadores.push(us);
         } else {
           this.observadores.push(us);
+        }
+
+        // Verifica a carta selecionada
+        if (us.id === this.myId) {
+          this.setCartaSel(us.voto.value);
         }
       });
 
@@ -88,28 +93,11 @@ export class JogoComponent implements OnInit, OnDestroy {
     // Observa recebe a configuração das cartas
     this.conCartas = this.jogoService.getCartas().subscribe( (cartas: Array<Carta>) => {
       this.cartas = cartas;
-
-      if (this.vlCartaSelecionada !== undefined) {
-        const cartaSelecionada: Carta = this.cartas.find(ct => {
-          return ct.value === this.vlCartaSelecionada;
-        });
-
-        if (cartaSelecionada !== undefined) {
-          this.cartaClick(cartaSelecionada);
-        }
-      }
     });
 
     // Observa se acabou o jogo
     this.conFimJogo = this.jogoService.getFimJogo().subscribe( (fimJogo: boolean) => {
       this.fimDeJogo(fimJogo);
-      if (!fimJogo) {
-        for (let i = 0; i < this.cartas.length; i++) {
-          this.cartas[i].type = 'default';
-        }
-        this.maisVotado = undefined;
-        this.vlCartaSelecionada = undefined;
-      }
     });
 
     // Controle para reconectar
@@ -150,17 +138,7 @@ export class JogoComponent implements OnInit, OnDestroy {
    */
   public cartaClick(carta: Carta): void {
     if (!this.fimJogo && carta !== undefined && this.isConnected) {
-
-      this.cartas.forEach( ct => {
-
-        if (ct.value === carta.value) {
-          ct.type = 'danger';
-          this.vlCartaSelecionada = ct.value;
-        } else {
-          ct.type = 'default';
-        }
-      });
-
+      this.setCartaSel(carta.value);
       this.jogoService.sendVoto(carta);
     }
   }
@@ -188,5 +166,17 @@ export class JogoComponent implements OnInit, OnDestroy {
   private openModal(): boolean {
     this.thfModal.open();
     return true;
+  }
+
+  public setCartaSel(valor: number) {
+    this.vlCartaSelecionada = valor;
+
+    this.cartas.forEach( (carta: Carta) => {
+      if (carta.value === this.vlCartaSelecionada) {
+        carta.type = 'danger';
+      } else {
+        carta.type = 'default';
+      }
+    });
   }
 }
