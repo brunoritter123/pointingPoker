@@ -10,7 +10,6 @@ export class EntrarSecaoComponent implements OnInit {
 
   public jogador = true;
   public nome    = '';
-  public vlCarta: number;
 
   constructor(
     private activateRoute: ActivatedRoute
@@ -19,7 +18,6 @@ export class EntrarSecaoComponent implements OnInit {
   ngOnInit() {
     const nameUser: string = this.activateRoute.snapshot.params['nameUser'];
     const isJogador: boolean = this.activateRoute.snapshot.params['isJogador'] === 'true';
-    this.vlCarta = this.activateRoute.snapshot.queryParams['vlCarta'];
 
     if (nameUser > '') {
       this.nome = nameUser;

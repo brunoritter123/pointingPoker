@@ -1,13 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { SecaoComponent } from './secao/secao.component';
 import { EntrarSecaoComponent } from './entrar-secao/entrar-secao.component';
 import { JogoComponent } from './jogo/jogo.component';
 
 const routes: Routes = [
 
-  { path: '', component: SecaoComponent },
+  { path: '', component: EntrarSecaoComponent },
   { path: 'entrar-sala', component: EntrarSecaoComponent },
   { path: 'entrar-sala/:nameUser/:isJogador', component: EntrarSecaoComponent },
   { path: 'jogo', component: EntrarSecaoComponent },

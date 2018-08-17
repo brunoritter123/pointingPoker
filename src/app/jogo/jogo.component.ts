@@ -129,7 +129,15 @@ export class JogoComponent implements OnInit, OnDestroy {
    */
   private fimDeJogo(acabou: boolean): void {
     this.fimJogo = acabou;
-    this.descWidget = this.fimJogo ? 'Estatísticas' : 'Pontos';
+    if (this.fimJogo) {
+      this.descWidget = 'Estatísticas';
+    } else {
+      if (this.isJogador) {
+        this.descWidget = 'Pontos';
+      } else {
+        this.descWidget = 'Ações';
+      }
+    }
   }
 
   /**
