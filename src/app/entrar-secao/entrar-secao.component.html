@@ -1,11 +1,14 @@
 <thf-page-default>
     <div class="thf-sm-12 thf-md-7 thf-lg-4 thf-xl-3"> 
-      <form (ngSubmit)="onSubmit()" #f="ngForm">
+      <form #f="ngForm">
         <thf-widget t-title="Criar/Entrar na Sala">
 
           <thf-input
             class="thf-md-12"
-            name="codSecao"
+            name="idSala"
+            [(ngModel)]="idSala"
+            [t-maxlength]="12"
+            [t-minlength]="3"
             t-required="true"
             t-placeholder="ID Sala">
           </thf-input>
@@ -14,6 +17,8 @@
             class="thf-md-12"
             name="nome"
             [(ngModel)]="nome"
+            [t-maxlength]="12"
+            [t-minlength]="3"
             t-required="true"
             t-placeholder="Nome">
           </thf-input>
@@ -29,7 +34,7 @@
           </thf-switch>
 
           <thf-button
-            [routerLink]="['/jogo',nome,jogador]"
+            (t-click)="entrar()"
             class="pad-b-20 thf-md-12"
             t-label="Criar/Entrar"
             t-type="primary" >

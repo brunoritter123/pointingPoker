@@ -10,7 +10,7 @@ import { ThfModalAction } from '@totvs/thf-ui/components/thf-modal';
 })
 export class AppComponent {
   @ViewChild(ThfModalComponent) thfModal: ThfModalComponent;
-  title = 'Point Poker';
+  public title = 'Scrum Poker';
 
   menus: Array<ThfMenuItem> = [
     { label: 'Início', link: '/', icon: 'home' },

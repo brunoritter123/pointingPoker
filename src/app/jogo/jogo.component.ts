@@ -7,7 +7,6 @@ import { interval } from 'rxjs/observable/interval';
 import { ThfNotificationService } from '@totvs/thf-ui/services/thf-notification/thf-notification.service';
 import { ThfModalComponent } from '@totvs/thf-ui/components/thf-modal/thf-modal.component';
 import { ThfModalAction } from '@totvs/thf-ui/components/thf-modal';
-
 @Component({
   selector: 'app-jogo',
   templateUrl: './jogo.component.html',
@@ -18,6 +17,7 @@ import { ThfModalAction } from '@totvs/thf-ui/components/thf-modal';
 export class JogoComponent implements OnInit, OnDestroy {
   @ViewChild(ThfModalComponent) thfModal: ThfModalComponent;
 
+  public idSala: string;
   public fimJogo: boolean;
   public descWidget: string;
   public cartas: Array<Carta> = [];
@@ -55,7 +55,7 @@ export class JogoComponent implements OnInit, OnDestroy {
     private jogoService: JogoService,
     private activateRoute: ActivatedRoute,
     private thfNotification: ThfNotificationService,
-    private route: Router
+    private route: Router,
   ) { }
 
   /**
@@ -63,6 +63,7 @@ export class JogoComponent implements OnInit, OnDestroy {
    * Inicializador do componente
    */
   ngOnInit() {
+    this.idSala = this.activateRoute.snapshot.params['idSala'];
     this.nameUser = this.activateRoute.snapshot.params['nameUser'];
     this.fimDeJogo(false);
     this.isJogador = this.activateRoute.snapshot.params['isJogador'] === 'true';

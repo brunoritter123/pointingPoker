@@ -10,7 +10,7 @@ const routes: Routes = [
   { path: 'entrar-sala', component: EntrarSecaoComponent },
   { path: 'entrar-sala/:nameUser/:isJogador', component: EntrarSecaoComponent },
   { path: 'jogo', component: EntrarSecaoComponent },
-  { path: 'jogo/:nameUser/:isJogador', component: JogoComponent }
+  { path: 'jogo/:idSala/:nameUser/:isJogador', component: JogoComponent }
 ];
 
 @NgModule({

@@ -26,7 +26,6 @@ const cartas = [
 ]
 
 io.on('connection', (socket) => {
-  console.log('Conectado: '+socket.id);
 
   socket.on('disconnect', () => {
     let remover = false;
