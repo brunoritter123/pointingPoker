@@ -67,7 +67,7 @@ export class JogoComponent implements OnInit, OnDestroy {
     this.nameUser = this.activateRoute.snapshot.params['nameUser'];
     this.fimDeJogo(false);
     this.isJogador = this.activateRoute.snapshot.params['isJogador'] === 'true';
-    this.jogoService.setUser( this.nameUser, this.isJogador );
+    this.jogoService.setUser(this.idSala, this.nameUser, this.isJogador );
 
     // Quando um usuário sai ou entra na seção.
     this.conUsers = this.jogoService.getUsersConnect().subscribe( (users: Array<User>) => {

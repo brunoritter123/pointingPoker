@@ -11,6 +11,7 @@ import { ContatoComponent } from './contato/contato.component';
 import { EstatisticaComponent } from './jogo/estatistica/estatistica.component';
 import { VotosComponent } from './jogo/votos/votos.component';
 import { ObservadorComponent } from './jogo/observador/observador.component';
+import { HttpModule } from '@angular/http';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { ObservadorComponent } from './jogo/observador/observador.component';
     BrowserModule,
     AppRoutingModule,
     ThfModule,
-    FormsModule
+    FormsModule,
+    HttpModule
   ],
   providers: [],
   bootstrap: [AppComponent]
