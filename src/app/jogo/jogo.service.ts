@@ -3,13 +3,11 @@ import {Observable} from 'rxjs/Observable';
 import * as io from 'socket.io-client';
 import { User } from '../models/user.model';
 import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class JogoService {
-  // private url = 'http://192.168.25.47:3000';
-  // private url = 'http://10.172.14.46:3000';
-  // private url = 'http://www.scrumpoker.com.br:80';
-  private url = 'localhost:3005';
+  private readonly url = environment.API;
 
   private socket = io(this.url, {
     reconnection: true,
@@ -37,12 +35,11 @@ export class JogoService {
       this.isJogador = isJogador;
       this.idSala = idSala;
       this.socket.emit('add-user', this.idSala, this.myId, this.userName, this.isJogador);
-      console.log(this.myId);
     });
   }
 
   sendVoto(carta: any) {
-    this.socket.emit('add-voto', carta);
+    this.socket.emit('add-voto', this.myId, carta);
   }
 
   isConnected(): string {
@@ -51,10 +48,6 @@ export class JogoService {
     if (!this.conectado && socketConnected) {
       // Reconectou
       this.socket.emit('add-user', this.idSala, this.myId, this.userName, this.isJogador, this.myId);
-    }
-
-    if (socketConnected) {
-      this.myId = this.socket.io.engine.id;
     }
 
     this.conectado = socketConnected;
@@ -67,7 +60,7 @@ export class JogoService {
         observer.next(data);
       });
       return () => {
-        this.socket.emit('remove');
+        this.socket.emit('remove', this.idSala, this.myId);
         this.socket.disconnect();
       };
     });
@@ -76,7 +69,7 @@ export class JogoService {
   }
 
   getCartas() {
-    this.socket.emit('obs-cartas');
+    this.socket.emit('obs-cartas', this.idSala);
 
     const observable = new Observable(observer => {
       this.socket.on('get-cartas', (data) => {
@@ -96,23 +89,10 @@ export class JogoService {
   }
 
   sendFimJogo() {
-    this.socket.emit('add-FimJogo', true);
+    this.socket.emit('fimJogo', this.idSala);
   }
 
   sendReset() {
-    this.socket.emit('add-FimJogo', false);
-  }
-
-  getIp() {
-    let idUser: string;
-    const xmlhttp = new XMLHttpRequest();
-    xmlhttp.open('GET', 'https://api.ipify.org?format=json');
-    xmlhttp.send();
-    xmlhttp.onload = function(e) {
-      idUser = JSON.parse(xmlhttp.response);
-      console.log(idUser);
-    };
-    console.log(idUser);
-    return idUser;
+    this.socket.emit('reset', this.idSala);
   }
 }
