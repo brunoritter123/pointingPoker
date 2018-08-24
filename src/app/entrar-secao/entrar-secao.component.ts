@@ -42,4 +42,10 @@ export class EntrarSecaoComponent implements OnInit {
     }
    }
 
+   public checkLoginState() {
+    FB.getLoginStatus(function(response) {
+      statusChangeCallback(response);
+    });
+  }
+
 }
