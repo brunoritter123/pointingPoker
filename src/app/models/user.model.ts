@@ -1,7 +1,7 @@
 import { Carta } from './carta.model';
 
 export class User {
-  public id: string;
+  public idUser: string;
   public socket: string;
   public status: string;
   public nome: string;

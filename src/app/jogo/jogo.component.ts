@@ -27,7 +27,7 @@ export class JogoComponent implements OnInit, OnDestroy {
   public isConnected = false;
   public isJogador = false;
   public myId: string;
-  public vlCartaSelecionada: number;
+  public idCartaSelecionada: number;
   public primaryAction: ThfModalAction = {
     action: () => {
       this.thfModal.close();
@@ -37,12 +37,12 @@ export class JogoComponent implements OnInit, OnDestroy {
 
   public secondaryAction: ThfModalAction = {
     action: () => {
-        this.route.navigate([`/entrar-sala/${this.nameUser}/${this.isJogador}`], { queryParams: { vlCarta: this.vlCartaSelecionada }});
+        this.route.navigate([`/entrar-sala/${this.nameUser}/${this.isJogador}`], { queryParams: { vlCarta: this.idCartaSelecionada }});
     },
     label: 'Sair da Sala'
   };
 
-
+  private forceFimJogo: boolean;
   private nameUser: string;
   private conUsers;
   private conCartas;
@@ -66,6 +66,7 @@ export class JogoComponent implements OnInit, OnDestroy {
     this.idSala = this.activateRoute.snapshot.params['idSala'];
     this.nameUser = this.activateRoute.snapshot.params['nameUser'];
     this.fimDeJogo(false);
+    this.forceFimJogo = false;
     this.isJogador = this.activateRoute.snapshot.params['isJogador'] === 'true';
     this.jogoService.setUser(this.idSala, this.nameUser, this.isJogador );
 
@@ -73,22 +74,19 @@ export class JogoComponent implements OnInit, OnDestroy {
     this.conUsers = this.jogoService.getUsersConnect().subscribe( (users: Array<User>) => {
       this.jogadores = [];
       this.observadores = [];
-      this.fimDeJogo(false);
 
-      users.forEach((us: User) => {
-        // Separa o tipo de usuário
-        if (us.isJogador) {
-          this.jogadores.push(us);
-        } else {
-          this.observadores.push(us);
-        }
+      // Separa o tipo de usuário
+      this.jogadores = users.filter(us => us.isJogador);
+      this.observadores = users.filter(us => !us.isJogador);
 
-        // Verifica a carta selecionada
-        if (us.id === this.myId) {
-          this.setCartaSel(us.voto.value);
+      // Verifica a carta selecionada
+      users.forEach(us => {
+        if (us.idUser === this.myId) {
+          this.setCartaSel(us.voto.id);
         }
       });
 
+      this.todosVotaram(users);
     });
 
     // Observa recebe a configuração das cartas
@@ -98,6 +96,7 @@ export class JogoComponent implements OnInit, OnDestroy {
 
     // Observa se acabou o jogo
     this.conFimJogo = this.jogoService.getFimJogo().subscribe( (fimJogo: boolean) => {
+      this.forceFimJogo = fimJogo;
       this.fimDeJogo(fimJogo);
     });
 
@@ -129,7 +128,7 @@ export class JogoComponent implements OnInit, OnDestroy {
    * Metodo para alterar o valor da propriedade fimJogo
    */
   private fimDeJogo(acabou: boolean): void {
-    this.fimJogo = acabou;
+    this.fimJogo = acabou || this.forceFimJogo;
     if (this.fimJogo) {
       this.descWidget = 'Estatísticas';
     } else {
@@ -147,7 +146,7 @@ export class JogoComponent implements OnInit, OnDestroy {
    */
   public cartaClick(carta: Carta): void {
     if (!this.fimJogo && carta !== undefined && this.isConnected) {
-      this.setCartaSel(carta.value);
+      this.setCartaSel(carta.id);
       this.jogoService.sendVoto(carta);
     }
   }
@@ -178,14 +177,24 @@ export class JogoComponent implements OnInit, OnDestroy {
   }
 
   public setCartaSel(valor: number) {
-    this.vlCartaSelecionada = valor;
+    this.idCartaSelecionada = valor;
 
     this.cartas.forEach( (carta: Carta) => {
-      if (carta.value === this.vlCartaSelecionada) {
+      if (carta.id === this.idCartaSelecionada) {
         carta.type = 'danger';
       } else {
         carta.type = 'default';
       }
     });
+  }
+
+  private todosVotaram(users: Array<User>): void {
+    const index = users.findIndex(us => us.voto.id === undefined);
+
+      if (index < 0) {
+        this.fimDeJogo(true);
+      } else {
+        this.fimDeJogo(false);
+      }
   }
 }
