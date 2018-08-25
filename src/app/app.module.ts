@@ -12,6 +12,8 @@ import { EstatisticaComponent } from './jogo/estatistica/estatistica.component';
 import { VotosComponent } from './jogo/votos/votos.component';
 import { ObservadorComponent } from './jogo/observador/observador.component';
 import { HttpModule } from '@angular/http';
+import { AuthService } from './app.auth.service';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,8 @@ import { HttpModule } from '@angular/http';
     ContatoComponent,
     EstatisticaComponent,
     VotosComponent,
-    ObservadorComponent
+    ObservadorComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -30,7 +33,7 @@ import { HttpModule } from '@angular/http';
     FormsModule,
     HttpModule
   ],
-  providers: [],
+  providers: [AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

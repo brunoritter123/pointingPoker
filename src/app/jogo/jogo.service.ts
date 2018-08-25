@@ -1,4 +1,3 @@
-import { Http, Response } from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 import * as io from 'socket.io-client';
 import { User } from '../models/user.model';
@@ -22,20 +21,18 @@ export class JogoService {
 
   public myId: string;
 
-  constructor(
-    private _http: Http
-  ) { }
+  constructor( ) { }
+
+
+  public setMyId(myId: string): void {
+    this.myId = myId;
+  }
 
   setUser(idSala: string, userName: string, isJogador: boolean): void {
-    this._http.get('https://api.ipify.org?format=json')
-    .toPromise()
-    .then( (res: Response) => {
-      this.myId = res.json().ip;
-      this.userName = userName;
-      this.isJogador = isJogador;
-      this.idSala = idSala;
-      this.socket.emit('add-user', this.idSala, this.myId, this.userName, this.isJogador);
-    });
+    this.userName = userName;
+    this.isJogador = isJogador;
+    this.idSala = idSala;
+    this.socket.emit('add-user', this.idSala, this.myId, this.userName, this.isJogador);
   }
 
   sendVoto(carta: any) {

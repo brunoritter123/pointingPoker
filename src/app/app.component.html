@@ -1,5 +1,9 @@
 <div class="thf-wrapper">
-  <thf-toolbar t-title="{{title}}"></thf-toolbar>
+  <thf-toolbar
+    t-title="{{title}}"
+    [t-profile]="profile"
+    [t-profile-actions]="profileActions"
+    ></thf-toolbar>
 
   <thf-menu display = "none"
     [t-menus]="menus" >
@@ -8,15 +12,11 @@
   <router-outlet></router-outlet>
 </div>
 
-
 <thf-modal
   t-click-out="true"
   t-hide-close="true"
   t-size="md"
   t-title="Sobre"
   [t-primary-action]="primaryAction">
-
   <app-contato></app-contato>
-
-
 </thf-modal>

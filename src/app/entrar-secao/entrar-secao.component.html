@@ -2,10 +2,6 @@
     <div class="thf-sm-12 thf-md-7 thf-lg-4 thf-xl-3"> 
       <form #f="ngForm">
         <thf-widget t-title="Criar/Entrar na Sala">
-          <fb:login-button 
-            scope="public_profile,email"
-            onlogin="checkLoginState();">
-          </fb:login-button>
 
           <thf-input
             class="thf-md-12"
@@ -39,11 +35,11 @@
 
           <thf-button
             (t-click)="entrar()"
+            [t-disabled]="authService.id === undefined"
             class="pad-b-20 thf-md-12"
             t-label="Criar/Entrar"
             t-type="primary" >
           </thf-button>
-
         </thf-widget>
       </form>
     </div>

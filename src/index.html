@@ -12,32 +12,13 @@
   <link rel="manifest" href="./manifest.json">
   <meta name="theme-color" content="#fafafa">
 
-  <script>
-    window.fbAsyncInit = function() {
-      FB.init({
-        appId      : '',
-        cookie     : true,
-        xfbml      : true,
-        version    : '1.0'
-      });
-        
-      FB.AppEvents.logPageView();
-        
-    };
-  
-    (function(d, s, id){
-       var js, fjs = d.getElementsByTagName(s)[0];
-       if (d.getElementById(id)) {return;}
-       js = d.createElement(s); js.id = id;
-       js.src = "https://connect.facebook.net/en_US/sdk.js";
-       fjs.parentNode.insertBefore(js, fjs);
-     }(document, 'script', 'facebook-jssdk'));
-  </script>
+  <meta name="google-signin-client_id" content="490896064905-rlnp8cbqkarl6m23362s5tg1urbbftuj.apps.googleusercontent.com">
+  <script src="https://apis.google.com/js/platform.js"></script>
 
 </head>
 
 <body>
-  <app-root></app-root>
+  <app-root>Loading...</app-root>
 </body>
 
 </html>

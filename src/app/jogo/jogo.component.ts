@@ -7,6 +7,9 @@ import { interval } from 'rxjs/observable/interval';
 import { ThfNotificationService } from '@totvs/thf-ui/services/thf-notification/thf-notification.service';
 import { ThfModalComponent } from '@totvs/thf-ui/components/thf-modal/thf-modal.component';
 import { ThfModalAction } from '@totvs/thf-ui/components/thf-modal';
+import { AuthService } from '../app.auth.service';
+import { routerNgProbeToken } from '@angular/router/src/router_module';
+
 @Component({
   selector: 'app-jogo',
   templateUrl: './jogo.component.html',
@@ -17,6 +20,16 @@ import { ThfModalAction } from '@totvs/thf-ui/components/thf-modal';
 export class JogoComponent implements OnInit, OnDestroy {
   @ViewChild(ThfModalComponent) thfModal: ThfModalComponent;
 
+  constructor(
+    private authService: AuthService,
+    private jogoService: JogoService,
+    private activateRoute: ActivatedRoute,
+    private thfNotification: ThfNotificationService,
+    private route: Router,
+  ) {
+    jogoService.setMyId(authService.id);
+  }
+
   public idSala: string;
   public fimJogo: boolean;
   public descWidget: string;
@@ -26,7 +39,7 @@ export class JogoComponent implements OnInit, OnDestroy {
   public maisVotado: string = undefined;
   public isConnected = false;
   public isJogador = false;
-  public myId: string;
+  public myId: string = this.authService.id;
   public idCartaSelecionada: number;
   public primaryAction: ThfModalAction = {
     action: () => {
@@ -50,14 +63,6 @@ export class JogoComponent implements OnInit, OnDestroy {
   private conRecnnect;
   private conRecnnectSub;
 
-
-  constructor(
-    private jogoService: JogoService,
-    private activateRoute: ActivatedRoute,
-    private thfNotification: ThfNotificationService,
-    private route: Router,
-  ) { }
-
   /**
    * ngOnInit
    * Inicializador do componente
@@ -69,6 +74,10 @@ export class JogoComponent implements OnInit, OnDestroy {
     this.forceFimJogo = false;
     this.isJogador = this.activateRoute.snapshot.params['isJogador'] === 'true';
     this.jogoService.setUser(this.idSala, this.nameUser, this.isJogador );
+
+    if (this.myId === undefined) {
+      this.route.navigate(['/']);
+    }
 
     // Quando um usuário sai ou entra na seção.
     this.conUsers = this.jogoService.getUsersConnect().subscribe( (users: Array<User>) => {
@@ -103,7 +112,7 @@ export class JogoComponent implements OnInit, OnDestroy {
     // Controle para reconectar
     this.conRecnnect = interval(2000);
     this.conRecnnectSub = this.conRecnnect.subscribe(() => {
-      this.myId = this.jogoService.isConnected();
+      this.jogoService.isConnected();
       this.isConnected = navigator.onLine;
 
       if (!this.isConnected) {

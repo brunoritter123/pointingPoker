@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '../../../node_modules/@angular/router';
 import { ThfNotificationService } from '@totvs/thf-ui/services/thf-notification/thf-notification.service';
+import { AuthService } from '../app.auth.service';
 
 @Component({
   selector: 'app-entrar-secao',
@@ -18,6 +19,7 @@ export class EntrarSecaoComponent implements OnInit {
     private activateRoute: ActivatedRoute,
     private thfNotification: ThfNotificationService,
     private router: Router,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
@@ -31,21 +33,14 @@ export class EntrarSecaoComponent implements OnInit {
   }
 
   entrar() {
-    if (this.nome.length < 3 || this.nome.length > 12) {
+    if (this.nome.trim().length < 3 || this.nome.trim().length > 12) {
       this.thfNotification.error('O nome deve ter no mínimo 3 caracteres.');
 
-    } else if (this.idSala.length < 3 || this.idSala.length > 12) {
+    } else if (this.idSala.trim().length < 3 || this.idSala.trim().length > 12) {
       this.thfNotification.error('O ID da Sala deve ter no mínimo 3 caracteres.');
 
     } else {
       this.router.navigate([`/jogo/${this.idSala.toUpperCase()}/${this.nome}/${this.jogador}`]);
     }
    }
-
-   public checkLoginState() {
-    FB.getLoginStatus(function(response) {
-      statusChangeCallback(response);
-    });
-  }
-
 }
