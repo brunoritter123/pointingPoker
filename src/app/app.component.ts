@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, NgZone } from '@angular/core';
 import { ThfMenuItem } from '@totvs/thf-ui/components/thf-menu';
 import { ThfModalComponent } from '@totvs/thf-ui/components/thf-modal/thf-modal.component';
 import { ThfModalAction } from '@totvs/thf-ui/components/thf-modal';
@@ -13,7 +13,9 @@ import { AuthService } from './app.auth.service';
 export class AppComponent {
   @ViewChild(ThfModalComponent) thfModal: ThfModalComponent;
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private ngZone: NgZone) {}
 
   public title = 'Scrum Poker';
   public profile: ThfToolbarProfile  = {
@@ -49,7 +51,7 @@ export class AppComponent {
   }
 
   private login(): void {
-    this.authService.login( () => {
+    this.authService.login( () => this.ngZone.run(() => {
       const newProfile: ThfToolbarProfile  = {
         avatar: this.authService.imageUrl,
         subtitle: this.authService.email,
@@ -58,7 +60,7 @@ export class AppComponent {
 
       this.profile = newProfile;
       this.profileActions = [this.profActSair];
-    });
+    }));
   }
 
   private sair(): void {
