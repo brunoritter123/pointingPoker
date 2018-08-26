@@ -65,6 +65,10 @@ export class JogoService {
     return observable;
   }
 
+  sendRemove(idUser: string) {
+    this.socket.emit('remove', this.idSala, idUser);
+  }
+
   getCartas() {
     this.socket.emit('obs-cartas', this.idSala);
 

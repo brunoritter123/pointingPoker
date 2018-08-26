@@ -3,7 +3,12 @@
   <h3 class="thf-sm-6 thf-md-6 thf-lg-6">Voto</h3>
   <div *ngFor="let jogador of jogadores">
     <div class="thf-row">
-      <h4 class="thf-sm-6 thf-md-6 thf-lg-6" [class.off]="jogador.status === 'OFF'">{{jogador.nome}}</h4>
+      <h4
+        (click)="remove(jogador)"
+        class="thf-sm-6 thf-md-6 thf-lg-6"
+        [class.off]="jogador.status === 'OFF'">
+        {{jogador.nome}}
+      </h4>
       <h4 class="thf-sm-6 thf-md-6 thf-lg-6">
         <span *ngIf="fimJogo"> {{jogador.voto.label}}</span>
         <span *ngIf="!fimJogo && !jogador.voto.label" class="txt-vermelho"> - </span>

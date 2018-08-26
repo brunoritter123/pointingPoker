@@ -19,7 +19,7 @@ export class EntrarSecaoComponent implements OnInit {
     private activateRoute: ActivatedRoute,
     private thfNotification: ThfNotificationService,
     private router: Router,
-    private authService: AuthService
+    public authService: AuthService
   ) { }
 
   ngOnInit() {
