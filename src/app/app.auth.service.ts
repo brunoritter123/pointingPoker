@@ -1,5 +1,6 @@
-import {Injectable} from '@angular/core';
+import {Injectable, EventEmitter, NgZone} from '@angular/core';
 import {Router} from '@angular/router';
+import { ThfToolbarProfile } from '../../node_modules/@totvs/thf-ui/components/thf-toolbar';
 
 declare const gapi: any;
 
@@ -11,9 +12,11 @@ export class AuthService {
   public email: string;
   public imageUrl: string;
   public token: string;
+  public emitirAuth = new EventEmitter<ThfToolbarProfile>();
 
   constructor(
-   private router: Router
+   private router: Router,
+   private ngZone: NgZone
   ) {
     gapi.load('auth2', function () {
       gapi.auth2.init();
@@ -21,7 +24,17 @@ export class AuthService {
 
   }
 
-  public login( callback: Function): void {
+  public getProfile(): ThfToolbarProfile {
+    const newProfile: ThfToolbarProfile  = {
+      avatar: this.imageUrl,
+      subtitle: this.email,
+      title: this.name
+    };
+
+    return newProfile;
+  }
+
+  public login(): void {
     const googleAuth = gapi.auth2.getAuthInstance();
     googleAuth.then(() => {
        googleAuth.signIn({scope: 'profile email'}).then(googleUser => {
@@ -31,7 +44,9 @@ export class AuthService {
           this.email = gbProfile.getEmail();
           this.imageUrl = gbProfile.getImageUrl();
 
-          callback();
+          this.ngZone.run( () => {
+            this.emitirAuth.emit(this.getProfile());
+          });
        });
     });
   }
@@ -45,6 +60,9 @@ export class AuthService {
     this.email = undefined;
     this.imageUrl = undefined;
     this.router.navigate(['/']);
+    this.ngZone.run( () => {
+      this.emitirAuth.emit(this.getProfile());
+    });
     });
   }
 }
