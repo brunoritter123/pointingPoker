@@ -54,15 +54,15 @@ export class AuthService {
   public sair() {
     const googleAuth = gapi.auth2.getAuthInstance();
     googleAuth.then( () => {
-    googleAuth.disconnect();
-    this.id = undefined;
-    this.name = undefined;
-    this.email = undefined;
-    this.imageUrl = undefined;
-    this.router.navigate(['/']);
-    this.ngZone.run( () => {
-      this.emitirAuth.emit(this.getProfile());
-    });
+      googleAuth.disconnect();
+      this.id = undefined;
+      this.name = undefined;
+      this.email = undefined;
+      this.imageUrl = undefined;
+      this.router.navigate(['/']);
+      this.ngZone.run( () => {
+        this.emitirAuth.emit(this.getProfile());
+      });
     });
   }
 }

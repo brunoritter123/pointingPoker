@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '../../../node_modules/@angular/router';
 import { ThfNotificationService } from '@totvs/thf-ui/services/thf-notification/thf-notification.service';
 import { AuthService } from '../app.auth.service';
+import { ThfDialogService } from '@totvs/thf-ui/services/thf-dialog/thf-dialog.service';
 
 @Component({
   selector: 'app-entrar-secao',
   templateUrl: './entrar-secao.component.html',
   styleUrls: ['./entrar-secao.component.css'],
-  providers: [ThfNotificationService]
+  providers: [ThfNotificationService, ThfDialogService]
 })
 export class EntrarSecaoComponent implements OnInit {
 
@@ -19,7 +20,8 @@ export class EntrarSecaoComponent implements OnInit {
     private activateRoute: ActivatedRoute,
     private thfNotification: ThfNotificationService,
     private router: Router,
-    public authService: AuthService
+    public authService: AuthService,
+    private thfAlert: ThfDialogService
   ) { }
 
   ngOnInit() {
@@ -32,8 +34,19 @@ export class EntrarSecaoComponent implements OnInit {
     }
   }
 
-  entrar() {
-    if (this.nome.trim().length < 3 || this.nome.trim().length > 12) {
+  public confirmLogin(): void {
+    this.thfAlert.confirm({
+      title: 'Atenção',
+      message: 'Para continuar é necessário fazer o login.',
+      confirm: () => this.authService.login()
+    });
+  }
+
+  public entrar() {
+    if (this.authService.id === undefined) {
+      this.confirmLogin();
+
+    } else if (this.nome.trim().length < 3 || this.nome.trim().length > 12) {
       this.thfNotification.error('O nome deve ter no mínimo 3 caracteres.');
 
     } else if (this.idSala.trim().length < 3 || this.idSala.trim().length > 12) {
