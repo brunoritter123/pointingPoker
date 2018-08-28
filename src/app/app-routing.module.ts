@@ -8,7 +8,6 @@ const routes: Routes = [
 
   { path: '', component: EntrarSecaoComponent },
   { path: 'entrar-sala', component: EntrarSecaoComponent },
-  { path: 'entrar-sala/:nameUser/:isJogador', component: EntrarSecaoComponent },
   { path: 'jogo', component: EntrarSecaoComponent },
   { path: 'jogo/:idSala/:nameUser/:isJogador', component: JogoComponent }
 ];

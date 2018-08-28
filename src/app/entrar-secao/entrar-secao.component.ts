@@ -25,10 +25,12 @@ export class EntrarSecaoComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    const nameUser: string = this.activateRoute.snapshot.params['nameUser'];
-    const isJogador: boolean = this.activateRoute.snapshot.params['isJogador'] === 'true';
+    const sala: string = this.activateRoute.snapshot.queryParams['idSala'];
+    const nameUser: string = this.activateRoute.snapshot.queryParams['nameUser'];
+    const isJogador: boolean = this.activateRoute.snapshot.queryParams['isJogador'] === 'true';
 
     if (nameUser > '') {
+      this.idSala = sala;
       this.nome = nameUser;
       this.jogador = isJogador;
     }

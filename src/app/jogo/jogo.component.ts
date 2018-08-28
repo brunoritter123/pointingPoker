@@ -8,7 +8,6 @@ import { ThfNotificationService } from '@totvs/thf-ui/services/thf-notification/
 import { ThfModalComponent } from '@totvs/thf-ui/components/thf-modal/thf-modal.component';
 import { ThfModalAction } from '@totvs/thf-ui/components/thf-modal';
 import { AuthService } from '../app.auth.service';
-import { routerNgProbeToken } from '@angular/router/src/router_module';
 
 @Component({
   selector: 'app-jogo',
@@ -50,7 +49,7 @@ export class JogoComponent implements OnInit, OnDestroy {
 
   public secondaryAction: ThfModalAction = {
     action: () => {
-        this.route.navigate([`/entrar-sala/${this.nameUser}/${this.isJogador}`], { queryParams: { vlCarta: this.idCartaSelecionada }});
+        this.route.navigate([`/entrar-sala`], { queryParams: { idSala: this.idSala, nameUser: this.nameUser, isJogador: this.isJogador }});
     },
     label: 'Sair da Sala'
   };
@@ -76,7 +75,7 @@ export class JogoComponent implements OnInit, OnDestroy {
     this.jogoService.setUser(this.idSala, this.nameUser, this.isJogador );
 
     if (this.myId === undefined) {
-      this.route.navigate(['/']);
+      this.route.navigate([`/entrar-sala`], { queryParams: { idSala: this.idSala, nameUser: this.nameUser, isJogador: this.isJogador }});
     }
 
     // Quando um usuário sai ou entra na seção.
