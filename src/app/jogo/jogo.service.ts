@@ -6,7 +6,7 @@ import { environment } from '../../environments/environment';
 
 @Injectable()
 export class JogoService {
-  private readonly url = environment.API;
+  private readonly url = 'http://www.scrumpoker.com.br:80'; // environment.API;
 
   private socket = io(this.url, {
     reconnection: true,
@@ -53,8 +53,14 @@ export class JogoService {
 
   getUsersConnect() {
     const observable = new Observable(observer => {
-      this.socket.on('get-user', (data: Array < User > ) => {
-        observer.next(data);
+      this.socket.on('get-user', (data: Array < any > ) => {
+        const users: Array < User > = new  Array < User >();
+
+        data.forEach(d => {
+          users.push( User.novo(d));
+        });
+
+        observer.next(users);
       });
       return () => {
         this.socket.emit('remove', this.idSala, this.myId);
