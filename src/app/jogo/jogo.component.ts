@@ -25,9 +25,7 @@ export class JogoComponent implements OnInit, OnDestroy {
     private activateRoute: ActivatedRoute,
     private thfNotification: ThfNotificationService,
     private route: Router,
-  ) {
-    jogoService.setMyId(authService.id);
-  }
+  ) { }
 
   public idSala: string;
   public fimJogo: boolean;
@@ -39,7 +37,6 @@ export class JogoComponent implements OnInit, OnDestroy {
   public isConnected = false;
   public isJogador = false;
   public myId: string = this.authService.id;
-  public idCartaSelecionada: number;
   public primaryAction: ThfModalAction = {
     action: () => {
       this.thfModal.close();
@@ -185,11 +182,11 @@ export class JogoComponent implements OnInit, OnDestroy {
   }
 
   public setCartaSel(valor: number) {
-    this.idCartaSelecionada = valor;
 
     this.cartas.forEach( (carta: Carta) => {
-      if (carta.id === this.idCartaSelecionada) {
+      if (carta.id === valor) {
         carta.type = 'danger';
+        this.jogoService.cartaSel = carta;
       } else {
         carta.type = 'default';
       }

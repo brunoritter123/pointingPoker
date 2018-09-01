@@ -3,10 +3,15 @@ import * as io from 'socket.io-client';
 import { User } from '../models/user.model';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
+import { Carta } from '../models/carta.model';
+import { AuthService } from '../app.auth.service';
 
 @Injectable()
 export class JogoService {
-  private readonly url = 'http://www.scrumpoker.com.br:80'; // environment.API;
+  public myId = this.authService.id;
+  public cartaSel: Carta;
+
+  private readonly url = environment.API;
 
   private socket = io(this.url, {
     reconnection: true,
@@ -19,20 +24,13 @@ export class JogoService {
   private conectado = true;
   private idSala = '';
 
-  public myId: string;
-
-  constructor( ) { }
-
-
-  public setMyId(myId: string): void {
-    this.myId = myId;
-  }
+  constructor( private authService: AuthService) { }
 
   setUser(idSala: string, userName: string, isJogador: boolean): void {
     this.userName = userName;
     this.isJogador = isJogador;
     this.idSala = idSala;
-    this.socket.emit('add-user', this.idSala, this.myId, this.userName, this.isJogador);
+    this.socket.emit('add-user', this.idSala, this.myId, this.userName, this.isJogador, this.cartaSel);
   }
 
   sendVoto(carta: any) {
@@ -44,7 +42,7 @@ export class JogoService {
 
     if (!this.conectado && socketConnected) {
       // Reconectou
-      this.socket.emit('add-user', this.idSala, this.myId, this.userName, this.isJogador, this.myId);
+      this.socket.emit('add-user', this.idSala, this.myId, this.userName, this.isJogador, this.cartaSel);
     }
 
     this.conectado = socketConnected;

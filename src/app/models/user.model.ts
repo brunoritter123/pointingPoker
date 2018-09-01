@@ -41,7 +41,7 @@ export class User {
       newUser.isJogador = undefined;
     }
 
-    if (obj.hasOwnProperty('voto')) {
+    if (obj.hasOwnProperty('voto') && obj.voto !== null && obj.voto !== undefined) {
       newUser.voto = obj.voto;
 
       if (!newUser.voto.hasOwnProperty('id')) {
