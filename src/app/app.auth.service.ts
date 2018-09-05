@@ -1,6 +1,7 @@
 import {Injectable, EventEmitter, NgZone} from '@angular/core';
 import {Router} from '@angular/router';
 import { ThfToolbarProfile } from '../../node_modules/@totvs/thf-ui/components/thf-toolbar';
+import { interval } from 'rxjs/observable/interval';
 
 declare const gapi: any;
 
@@ -18,10 +19,33 @@ export class AuthService {
    private router: Router,
    private ngZone: NgZone
   ) {
+
     gapi.load('auth2', function () {
       gapi.auth2.init();
-   });
+    });
 
+    const testLoad = interval(500);
+    const testLoadSub = testLoad.subscribe(() => {
+      if (gapi.hasOwnProperty('auth2')) {
+        this.load();
+        testLoadSub.unsubscribe();
+      }
+    });
+  }
+
+  public load(): void {
+    const googleUser = gapi.auth2.getAuthInstance().currentUser.get();
+    googleUser.reloadAuthResponse().then( () => {
+      const gbProfile = googleUser.getBasicProfile();
+      this.id = 'google' + gbProfile.getId();
+      this.name = gbProfile.getName();
+      this.email = gbProfile.getEmail();
+      this.imageUrl = gbProfile.getImageUrl();
+
+      this.ngZone.run( () => {
+        this.emitirAuth.emit(this.getProfile());
+      });
+    });
   }
 
   public getProfile(): ThfToolbarProfile {
