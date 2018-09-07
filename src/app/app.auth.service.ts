@@ -19,9 +19,14 @@ export class AuthService {
    private router: Router,
    private ngZone: NgZone
   ) {
-
-    gapi.load('auth2', function () {
-      gapi.auth2.init();
+    const testGapi = interval(1000);
+    const testGapiSub = testGapi.subscribe(() => {
+      if (gapi !== undefined) {
+          gapi.load('auth2', function () {
+          gapi.auth2.init();
+          testGapiSub.unsubscribe();
+        });
+      }
     });
 
     const testLoad = interval(500);

@@ -73,11 +73,9 @@ export class JogoService {
     this.socket.emit('remove', this.idSala, idUser);
   }
 
-  getCartas() {
-    this.socket.emit('obs-cartas', this.idSala);
-
+  getSala() {
     const observable = new Observable(observer => {
-      this.socket.on('get-cartas', (data) => {
+      this.socket.on('get-sala', (data) => {
         observer.next(data);
       });
     });
@@ -93,8 +91,8 @@ export class JogoService {
     return observable;
   }
 
-  sendFimJogo() {
-    this.socket.emit('fimJogo', this.idSala);
+  sendUpdateSala(configSala) {
+    this.socket.emit('update-sala', configSala);
   }
 
   sendReset() {

@@ -2,13 +2,13 @@
   <div class="thf-row">
 
     <div class="pad-b-10 thf-sm-12 thf-md-7 thf-lg-6 thf-xl-3">
-      <thf-widget t-title="Sala: {{idSala}}">
+      <thf-widget t-title="Sala: {{configSala.idSala}}">
 
         <div class="row">
-          <div *ngIf="isJogador && !fimJogo">
+          <div *ngIf="isJogador && !fimJogo && configSala !== undefined">
             <div class="thf-sm-12">
-              <thf-button *ngFor="let carta of cartas" (t-click)="cartaClick(carta)" class="pad-b-10 thf-sm-6 thf-md-6 thf-lg-4 cartaSelec"
-                t-label={{carta.label}} t-type={{carta.type}}>
+              <thf-button *ngFor="let carta of configSala.cartas" (t-click)="cartaClick(carta)" class="pad-b-10 thf-sm-6 thf-md-6 thf-lg-4"
+                t-label={{carta.label}} [t-type]="isCardSel(carta.id)">
               </thf-button>
             </div>
           </div>

@@ -8,6 +8,7 @@ import { ThfNotificationService } from '@totvs/thf-ui/services/thf-notification/
 import { ThfModalComponent } from '@totvs/thf-ui/components/thf-modal/thf-modal.component';
 import { ThfModalAction } from '@totvs/thf-ui/components/thf-modal';
 import { AuthService } from '../app.auth.service';
+import { Sala } from '../models/sala.model';
 
 @Component({
   selector: 'app-jogo',
@@ -21,16 +22,15 @@ export class JogoComponent implements OnInit, OnDestroy {
 
   constructor(
     private authService: AuthService,
-    private jogoService: JogoService,
+    public jogoService: JogoService,
     private activateRoute: ActivatedRoute,
     private thfNotification: ThfNotificationService,
     private route: Router,
   ) { }
 
-  public idSala: string;
+  public configSala: Sala = new Sala();
   public fimJogo: boolean;
   public descWidget: string;
-  public cartas: Array<Carta> = [];
   public jogadores: Array<User> = [];
   public observadores: Array<User> = [];
   public maisVotado: string = undefined;
@@ -46,16 +46,15 @@ export class JogoComponent implements OnInit, OnDestroy {
 
   public secondaryAction: ThfModalAction = {
     action: () => {
-        this.route.navigate([`/entrar-sala`], { queryParams: { idSala: this.idSala, nameUser: this.nameUser, isJogador: this.isJogador }});
+        this.route.navigate([`/entrar-sala`], {
+          queryParams: { idSala: this.configSala.idSala, nameUser: this.nameUser, isJogador: this.isJogador }});
     },
     label: 'Sair da Sala'
   };
 
-  private forceFimJogo: boolean;
   private nameUser: string;
   private conUsers;
   private conCartas;
-  private conFimJogo;
   private conRecnnect;
   private conRecnnectSub;
 
@@ -64,15 +63,15 @@ export class JogoComponent implements OnInit, OnDestroy {
    * Inicializador do componente
    */
   ngOnInit() {
-    this.idSala = this.activateRoute.snapshot.params['idSala'];
+    this.configSala.idSala = this.activateRoute.snapshot.params['idSala'];
     this.nameUser = this.activateRoute.snapshot.params['nameUser'];
     this.fimDeJogo(false);
-    this.forceFimJogo = false;
     this.isJogador = this.activateRoute.snapshot.params['isJogador'] === 'true';
-    this.jogoService.setUser(this.idSala, this.nameUser, this.isJogador );
+    this.jogoService.setUser(this.configSala.idSala, this.nameUser, this.isJogador );
 
     if (this.myId === undefined) {
-      this.route.navigate([`/entrar-sala`], { queryParams: { idSala: this.idSala, nameUser: this.nameUser, isJogador: this.isJogador }});
+      this.route.navigate([`/entrar-sala`], { queryParams:
+        { idSala: this.configSala.idSala, nameUser: this.nameUser, isJogador: this.isJogador }});
     }
 
     // Quando um usuário sai ou entra na seção.
@@ -85,24 +84,27 @@ export class JogoComponent implements OnInit, OnDestroy {
       this.observadores = users.filter(us => !us.isJogador);
 
       // Verifica a carta selecionada
+      let existCardSel = false;
       users.forEach(us => {
-        if (us.idUser === this.myId) {
+        if (us.idUser === this.myId && us.voto.id !== undefined) {
           this.setCartaSel(us.voto.id);
+          existCardSel = true;
         }
       });
+      if (!existCardSel) {
+        this.setCartaSel(undefined);
+      }
 
       this.todosVotaram(users);
     });
 
-    // Observa recebe a configuração das cartas
-    this.conCartas = this.jogoService.getCartas().subscribe( (cartas: Array<Carta>) => {
-      this.cartas = cartas;
-    });
-
-    // Observa se acabou o jogo
-    this.conFimJogo = this.jogoService.getFimJogo().subscribe( (fimJogo: boolean) => {
-      this.forceFimJogo = fimJogo;
-      this.fimDeJogo(fimJogo);
+    // Observa recebe a configuração da sala
+    this.conCartas = this.jogoService.getSala().subscribe( (sala: Sala) => {
+      this.configSala = sala;
+      this.fimDeJogo(this.configSala.forceFimJogo);
+      if (this.jogoService.cartaSel !== undefined && this.jogoService.cartaSel.id !== undefined) {
+        this.setCartaSel(this.jogoService.cartaSel.id);
+      }
     });
 
     // Controle para reconectar
@@ -125,7 +127,6 @@ export class JogoComponent implements OnInit, OnDestroy {
     this.conRecnnectSub.unsubscribe();
     this.conUsers.unsubscribe();
     this.conCartas.unsubscribe();
-    this.conFimJogo.unsubscribe();
   }
 
   /**
@@ -133,7 +134,7 @@ export class JogoComponent implements OnInit, OnDestroy {
    * Metodo para alterar o valor da propriedade fimJogo
    */
   private fimDeJogo(acabou: boolean): void {
-    this.fimJogo = acabou || this.forceFimJogo;
+    this.fimJogo = acabou || this.configSala.forceFimJogo;
     if (this.fimJogo) {
       this.descWidget = 'Estatísticas';
     } else {
@@ -162,7 +163,8 @@ export class JogoComponent implements OnInit, OnDestroy {
    */
   public fimClick(): void {
     if (this.isConnected) {
-      this.jogoService.sendFimJogo();
+      this.configSala.forceFimJogo = true;
+      this.jogoService.sendUpdateSala(this.configSala);
     }
   }
 
@@ -172,7 +174,9 @@ export class JogoComponent implements OnInit, OnDestroy {
    */
   public resetClick(): void {
     if (this.isConnected) {
+      this.configSala.forceFimJogo = false;
       this.jogoService.sendReset();
+      this.jogoService.sendUpdateSala(this.configSala);
     }
   }
 
@@ -181,16 +185,28 @@ export class JogoComponent implements OnInit, OnDestroy {
     return true;
   }
 
-  public setCartaSel(valor: number) {
+  public setCartaSel(id: number | undefined) {
+    if (id === undefined) {
+      this.jogoService.cartaSel = undefined;
 
-    this.cartas.forEach( (carta: Carta) => {
-      if (carta.id === valor) {
-        carta.type = 'danger';
-        this.jogoService.cartaSel = carta;
-      } else {
-        carta.type = 'default';
-      }
-    });
+    } else {
+
+      this.configSala.cartas.forEach( (carta: Carta) => {
+        if (carta.id === id) {
+          this.jogoService.cartaSel = carta;
+        }
+      });
+    }
+  }
+
+  public isCardSel(id: number): string {
+    if (this.jogoService.cartaSel !== undefined && id === this.jogoService.cartaSel.id) {
+      return 'danger';
+
+    } else {
+      return 'default';
+
+    }
   }
 
   private todosVotaram(users: Array<User>): void {
