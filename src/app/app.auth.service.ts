@@ -12,7 +12,6 @@ export class AuthService {
   public name: string;
   public email: string;
   public imageUrl: string;
-  public token: string;
   public emitirAuth = new EventEmitter<ThfToolbarProfile>();
 
   constructor(
@@ -36,6 +35,18 @@ export class AuthService {
         testLoadSub.unsubscribe();
       }
     });
+  }
+
+  private aleatorio(): string {
+    const letras = '1234567890abcdefghijlkmnopqtuvxywz';
+    let txtAleatorio: string;
+
+    for (let i = 0; i < 20; i++) {
+      const pos = Math.floor(Math.random() * letras.length);
+      txtAleatorio += letras.substring(pos, pos + 1);
+    }
+
+    return txtAleatorio;
   }
 
   public load(): void {

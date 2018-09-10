@@ -1,5 +1,10 @@
 <thf-widget t-title="Administrador: {{observadores.length}}">
   <div *ngFor="let observador of observadores">
-    <h4 class="thf-sm-12 thf-md-12 thf-lg-12">{{observador.nome}}</h4>
+    <h4
+    (click)="remove(observador)"
+      class="thf-sm-12 thf-md-12 thf-lg-12"
+      [class.off]="observador.status === 'OFF'">
+        {{observador.nome}}
+    </h4>
   </div>
 </thf-widget>

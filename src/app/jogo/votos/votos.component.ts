@@ -7,7 +7,7 @@ import { ThfDialogService } from '@totvs/thf-ui/services/thf-dialog/thf-dialog.s
   selector: 'app-votos',
   templateUrl: './votos.component.html',
   styleUrls: ['./votos.component.css'],
-  providers: [ThfDialogService]
+  providers: []
 })
 export class VotosComponent {
   @Input() jogadores: Array<User>;
@@ -26,7 +26,7 @@ export class VotosComponent {
   public confirmRemove(jogador: User): void {
     this.thfAlert.confirm({
       title: 'Atenção',
-      message: 'Deseja remover o usuário da sala?',
+      message: `Deseja remover o '${jogador.nome}' da sala?`,
       confirm: () => this.jogoService.sendRemove(jogador.idUser)
     });
   }

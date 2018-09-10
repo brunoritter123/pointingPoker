@@ -13,6 +13,9 @@ import { VotosComponent } from './jogo/votos/votos.component';
 import { ObservadorComponent } from './jogo/observador/observador.component';
 import { HttpModule } from '@angular/http';
 import { AuthService } from './app.auth.service';
+import { ThfDialogService } from '@totvs/thf-ui/services/thf-dialog/thf-dialog.service';
+import { ConfiguracaoComponent } from './jogo/configuracao/configuracao.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -22,16 +25,18 @@ import { AuthService } from './app.auth.service';
     ContatoComponent,
     EstatisticaComponent,
     VotosComponent,
-    ObservadorComponent
+    ObservadorComponent,
+    ConfiguracaoComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ThfModule,
     FormsModule,
-    HttpModule
+    HttpModule,
+    BrowserAnimationsModule
   ],
-  providers: [AuthService],
+  providers: [AuthService, ThfDialogService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

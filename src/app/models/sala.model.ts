@@ -4,6 +4,8 @@ export class Sala {
   constructor(
     public idSala: string = '',
     public forceFimJogo: boolean = false,
+    public jogadorFinaliza: boolean = true,
+    public jogadorReseta: boolean = true,
     public cartas: Array<Carta> =
       [ {id: 1, value: 1, label: '1', type: 'default' },
         {id: 2, value: 2, label: '2', type: 'default' },

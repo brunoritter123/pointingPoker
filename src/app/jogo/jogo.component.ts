@@ -54,7 +54,7 @@ export class JogoComponent implements OnInit, OnDestroy {
 
   private nameUser: string;
   private conUsers;
-  private conCartas;
+  private conConfigSala;
   private conRecnnect;
   private conRecnnectSub;
 
@@ -99,7 +99,7 @@ export class JogoComponent implements OnInit, OnDestroy {
     });
 
     // Observa recebe a configuração da sala
-    this.conCartas = this.jogoService.getSala().subscribe( (sala: Sala) => {
+    this.conConfigSala = this.jogoService.getSala().subscribe( (sala: Sala) => {
       this.configSala = sala;
       this.fimDeJogo(this.configSala.forceFimJogo);
       if (this.jogoService.cartaSel !== undefined && this.jogoService.cartaSel.id !== undefined) {
@@ -126,7 +126,7 @@ export class JogoComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.conRecnnectSub.unsubscribe();
     this.conUsers.unsubscribe();
-    this.conCartas.unsubscribe();
+    this.conConfigSala.unsubscribe();
   }
 
   /**
