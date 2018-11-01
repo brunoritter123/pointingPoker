@@ -11,7 +11,7 @@ import { ContatoComponent } from './contato/contato.component';
 import { EstatisticaComponent } from './jogo/estatistica/estatistica.component';
 import { VotosComponent } from './jogo/votos/votos.component';
 import { ObservadorComponent } from './jogo/observador/observador.component';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { AuthService } from './app.auth.service';
 import { ThfDialogService } from '@totvs/thf-ui/services/thf-dialog/thf-dialog.service';
 import { ConfiguracaoComponent } from './jogo/configuracao/configuracao.component';
@@ -33,7 +33,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     AppRoutingModule,
     ThfModule,
     FormsModule,
-    HttpModule,
+    HttpClientModule,
     BrowserAnimationsModule
   ],
   providers: [AuthService, ThfDialogService],

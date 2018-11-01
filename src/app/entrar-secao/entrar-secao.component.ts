@@ -55,7 +55,7 @@ export class EntrarSecaoComponent implements OnInit {
       this.thfNotification.error('O ID da Sala deve ter no mínimo 3 caracteres.');
 
     } else {
-      this.router.navigate([`/jogo/${this.idSala.toUpperCase()}/${this.nome}/${this.jogador}`]);
+      this.router.navigate([`/jogo/${this.idSala.trim().toUpperCase()}/${this.nome.trim()}/${this.jogador}`]);
     }
    }
 }

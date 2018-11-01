@@ -37,8 +37,9 @@ export class JogoService {
     this.socket.emit('add-voto', this.myId, carta);
   }
 
-  isConnected(): string {
+  isConnected(): boolean {
     const socketConnected = this.socket.connected;
+    console.log(this.socket);
 
     if (!this.conectado && socketConnected) {
       // Reconectou
@@ -46,7 +47,7 @@ export class JogoService {
     }
 
     this.conectado = socketConnected;
-    return this.myId;
+    return this.conectado;
   }
 
   getUsersConnect() {

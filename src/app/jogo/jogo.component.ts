@@ -28,6 +28,7 @@ export class JogoComponent implements OnInit, OnDestroy {
     private route: Router,
   ) { }
 
+  public teste = true;
   public configSala: Sala = new Sala();
   public fimJogo: boolean;
   public descWidget: string;
