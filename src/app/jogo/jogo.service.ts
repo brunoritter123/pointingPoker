@@ -39,7 +39,6 @@ export class JogoService {
 
   isConnected(): boolean {
     const socketConnected = this.socket.connected;
-    console.log(this.socket);
 
     if (!this.conectado && socketConnected) {
       // Reconectou

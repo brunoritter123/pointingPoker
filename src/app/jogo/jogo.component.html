@@ -1,9 +1,11 @@
 
 <thf-page-default>
-  <thf-loading-overlay
-    t-screen-lock="teste"
-    t-text="Sincronizando com sala..." >
-  </thf-loading-overlay>
+  <div *ngIf="isConnected && !sincSala">
+    <thf-loading-overlay
+      t-screen-lock="true"
+      t-text="Sincronizando com sala..." >
+    </thf-loading-overlay>
+  </div>
 
   <div class="thf-row">
 

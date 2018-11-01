@@ -28,7 +28,7 @@ export class JogoComponent implements OnInit, OnDestroy {
     private route: Router,
   ) { }
 
-  public teste = true;
+  public sincSala = false;
   public configSala: Sala = new Sala();
   public fimJogo: boolean;
   public descWidget: string;
@@ -111,7 +111,12 @@ export class JogoComponent implements OnInit, OnDestroy {
     // Controle para reconectar
     this.conRecnnect = interval(2000);
     this.conRecnnectSub = this.conRecnnect.subscribe(() => {
-      this.jogoService.isConnected();
+      this.sincSala = this.jogoService.isConnected() && this.isUser();
+
+      if (navigator.onLine !== this.isConnected && !this.isConnected) {
+        this.thfModal.close();
+      }
+
       this.isConnected = navigator.onLine;
 
       if (!this.isConnected) {
@@ -128,6 +133,15 @@ export class JogoComponent implements OnInit, OnDestroy {
     this.conRecnnectSub.unsubscribe();
     this.conUsers.unsubscribe();
     this.conConfigSala.unsubscribe();
+  }
+
+    /**
+   * isUser
+   * Metodo para verificar se o meu usuário está na lista.
+   */
+  private isUser(): boolean {
+
+    return true;
   }
 
   /**
