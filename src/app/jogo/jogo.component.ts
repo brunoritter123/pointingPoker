@@ -28,7 +28,7 @@ export class JogoComponent implements OnInit, OnDestroy {
     private route: Router,
   ) { }
 
-  public sincSala = false;
+  public sincSala = true;
   public configSala: Sala = new Sala();
   public fimJogo: boolean;
   public descWidget: string;
@@ -111,7 +111,7 @@ export class JogoComponent implements OnInit, OnDestroy {
     // Controle para reconectar
     this.conRecnnect = interval(2000);
     this.conRecnnectSub = this.conRecnnect.subscribe(() => {
-      this.sincSala = this.jogoService.isConnected() && this.isUser();
+      this.sincSala = this.isConnected && this.jogoService.isSincronizando();
 
       if (navigator.onLine !== this.isConnected && !this.isConnected) {
         this.thfModal.close();
@@ -133,15 +133,6 @@ export class JogoComponent implements OnInit, OnDestroy {
     this.conRecnnectSub.unsubscribe();
     this.conUsers.unsubscribe();
     this.conConfigSala.unsubscribe();
-  }
-
-    /**
-   * isUser
-   * Metodo para verificar se o meu usuário está na lista.
-   */
-  private isUser(): boolean {
-
-    return true;
   }
 
   /**
@@ -166,7 +157,9 @@ export class JogoComponent implements OnInit, OnDestroy {
    * Função para executar ao clicar em uma carta
    */
   public cartaClick(carta: Carta): void {
+    console.log(this.isConnected);
     if (!this.fimJogo && carta !== undefined && this.isConnected) {
+      console.log("clicou");
       this.setCartaSel(carta.id);
       this.jogoService.sendVoto(carta);
     }

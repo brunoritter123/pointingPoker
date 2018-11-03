@@ -10,6 +10,7 @@ import { AuthService } from '../app.auth.service';
 export class JogoService {
   public myId = this.authService.id;
   public cartaSel: Carta;
+  public iAmOn: boolean = false;
 
   private readonly url = environment.API;
 
@@ -23,6 +24,8 @@ export class JogoService {
   private isJogador: boolean;
   private conectado = true;
   private idSala = '';
+  private timeUltEnvio: number = 0;
+  private timeDesconect: number = new Date().getTime();
 
   constructor( private authService: AuthService) { }
 
@@ -30,19 +33,24 @@ export class JogoService {
     this.userName = userName;
     this.isJogador = isJogador;
     this.idSala = idSala;
-    this.socket.emit('add-user', this.idSala, this.myId, this.userName, this.isJogador, this.cartaSel);
+    let dt
+    this.socket.emit('add-user', this.idSala, this.myId, this.userName, this.isJogador, this.cartaSel, new Date().getTime());
   }
 
   sendVoto(carta: any) {
-    this.socket.emit('add-voto', this.myId, carta);
+    this.socket.emit('add-voto', this.myId, carta, new Date().getTime());
   }
 
   isConnected(): boolean {
     const socketConnected = this.socket.connected;
 
+    if (!socketConnected) {
+      this.timeDesconect = new Date().getTime();
+    }
+
     if (!this.conectado && socketConnected) {
       // Reconectou
-      this.socket.emit('add-user', this.idSala, this.myId, this.userName, this.isJogador, this.cartaSel);
+      this.socket.emit('add-user', this.idSala, this.myId, this.userName, this.isJogador, this.cartaSel, new Date().getTime());
     }
 
     this.conectado = socketConnected;
@@ -50,18 +58,29 @@ export class JogoService {
   }
 
   getUsersConnect() {
+    let iAmOn: boolean = false;
     const observable = new Observable(observer => {
-      this.socket.on('get-user', (data: Array < any > ) => {
-        const users: Array < User > = new  Array < User >();
+      this.socket.on('get-user', (ret: any ) => {
+        let timeEnvio: number = ret.timeEnvio;
+        let data: any = ret.users;
 
-        data.forEach(d => {
-          users.push( User.novo(d));
-        });
+        if (this.timeUltEnvio <= timeEnvio) {
+          this.timeUltEnvio = timeEnvio;
+          const users: Array < User > = new  Array < User >();
 
-        observer.next(users);
+          data.forEach(d => {
+            if (this.myId == d.idUser) {
+              iAmOn = true;
+            }
+            users.push( User.novo(d));
+          });
+          
+          this.iAmOn = iAmOn;
+          observer.next(users);
+        }
       });
       return () => {
-        this.socket.emit('remove', this.idSala, this.myId);
+        this.socket.emit('remove', this.idSala, this.myId, new Date().getTime());
         this.socket.disconnect();
       };
     });
@@ -70,7 +89,7 @@ export class JogoService {
   }
 
   sendRemove(idUser: string) {
-    this.socket.emit('remove', this.idSala, idUser);
+    this.socket.emit('remove', this.idSala, idUser, new Date().getTime());
   }
 
   getSala() {
@@ -96,6 +115,10 @@ export class JogoService {
   }
 
   sendReset() {
-    this.socket.emit('reset', this.idSala);
+    this.socket.emit('reset', this.idSala, new Date().getTime());
+  }
+
+  isSincronizando(): boolean {
+    return !this.isConnected() || !this.iAmOn || this.timeUltEnvio < this.timeDesconect;
   }
 }
