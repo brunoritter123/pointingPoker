@@ -10,7 +10,7 @@ import { AuthService } from '../app.auth.service';
 export class JogoService {
   public myId = this.authService.id;
   public cartaSel: Carta;
-  public iAmOn: boolean = false;
+  public iAmOn = false;
 
   private readonly url = environment.API;
 
@@ -24,7 +24,7 @@ export class JogoService {
   private isJogador: boolean;
   private conectado = true;
   private idSala = '';
-  private timeUltEnvio: number = 0;
+  private timeUltEnvio = 0;
   private timeDesconect: number = new Date().getTime();
 
   constructor( private authService: AuthService) { }
@@ -33,7 +33,6 @@ export class JogoService {
     this.userName = userName;
     this.isJogador = isJogador;
     this.idSala = idSala;
-    let dt
     this.socket.emit('add-user', this.idSala, this.myId, this.userName, this.isJogador, this.cartaSel, new Date().getTime());
   }
 
@@ -58,26 +57,27 @@ export class JogoService {
   }
 
   getUsersConnect() {
-    let iAmOn: boolean = false;
+    let iAmOn = false;
     const observable = new Observable(observer => {
       this.socket.on('get-user', (ret: any ) => {
-        let timeEnvio: number = ret.timeEnvio;
-        let data: any = ret.users;
+        const timeEnvio: number = ret.timeEnvio;
+        const data: any = ret.users;
 
         if (this.timeUltEnvio <= timeEnvio) {
           this.timeUltEnvio = timeEnvio;
-          const users: Array < User > = new  Array < User >();
-
-          data.forEach(d => {
-            if (this.myId == d.idUser) {
-              iAmOn = true;
-            }
-            users.push( User.novo(d));
-          });
-          
-          this.iAmOn = iAmOn;
-          observer.next(users);
         }
+
+        const users: Array < User > = new  Array < User >();
+
+        data.forEach(d => {
+          if (this.myId === d.idUser) {
+            iAmOn = true;
+          }
+          users.push( User.novo(d));
+        });
+
+        this.iAmOn = iAmOn;
+        observer.next(users);
       });
       return () => {
         this.socket.emit('remove', this.idSala, this.myId, new Date().getTime());

@@ -159,7 +159,6 @@ export class JogoComponent implements OnInit, OnDestroy {
   public cartaClick(carta: Carta): void {
     console.log(this.isConnected);
     if (!this.fimJogo && carta !== undefined && this.isConnected) {
-      console.log("clicou");
       this.setCartaSel(carta.id);
       this.jogoService.sendVoto(carta);
     }
