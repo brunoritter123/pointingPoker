@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, HostListener } from '@angular/core';
 import { JogoService } from './jogo.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Carta } from '../models/carta.model';
@@ -58,6 +58,10 @@ export class JogoComponent implements OnInit, OnDestroy {
   private conConfigSala;
   private conRecnnect;
   private conRecnnectSub;
+
+  @HostListener('window:beforeunload', ['$event']) unloadHandler(event: Event) {
+    event.returnValue = false;
+  }
 
   /**
    * ngOnInit
@@ -157,7 +161,6 @@ export class JogoComponent implements OnInit, OnDestroy {
    * Função para executar ao clicar em uma carta
    */
   public cartaClick(carta: Carta): void {
-    console.log(this.isConnected);
     if (!this.fimJogo && carta !== undefined && this.isConnected) {
       this.setCartaSel(carta.id);
       this.jogoService.sendVoto(carta);

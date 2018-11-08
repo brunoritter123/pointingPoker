@@ -14,7 +14,7 @@ export class ObservadorComponent {
   constructor(
     private jogoService: JogoService,
     private thfAlert: ThfDialogService
-  ){}
+  ) { }
 
   public remove(user: User): void {
     if (user.status === 'OFF') {

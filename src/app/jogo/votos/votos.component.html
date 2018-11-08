@@ -6,7 +6,8 @@
       <h4
         (click)="remove(jogador)"
         class="thf-sm-6 thf-md-6 thf-lg-6"
-        [class.off]="jogador.status === 'OFF'">
+        [class.off]="jogador.status === 'OFF'"
+        [class.click]="jogador.status === 'OFF' && (!this.isJogador || this.observadores.length === 0)">
         {{jogador.nome}}
       </h4>
       <h4 class="thf-sm-6 thf-md-6 thf-lg-6">

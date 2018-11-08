@@ -27,5 +27,8 @@ h2{
 .off {
   text-decoration: line-through;;
   color: gray;
+}
+
+.click {
   cursor:pointer;
 }

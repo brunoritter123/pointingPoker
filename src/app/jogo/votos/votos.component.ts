@@ -11,14 +11,16 @@ import { ThfDialogService } from '@totvs/thf-ui/services/thf-dialog/thf-dialog.s
 })
 export class VotosComponent {
   @Input() jogadores: Array<User>;
+  @Input() observadores: Array<User>;
   @Input() fimJogo: boolean;
+  @Input() isJogador: boolean;
 
   constructor(
     private jogoService: JogoService,
     private thfAlert: ThfDialogService) {}
 
   public remove(jogador: User): void {
-    if (jogador.status === 'OFF') {
+    if (jogador.status === 'OFF' && (!this.isJogador || this.observadores.length === 0)) {
       this.confirmRemove(jogador);
     }
   }
