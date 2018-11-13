@@ -1,6 +1,21 @@
-<thf-info
-    t-label="Configuração">
-</thf-info>
-<thf-widget t-title="Cartas">
+<thf-widget t-title="Configuração">
+<!--
+    <thf-grid
+        [t-data]="dataItems"
+        [t-columns]="columns"
+        [t-sortable]="true"
+        [t-selectable]="visualizationsValues.includes('selectable')"
+        [t-editable]="allowedValues.includes('editable')"
+        [t-groupable]="allowedValues.includes('groupable')"
+        [t-show-export-buttons]="visualizationsValues.includes('export')"
+        [t-show-more-disabled]="false"
+        [t-show-remove-button]="visualizationsValues.includes('remove')"
+        [t-show-add-button]="allowedValues.includes('add')"
+        (t-show-more)="loadMoreData()"
+        (t-selection-change)="onSelectionChange($event)"
+        t-remove-action="onRemove"
+        t-save-action="onSave">
+    </thf-grid>
+-->
 </thf-widget>
 

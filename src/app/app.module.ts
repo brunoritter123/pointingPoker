@@ -4,6 +4,8 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ThfModule } from '@totvs/thf-ui';
+import { ThfKendoModule } from '@totvs/thf-kendo';
+
 import { EntrarSecaoComponent } from './entrar-secao/entrar-secao.component';
 import { JogoComponent } from './jogo/jogo.component';
 import { FormsModule } from '@angular/forms';
@@ -32,6 +34,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     BrowserModule,
     AppRoutingModule,
     ThfModule,
+    ThfKendoModule,
     FormsModule,
     HttpClientModule,
     BrowserAnimationsModule

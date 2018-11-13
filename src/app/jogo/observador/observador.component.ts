@@ -10,6 +10,7 @@ import { ThfDialogService } from '@totvs/thf-ui/services/thf-dialog/thf-dialog.s
 })
 export class ObservadorComponent {
   @Input() observadores: Array<User>;
+  @Input() myId: string;
 
   constructor(
     private jogoService: JogoService,

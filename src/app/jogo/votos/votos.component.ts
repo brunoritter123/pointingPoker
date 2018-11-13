@@ -14,6 +14,7 @@ export class VotosComponent {
   @Input() observadores: Array<User>;
   @Input() fimJogo: boolean;
   @Input() isJogador: boolean;
+  @Input() myId: string;
 
   constructor(
     private jogoService: JogoService,

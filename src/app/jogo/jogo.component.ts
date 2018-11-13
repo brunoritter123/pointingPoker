@@ -93,6 +93,7 @@ export class JogoComponent implements OnInit, OnDestroy {
       users.forEach(us => {
         if (us.idUser === this.myId && us.voto.id !== undefined) {
           this.setCartaSel(us.voto.id);
+          this.isJogador = us.isJogador;
           existCardSel = true;
         }
       });

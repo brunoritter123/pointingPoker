@@ -42,23 +42,23 @@
     </div>
 
     <div class="pad-b-10 thf-sm-12 thf-md-5 thf-lg-3 thf-xl-3">
-      <app-votos [jogadores]="jogadores" [observadores]="observadores" [fimJogo]="fimJogo" [isJogador]="isJogador">
+      <app-votos [jogadores]="jogadores" [observadores]="observadores" [fimJogo]="fimJogo" [isJogador]="isJogador" [myId]="myId">
       </app-votos>
     </div>
 
     <div *ngIf="observadores !== undefined && observadores.length > 0" class="pad-b-10 thf-sm-12 thf-md-5 thf-lg-3 thf-xl-3">
-      <app-observador [observadores]="observadores">
+      <app-observador [observadores]="observadores" [myId]="myId">
       </app-observador>
     </div>
   </div>
 
-  <!--
-  <div class="thf-row"
+<!--
+  <div class="thf-row">
       <div class="pad-b-10 thf-sm-12 thf-md-12 thf-lg-12 thf-xl-12">
         <app-configuracao [configSala]="configSala" ></app-configuracao>
       </div>
   </div>
-  -->
+-->
 </thf-page-default>
 
 <thf-modal

@@ -32,3 +32,12 @@ h2{
 .click {
   cursor:pointer;
 }
+
+.f-bold {
+  font-weight: bold
+}
+
+.txt-thf{
+  color: #0c9abe;
+  font-weight: bold;
+}

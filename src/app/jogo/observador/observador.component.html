@@ -3,7 +3,8 @@
     <h4
     (click)="remove(observador)"
       class="thf-sm-12 thf-md-12 thf-lg-12"
-      [class.off]="observador.status === 'OFF'">
+      [class.off]="observador.status === 'OFF'"
+      [class.f-bold]="observador.idUser === myId">
         {{observador.nome}}
     </h4>
   </div>
