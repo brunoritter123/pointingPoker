@@ -12,6 +12,7 @@
     <div class="pad-b-10 thf-sm-12 thf-md-7 thf-lg-6 thf-xl-3">
       <thf-widget t-title="Sala: {{configSala.idSala}}">
 
+        <!--Cartas-->
         <div class="row">
           <div *ngIf="isJogador && !fimJogo && configSala !== undefined">
             <div class="thf-sm-12">
@@ -21,11 +22,22 @@
             </div>
           </div>
 
+          <!--Estatisticas-->
           <div *ngIf="fimJogo">
-            <app-estatistica [jogadores]='jogadores'></app-estatistica>
+            <h3 class="thf-sm-12 txt-vermelho">Mais Votado: {{maisVotado}}</h3>
+            <h3 class="thf-sm-6 thf-md-6 thf-lg-6">Ponto</h3>
+            <h3 class="thf-sm-6 thf-md-6 thf-lg-6">Votos</h3>
+            <div *ngFor="let ponto of pontuacao">
+              <h4 class="thf-sm-6 thf-md-6 thf-lg-6">
+                <span *ngIf="ponto.carta.label > ''">{{ponto.carta.label}}</span>
+                <span *ngIf="!ponto.carta.label" class="txt-vermelho"> - </span>
+              </h4>
+              <h4 class="thf-sm-6 thf-md-6 thf-lg-6">{{ponto.votos}}</h4>
+            </div>
           </div>
         </div>
 
+        <!--Botões-->
         <div *ngIf="!isJogador || observadores.length === 0">
           <p>&#160;</p>
 
@@ -41,11 +53,13 @@
 
     </div>
 
+    <!--Jogadores-->
     <div class="pad-b-10 thf-sm-12 thf-md-5 thf-lg-3 thf-xl-3">
       <app-votos [jogadores]="jogadores" [observadores]="observadores" [fimJogo]="fimJogo" [isJogador]="isJogador" [myId]="myId">
       </app-votos>
     </div>
 
+    <!--Adminstrador-->
     <div *ngIf="observadores !== undefined && observadores.length > 0" class="pad-b-10 thf-sm-12 thf-md-5 thf-lg-3 thf-xl-3">
       <app-observador [observadores]="observadores" [myId]="myId">
       </app-observador>

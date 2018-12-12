@@ -10,7 +10,6 @@ import { EntrarSecaoComponent } from './entrar-secao/entrar-secao.component';
 import { JogoComponent } from './jogo/jogo.component';
 import { FormsModule } from '@angular/forms';
 import { ContatoComponent } from './contato/contato.component';
-import { EstatisticaComponent } from './jogo/estatistica/estatistica.component';
 import { VotosComponent } from './jogo/votos/votos.component';
 import { ObservadorComponent } from './jogo/observador/observador.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -25,7 +24,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     EntrarSecaoComponent,
     JogoComponent,
     ContatoComponent,
-    EstatisticaComponent,
     VotosComponent,
     ObservadorComponent,
     ConfiguracaoComponent

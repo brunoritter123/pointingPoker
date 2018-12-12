@@ -15,10 +15,14 @@ export class JogoService {
   private readonly url = environment.API;
 
   private socket = io(this.url, {
+    transports: ['websocket'],
+    upgrade: false,
     reconnection: true,
     reconnectionDelay: 1000,
     reconnectionDelayMax : 5000,
     reconnectionAttempts: Infinity
+  }, {
+    'force new connection': true
   } );
   private userName: string;
   private isJogador: boolean;

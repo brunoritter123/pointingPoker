@@ -4,17 +4,17 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Carta } from '../models/carta.model';
 import { User } from '../models/user.model';
 import { interval } from 'rxjs/observable/interval';
-import { ThfNotificationService } from '@totvs/thf-ui/services/thf-notification/thf-notification.service';
 import { ThfModalComponent } from '@totvs/thf-ui/components/thf-modal/thf-modal.component';
 import { ThfModalAction } from '@totvs/thf-ui/components/thf-modal';
 import { AuthService } from '../app.auth.service';
 import { Sala } from '../models/sala.model';
+import { Estatistica } from '../models/estatistica.model';
 
 @Component({
   selector: 'app-jogo',
   templateUrl: './jogo.component.html',
   styleUrls: ['./jogo.component.css'],
-  providers: [JogoService, ThfNotificationService]
+  providers: [JogoService]
 })
 
 export class JogoComponent implements OnInit, OnDestroy {
@@ -24,17 +24,17 @@ export class JogoComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     public jogoService: JogoService,
     private activateRoute: ActivatedRoute,
-    private thfNotification: ThfNotificationService,
     private route: Router,
   ) { }
 
+  public pontuacao: Array<Estatistica>;
+  public maisVotado: string;
   public sincSala = true;
   public configSala: Sala = new Sala();
   public fimJogo: boolean;
   public descWidget: string;
   public jogadores: Array<User> = [];
   public observadores: Array<User> = [];
-  public maisVotado: string = undefined;
   public isConnected = false;
   public isJogador = false;
   public myId: string = this.authService.id;
@@ -102,12 +102,14 @@ export class JogoComponent implements OnInit, OnDestroy {
       }
 
       this.todosVotaram(users);
+      this.GeraEstatistica()
     });
 
     // Observa recebe a configuração da sala
     this.conConfigSala = this.jogoService.getSala().subscribe( (sala: Sala) => {
       this.configSala = sala;
       this.fimDeJogo(this.configSala.forceFimJogo);
+      this.GeraEstatistica();
       if (this.jogoService.cartaSel !== undefined && this.jogoService.cartaSel.id !== undefined) {
         this.setCartaSel(this.jogoService.cartaSel.id);
       }
@@ -225,8 +227,45 @@ export class JogoComponent implements OnInit, OnDestroy {
 
       if (index < 0) {
         this.fimDeJogo(true);
+        this.GeraEstatistica()
       } else {
         this.fimDeJogo(false);
       }
+  }
+
+  private GeraEstatistica() {
+      let existeArray: boolean;
+      let novoPonto: Estatistica;
+
+      if (this.fimJogo) {
+      this.pontuacao = [];
+
+      this.jogadores.forEach(jogador => {
+        existeArray = false;
+
+        this.pontuacao.forEach(ponto => {
+          if (ponto.carta.label === jogador.voto.label ) {
+            existeArray = true;
+            ponto.votos += 1;
+          }
+        });
+
+        if (!existeArray) {
+          novoPonto = new Estatistica(jogador.voto, 1);
+          this.pontuacao.push(novoPonto);
+        }
+
+        this.pontuacao.sort( (a: Estatistica , b: Estatistica) => {
+          let ret: number = b.votos - a.votos;
+          if (ret === 0) {
+            ret = b.carta.value - a.carta.value;
+          }
+
+          return ret;
+        });
+
+        this.maisVotado = this.pontuacao[0].carta.label;
+      });
+    }
   }
 }
