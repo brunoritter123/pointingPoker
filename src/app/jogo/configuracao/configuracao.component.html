@@ -1,6 +1,39 @@
 <thf-widget t-title="Configuração">
 <!--
     <thf-grid
+    [t-row-actions]="rowActions"
+    [t-data]="data"
+    [t-columns]="columns">
+    </thf-grid>
+-->
+
+    <thf-combo
+        name="cbResetar"
+        t-label="Opção de Resetar"
+        [t-options]="opcoes">
+    </thf-combo>
+
+    <thf-combo
+        name="cbFinalizar"
+        t-label="Remover Administradores"
+        [t-options]="opcoes">
+    </thf-combo>
+
+    <thf-combo
+        name="rmJogadores"
+        t-label="Remover Jogadores"
+        [t-options]="opcoes">
+    </thf-combo>
+
+    <thf-combo
+        name="rmAdministradores"
+        t-label="Remover Administradores"
+        [t-options]="[{ value: 'Jogador' }, 
+                      { value: 'Administrador' },
+                      { value: 'Ambos' }]">
+    </thf-combo>
+<!--
+    <thf-grid
         [t-data]="dataItems"
         [t-columns]="columns"
         [t-sortable]="true"
