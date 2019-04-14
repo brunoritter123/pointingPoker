@@ -1,54 +1,44 @@
 <thf-widget t-title="Configuração">
-<!--
-    <thf-grid
-    [t-row-actions]="rowActions"
-    [t-data]="data"
-    [t-columns]="columns">
-    </thf-grid>
--->
 
-    <thf-combo
-        name="cbResetar"
-        t-label="Opção de Resetar"
-        [t-options]="opcoes">
-    </thf-combo>
+    <div class="thf-row">
+        <div class="pad-b-10 thf-sm-6 thf-md-6 thf-lg-6 thf-xl-6">
+            <thf-divider class="thf-md-12" t-label="Cartas"></thf-divider>
+             <thf-grid
+                [t-row-actions]="rowActions"
+                [t-data]="configSalaTmp.cartas"
+                [t-columns]="columns">
+            </thf-grid>
+        </div>
+        <div class="pad-b-10 thf-sm-6 thf-md-6 thf-lg-6 thf-xl-6">
+            <thf-divider class="thf-md-12" t-label="Ações"></thf-divider>
+            <thf-combo
+                name="cbResetar"
+                [(ngModel)]="cbResetar"
+                t-label="Opção de Resetar"
+                [t-options]="opcoes">
+            </thf-combo>
 
-    <thf-combo
-        name="cbFinalizar"
-        t-label="Remover Administradores"
-        [t-options]="opcoes">
-    </thf-combo>
+            <thf-combo
+                name="cbFinalizar"
+                [(ngModel)]="cbFinalizar"
+                t-label="Remover Administradores"
+                [t-options]="opcoes">
+            </thf-combo>
 
-    <thf-combo
-        name="rmJogadores"
-        t-label="Remover Jogadores"
-        [t-options]="opcoes">
-    </thf-combo>
+            <thf-combo
+                name="rmJogadores"
+                [(ngModel)]="rmJogadores"
+                t-label="Remover Jogadores"
+                [t-options]="opcoes">
+            </thf-combo>
 
-    <thf-combo
-        name="rmAdministradores"
-        t-label="Remover Administradores"
-        [t-options]="[{ value: 'Jogador' }, 
-                      { value: 'Administrador' },
-                      { value: 'Ambos' }]">
-    </thf-combo>
-<!--
-    <thf-grid
-        [t-data]="dataItems"
-        [t-columns]="columns"
-        [t-sortable]="true"
-        [t-selectable]="visualizationsValues.includes('selectable')"
-        [t-editable]="allowedValues.includes('editable')"
-        [t-groupable]="allowedValues.includes('groupable')"
-        [t-show-export-buttons]="visualizationsValues.includes('export')"
-        [t-show-more-disabled]="false"
-        [t-show-remove-button]="visualizationsValues.includes('remove')"
-        [t-show-add-button]="allowedValues.includes('add')"
-        (t-show-more)="loadMoreData()"
-        (t-selection-change)="onSelectionChange($event)"
-        t-remove-action="onRemove"
-        t-save-action="onSave">
-    </thf-grid>
--->
+            <thf-combo
+                name="rmAdministradores"
+                [(ngModel)]="rmAdministradores"
+                t-label="Remover Administradores"
+                [t-options]="opcoes">
+            </thf-combo>
+        </div>
+    </div>
 </thf-widget>
 

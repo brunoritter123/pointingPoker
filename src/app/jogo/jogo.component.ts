@@ -3,7 +3,7 @@ import { JogoService } from './jogo.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Carta } from '../models/carta.model';
 import { User } from '../models/user.model';
-import { interval } from 'rxjs/observable/interval';
+import { interval } from 'rxjs';
 import { ThfModalComponent } from '@totvs/thf-ui/components/thf-modal/thf-modal.component';
 import { ThfModalAction } from '@totvs/thf-ui/components/thf-modal';
 import { AuthService } from '../app.auth.service';
@@ -140,6 +140,7 @@ export class JogoComponent implements OnInit, OnDestroy {
     this.conRecnnectSub.unsubscribe();
     this.conUsers.unsubscribe();
     this.conConfigSala.unsubscribe();
+    console.log("NGonDestroy")
   }
 
   /**

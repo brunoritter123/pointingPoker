@@ -19,4 +19,17 @@ export class Sala {
         {id: 10, value: undefined, label: '?', type: 'default'}
       ]
   ) { }
+
+  clone(obj: any): any {
+    console.log(obj);
+    if(typeof(obj) == "object") {
+      for (const key in this) {
+          console.log(key);
+          if (obj.hasOwnProperty(key) && key !== "clone") {
+              this[key] = obj[key];                
+          }
+      }
+    }
+  }
+
 }

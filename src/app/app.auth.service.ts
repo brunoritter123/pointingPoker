@@ -1,7 +1,7 @@
 import {Injectable, EventEmitter, NgZone} from '@angular/core';
 import {Router} from '@angular/router';
 import { ThfToolbarProfile } from '../../node_modules/@totvs/thf-ui/components/thf-toolbar';
-import { interval } from 'rxjs/observable/interval';
+import { interval } from 'rxjs';
 
 declare const gapi: any;
 

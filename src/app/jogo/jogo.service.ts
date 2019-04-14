@@ -1,4 +1,4 @@
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 import * as io from 'socket.io-client';
 import { User } from '../models/user.model';
 import { Injectable } from '@angular/core';
