@@ -58,4 +58,8 @@ export class EntrarSecaoComponent implements OnInit {
       this.router.navigate([`/jogo/${this.idSala.trim().toUpperCase()}/${this.nome.trim()}/${this.jogador}`]);
     }
    }
+
+   changeEvent(event: string) {
+    console.log(event);
+  }
 }

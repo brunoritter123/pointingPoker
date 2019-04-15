@@ -1,7 +1,7 @@
 <thf-widget t-title="Configuração">
 
     <div class="thf-row">
-        <div class="pad-b-10 thf-sm-6 thf-md-6 thf-lg-6 thf-xl-6">
+        <div class="pad-b-10 thf-sm-12 thf-md-6 thf-lg-6 thf-xl-6">
             <thf-divider class="thf-md-12" t-label="Cartas"></thf-divider>
              <thf-grid
                 [t-row-actions]="rowActions"
@@ -9,35 +9,35 @@
                 [t-columns]="columns">
             </thf-grid>
         </div>
-        <div class="pad-b-10 thf-sm-6 thf-md-6 thf-lg-6 thf-xl-6">
+        <div class="pad-b-10 thf-sm-12 thf-md-6 thf-lg-6 thf-xl-6">
             <thf-divider class="thf-md-12" t-label="Ações"></thf-divider>
-            <thf-combo
+            <thf-select
                 name="cbResetar"
                 [(ngModel)]="cbResetar"
                 t-label="Opção de Resetar"
                 [t-options]="opcoes">
-            </thf-combo>
+            </thf-select>
 
-            <thf-combo
+            <thf-select
                 name="cbFinalizar"
                 [(ngModel)]="cbFinalizar"
                 t-label="Remover Administradores"
                 [t-options]="opcoes">
-            </thf-combo>
+            </thf-select>
 
-            <thf-combo
+            <thf-select
                 name="rmJogadores"
                 [(ngModel)]="rmJogadores"
                 t-label="Remover Jogadores"
                 [t-options]="opcoes">
-            </thf-combo>
+            </thf-select>
 
-            <thf-combo
+            <thf-select
                 name="rmAdministradores"
                 [(ngModel)]="rmAdministradores"
                 t-label="Remover Administradores"
                 [t-options]="opcoes">
-            </thf-combo>
+            </thf-select>
         </div>
     </div>
 </thf-widget>

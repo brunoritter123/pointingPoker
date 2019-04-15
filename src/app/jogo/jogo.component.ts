@@ -140,7 +140,6 @@ export class JogoComponent implements OnInit, OnDestroy {
     this.conRecnnectSub.unsubscribe();
     this.conUsers.unsubscribe();
     this.conConfigSala.unsubscribe();
-    console.log("NGonDestroy")
   }
 
   /**

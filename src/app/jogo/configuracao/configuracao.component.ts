@@ -16,7 +16,12 @@ export class ConfiguracaoComponent implements OnInit {
   public rmJogadores = "Default";
   public rmAdministradores = "Default";
 
-  public opcoes = [{ value: 'Ambos' }, {value: 'Administrador' }, {value: 'Default'}, {value: 'Jogador' }];
+  public opcoes = [
+    {label: 'Ambos', value: 'Ambos' },
+    {label: 'Administrador', value: 'Administrador' },
+    {label: 'Default', value: 'Default'},
+    {label: 'Jogador', value: 'Jogador' }
+  ];
 
   rowActions = {
     beforeSave: this.onBeforeSave.bind(this),
@@ -58,8 +63,6 @@ export class ConfiguracaoComponent implements OnInit {
 
   ngOnInit() {
     this.configSalaTmp.clone(this.configSala);
-    console.log(this.configSalaTmp);
-    console.log(this.configSala);
   }
 
 }
