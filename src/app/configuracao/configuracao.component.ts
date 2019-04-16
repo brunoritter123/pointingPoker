@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Sala } from '../../models/sala.model';
+import { Sala } from '../models/sala.model';
 
 
 @Component({
@@ -8,7 +8,8 @@ import { Sala } from '../../models/sala.model';
   styleUrls: ['./configuracao.component.css']
 })
 export class ConfiguracaoComponent implements OnInit {
-  @Input() configSala: Sala;
+  //@Input() configSala: Sala;
+  public configSala: Sala =  new Sala();
 
   public configSalaTmp: Sala =  new Sala();
   public cbResetar = "Default";
@@ -62,7 +63,7 @@ export class ConfiguracaoComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.configSalaTmp.clone(this.configSala);
+    Object.assign(this.configSalaTmp, this.configSala)
   }
 
 }

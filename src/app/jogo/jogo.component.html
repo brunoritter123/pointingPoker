@@ -8,7 +8,6 @@
   </div>
 
   <div class="thf-row">
-
     <div class="pad-b-10 thf-sm-12 thf-md-7 thf-lg-6 thf-xl-3">
       <thf-widget t-title="Sala: {{configSala.idSala}}">
 
@@ -64,12 +63,6 @@
       <app-observador [observadores]="observadores" [myId]="myId">
       </app-observador>
     </div>
-  </div>
-
-  <div class="thf-row" *ngIf="configSala !== undefined">
-      <div class="pad-b-10 thf-sm-12 thf-md-12 thf-lg-12 thf-xl-12">
-        <app-configuracao [configSala]="configSala" ></app-configuracao>
-      </div>
   </div>
 
 </thf-page-default>

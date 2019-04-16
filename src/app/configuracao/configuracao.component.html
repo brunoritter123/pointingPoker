@@ -1,3 +1,4 @@
+<thf-page-default>
 <thf-widget t-title="Configuração">
 
     <div class="thf-row">
@@ -40,5 +41,25 @@
             </thf-select>
         </div>
     </div>
+    <div class="thf-row">
+        <thf-button
+            (t-click)="ngOnInit()"
+            class="pad-b-20 thf-sm-12 thf-md-4 thf-lg-3 thf-xl-2"
+            t-label="Valores Default"
+            t-type="default" >
+        </thf-button>
+        <thf-button
+            (t-click)="ngOnInit()"
+            class="pad-b-20 thf-sm-12 thf-md-4 thf-lg-3 thf-xl-2"
+            t-label="Cancelar"
+            t-type="danger" >
+        </thf-button>
+        <thf-button
+            (t-click)="ngOnInit()"
+            class="pad-b-20 thf-sm-12 thf-md-4 thf-lg-3 thf-xl-2"
+            t-label="Salvar/Continuar"
+            t-type="primary" >
+        </thf-button>
+    </div>
 </thf-widget>
-
+</thf-page-default>

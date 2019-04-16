@@ -20,14 +20,4 @@ export class Sala {
       ]
   ) { }
 
-  clone(obj: any): any {
-    if(typeof(obj) == "object") {
-      for (const key in this) {
-          if (obj.hasOwnProperty(key) && key !== "clone") {
-              this[key] = obj[key];
-          }
-      }
-    }
-  }
-
 }

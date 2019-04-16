@@ -34,10 +34,17 @@
           </thf-switch>
 
           <thf-button
-            (t-click)="entrar()"
+            (t-click)="entrar('jogo')"
             class="pad-b-20 thf-md-12"
             t-label="Criar/Entrar"
             t-type="primary" >
+          </thf-button>
+
+          <thf-button
+            (t-click)="entrar('configuracao')"
+            class="pad-b-20 thf-md-12"
+            t-label="Configurar"
+            t-type="default" >
           </thf-button>
         </thf-widget>
       </form>

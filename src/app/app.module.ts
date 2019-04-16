@@ -14,7 +14,7 @@ import { ObservadorComponent } from './jogo/observador/observador.component';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthService } from './app.auth.service';
 import { ThfDialogService } from '@totvs/thf-ui/services/thf-dialog/thf-dialog.service';
-import { ConfiguracaoComponent } from './jogo/configuracao/configuracao.component';
+import { ConfiguracaoComponent } from './configuracao/configuracao.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
