@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Sala } from '../models/sala.model';
+import { ThfPageEditLiterals } from '@totvs/thf-ui';
 
 
 @Component({
@@ -9,6 +10,7 @@ import { Sala } from '../models/sala.model';
 })
 export class ConfiguracaoComponent implements OnInit {
   //@Input() configSala: Sala;
+
   public configSala: Sala =  new Sala();
 
   public configSalaTmp: Sala =  new Sala();
@@ -36,6 +38,14 @@ export class ConfiguracaoComponent implements OnInit {
     { property: 'label', label: 'Nome' , width: 50},
     { property: 'value', label: 'Valor', width: 50},
   ];
+
+  public save() {
+    console.log("save");
+  }
+
+  public cancel() {
+    console.log("save");
+  }
 
   onBeforeSave(row: any, old: any) {
     return row.occupation !== 'Engineer';
