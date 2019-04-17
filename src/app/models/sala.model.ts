@@ -15,7 +15,7 @@ export class Sala {
         {id: 6, value: 13, label: '13', type: 'default' },
         {id: 7, value: 21, label: '21', type: 'default' },
         {id: 8, value: 34, label: '34', type: 'default' },
-        {id: 9, value: 54, label: '55', type: 'default' },
+        {id: 9, value: 55, label: '55', type: 'default' },
         {id: 10, value: undefined, label: '?', type: 'default'}
       ]
   ) { }
