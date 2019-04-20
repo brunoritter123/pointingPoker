@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Sala } from '../models/sala.model';
-import { ThfPageEditLiterals } from '@totvs/thf-ui';
-import { Carta } from '../models/carta.model';
+import { ThfDialogService } from '@totvs/thf-ui/services/thf-dialog/thf-dialog.service';
 
 
 @Component({
@@ -10,31 +9,24 @@ import { Carta } from '../models/carta.model';
   styleUrls: ['./configuracao.component.css']
 })
 export class ConfiguracaoComponent implements OnInit {
-  //@Input() configSala: Sala;
 
   public configSala: Sala =  new Sala();
-
   public configSalaTmp: Sala =  new Sala();
-  public cbAplicar = "Fibonacci";
+
   public cbResetar = "Default";
   public cbFinalizar = "Default";
   public removeJogador = "Default";
   public removeAdm = "Default";
-  public lbAplicar = "Fibonacci";
-  public readonlyGrid  = "true"
+  public ordemCarta = "";
+  public novaCarta = "";
+  public isAlterouCartas = false;
+  public cartas: Array<object>;
 
   public opcoes = [
     {label: 'Ambos', value: 'Ambos' },
     {label: 'Administrador', value: 'Administrador' },
     {label: 'Default', value: 'Default'},
     {label: 'Jogador', value: 'Jogador' }
-  ];
-
-  public opcoesCarta = [
-    {label: 'Customizado', value: 'Customizado' },
-    {label: 'Fibonacci', value: 'Fibonacci' },
-    {label: 'Fibonacci 2', value: 'Fibonacci 2' },
-    {label: 'Tamanho', value: 'Tamanho'}
   ];
 
   public cartasEspecias: Array<string> = ['?', '...', 'Café'];
@@ -44,64 +36,67 @@ export class ConfiguracaoComponent implements OnInit {
     { value: '...', label: 'Infinito' },
     { value: 'Café', label: 'Xícara de café' }
   ];
-
+  
   public readonly sequencias: Array<object> = [
-    { label: 'Customizado', action: () => this.alteraCartas('Customizado') },
+    { label: 'Padrão'     , action: () => this.alteraCartas('Padrão') }, 
     { label: 'Fibonacci'  , action: () => this.alteraCartas('Fibonacci')   },
-    { label: 'Fibonacci 2', action: () => this.alteraCartas('Fibonacci 2') }, // 0, ½, 1, 2, 3, 5, 8, 13, 20, 40, 100
-    { label: 'Tamanho'    , action: () => this.alteraCartas('Tamanho')     } // XXS, XS, S, M, L, XL, XXL
+    { label: 'Tamanho'    , action: () => this.alteraCartas('Tamanho')     }, 
+    { label: 'Limpar'     , action: () => this.alteraCartas('Limpar') }
   ];
 
-  public rowActions = {
-    beforeSave: this.onBeforeSave.bind(this) ,
-    beforeInsert: this.onBeforeInsert.bind(this),
-  };
-
-  public columns = [
-    { property: 'id', label: 'Ordem' , width: 20, readonly: this.readonlyGrid},
-    { property: 'label', label: 'Nome', width: 80, readonly: this.readonlyGrid},
-    { property: 'actions', label: '.', align: 'center', readonly: this.readonlyGrid, action: true },
-  ];
-
-  constructor() { }
+  constructor( private thfAlert: ThfDialogService ) { }
 
   ngOnInit() {
     Object.assign(this.configSalaTmp, this.configSala)
+    this.alteraCartas('Padrão')
   }
 
-  private setReadOnlyGrid(readOnly: boolean) {
-    this.columns.forEach(col => {
-      readOnly
-      col.readonly = (readOnly ? 'true' : 'false')
-    });
+  public alteraCartas(aplicar: string){
+    let executar = true;
+    if(this.isAlterouCartas){
+      this.thfAlert.confirm({
+        title: 'Atenção',
+        message: `Deseja limpar as alteração realizadas nas cartas e aplicar a sequência selecionada?`,
+        confirm: () => this.execteAlteraCartas(aplicar)
+      });
+    } else {
+      this.execteAlteraCartas(aplicar);
+    }
   }
 
-  public alteraCartas(opcSelecionada: string){
-    this.lbAplicar = opcSelecionada;
-    this.readonlyGrid = 'false';
-    this.setReadOnlyGrid(true);
-
-    switch (this.lbAplicar) {
-      case 'Customizado':
-        this.setReadOnlyGrid(false);
-        debugger;
-
-        break;
-
+  private execteAlteraCartas(aplicar: string) {
+    switch (aplicar) {
       case 'Fibonacci':
-
-
+        this.cartas = [ {value: ' 0'}, {value: ' ½'}, {value: '01'},
+                        {value: '02'}, {value: '03'}, {value: '05'},
+                        {value: '08'}, {value: '13'}, {value: '21'},
+                        {value: '34'}, {value: '55'}
+        ]
         break;
-      case 'Fibonacci 2':
 
+      case 'Padrão':
+        this.cartas = [ {value: ' 0'}, {value: ' ½'}, {value: '01'},
+                        {value: '02'}, {value: '03'}, {value: '05'},
+                        {value: '08'}, {value: '13'}, {value: '20'},
+                        {value: '40'}, {value: '100'}
+        ]
         break;
+
       case 'Tamanho':
-
+        this.cartas = [ {value: 'XXS'}, {value: 'XS'}, {value: 'S'},
+                        {value: 'M'}, {value: 'L'},  {value: 'XL'},
+                        {value: 'XXL'}
+        ]
+        break;
+      
+      case 'Limpar':
+        this.cartas = [];
         break;
 
       default:
         break;
     }
+    this.isAlterouCartas = false;
   }
 
   public save() {
@@ -113,28 +108,38 @@ export class ConfiguracaoComponent implements OnInit {
     console.log("cancel");
   }
 
-  public removerCarta() {
-    console.log("removerCarta");
-  }
-
   public addCarta() {
-    console.log("addCarta");
+    let cartaTmp : Array<object> = [];
+    const ordemCarta = parseInt(this.ordemCarta)
+    const novaCarta = {value: this.novaCarta}
+
+    if (this.novaCarta.length > 0) {
+      if (ordemCarta <= 0) {
+        this.cartas.unshift(novaCarta);
+
+      } else if (ordemCarta > this.cartas.length || isNaN(ordemCarta)) {
+        this.cartas.push(novaCarta);
+
+      } else {
+        this.cartas.forEach( carta => {
+          if( (cartaTmp.length + 1) == ordemCarta) {
+            cartaTmp.push(novaCarta);
+          }
+          cartaTmp.push(carta);
+        });
+        this.cartas = cartaTmp.slice();
+      }
+
+      this.novaCarta = '';
+      this.isAlterouCartas = true;
+    }
   }
 
-  alteracaoCartaEspecias() {
+  public proximaOrdem(){
+    this.ordemCarta = (this.cartas.length + 1).toString();
+  }
+
+  public alteracaoCartaEspecias() {
     console.log(this.cartasEspecias);
   }
-
-  onBeforeSave(row: any, old: any) {
-    console.log('onBeforeSave(new): ', row);
-    return true;
-  }
-  onBeforeInsert(row) {
-    row.label = "100";
-    row.value = 100;
-    console.log('onBeforeInsert: ', row);
-
-    return true;
-  }
-
 }

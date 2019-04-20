@@ -20,7 +20,8 @@
             [t-maxlength]="12"
             [t-minlength]="3"
             t-required="true"
-            t-placeholder="Nome">
+            t-placeholder="Nome"
+            (keyup.enter)="entrar('jogo')">
           </thf-input>
 
           <thf-switch
