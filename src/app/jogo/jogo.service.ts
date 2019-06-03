@@ -4,10 +4,12 @@ import { User } from '../models/user.model';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Carta } from '../models/carta.model';
+import { Sala } from '../models/sala.model';
 import { AuthService } from '../app.auth.service';
+import { AcoesSala } from '../models/acoesSala.model';
 
 @Injectable()
-export class JogoService {
+export class JogoService {                                                                                                                                                                                                                                                                                
   public myId = this.authService.id;
   public cartaSel: Carta;
   public iAmOn = false;
@@ -30,6 +32,7 @@ export class JogoService {
   private idSala = '';
   private timeUltEnvio = 0;
   private timeDesconect: number = new Date().getTime();
+  public isConfiguracao: boolean ;
 
   constructor( private authService: AuthService) { }
 
@@ -114,8 +117,8 @@ export class JogoService {
     return observable;
   }
 
-  sendUpdateSala(configSala) {
-    this.socket.emit('update-sala', configSala);
+  sendUpdateSala(configSala, isUpdConfig = false) {
+    this.socket.emit('update-sala', this.myId, this.userName, isUpdConfig, configSala);
   }
 
   sendReset() {
@@ -125,4 +128,14 @@ export class JogoService {
   isSincronizando(): boolean {
     return !this.isConnected() || !this.iAmOn || this.timeUltEnvio < this.timeDesconect;
   }
+
+  public isPodeExcAcao(acao: AcoesSala, isJogador: boolean , adms: Array<User>): boolean {
+    let ok: boolean = adms.length == 0 || acao.value == '3'
+
+    if (!ok) {
+      ok = (isJogador && acao.value == '2') || (!isJogador && acao.value == '1')  
+    }
+
+    return ok;
+  };
 }

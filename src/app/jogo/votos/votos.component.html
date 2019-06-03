@@ -7,7 +7,7 @@
         (click)="remove(jogador)"
         class="thf-sm-6 thf-md-6 thf-lg-6"
         [class.off]="jogador.status === 'OFF'"
-        [class.click]="jogador.status === 'OFF' && (!this.isJogador || this.observadores.length === 0)"
+        [class.click]="podeRemover(jogador)"
         [class.f-bold]="jogador.idUser === myId">
         {{jogador.nome}}
       </h4>

@@ -45,6 +45,8 @@ export class EntrarSecaoComponent implements OnInit {
   }
 
   public entrar(local) {
+    const goConfig = local == 'configuracao';
+  
     if (this.authService.id === undefined) {
       this.confirmLogin();
 
@@ -55,7 +57,10 @@ export class EntrarSecaoComponent implements OnInit {
       this.thfNotification.error('O ID da Sala deve ter no mínimo 3 caracteres.');
 
     } else {
-      this.router.navigate([`/${local}/${this.idSala.trim().toUpperCase()}/${this.nome.trim()}/${this.jogador}`]);
+      this.router.navigate(
+          [`/jogo/${this.idSala.trim().toUpperCase()}/${this.nome.trim()}/${this.jogador}`], 
+          { queryParams: { config: goConfig } }
+        );
     }
    }
 

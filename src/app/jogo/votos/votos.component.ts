@@ -2,6 +2,7 @@ import { Component, Input} from '@angular/core';
 import { User } from '../../models/user.model';
 import { JogoService } from '../jogo.service';
 import { ThfDialogService } from '@totvs/thf-ui/services/thf-dialog/thf-dialog.service';
+import { Sala } from '../../models/sala.model';
 
 @Component({
   selector: 'app-votos',
@@ -15,13 +16,14 @@ export class VotosComponent {
   @Input() fimJogo: boolean;
   @Input() isJogador: boolean;
   @Input() myId: string;
+  @Input() configSala: Sala;
 
   constructor(
     private jogoService: JogoService,
     private thfAlert: ThfDialogService) {}
 
   public remove(jogador: User): void {
-    if (jogador.status === 'OFF' && (!this.isJogador || this.observadores.length === 0)) {
+    if (this.podeRemover(jogador)) {
       this.confirmRemove(jogador);
     }
   }
@@ -32,6 +34,10 @@ export class VotosComponent {
       message: `Deseja remover o '${jogador.nome}' da sala?`,
       confirm: () => this.jogoService.sendRemove(jogador.idUser)
     });
+  }
+
+  public podeRemover(jogador: User):boolean {
+    return jogador.status === 'OFF' && this.jogoService.isPodeExcAcao( this.configSala.removerJogador, this.isJogador, this.observadores)
   }
 
 }

@@ -1,11 +1,15 @@
 import { Carta } from './carta.model';
+import { AcoesSala } from './acoesSala.model';
+import { User } from './user.model';
 
 export class Sala {
   constructor(
     public idSala: string = '',
     public forceFimJogo: boolean = false,
-    public jogadorFinaliza: boolean = true,
-    public jogadorReseta: boolean = true,
+    public finalizar: AcoesSala = AcoesSala.getDefFinalizar(),
+    public resetar: AcoesSala = AcoesSala.getDefResetar(),
+    public removerJogador: AcoesSala = AcoesSala.getDefRemoveJogador(),
+    public removerAdm: AcoesSala = AcoesSala.getDefRemoveAdm(),
     public cartas: Array<Carta> =
       [ {id: 1, value: 1, label: '01', type: 'default' },
         {id: 2, value: 2, label: '02', type: 'default' },
@@ -18,6 +22,9 @@ export class Sala {
         {id: 9, value: 55, label: '55', type: 'default' },
         {id: 10, value: undefined, label: '?', type: 'default'}
       ]
-  ) { }
+    
+  ) { } 
+
+  
 
 }

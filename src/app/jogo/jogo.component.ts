@@ -3,12 +3,13 @@ import { JogoService } from './jogo.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Carta } from '../models/carta.model';
 import { User } from '../models/user.model';
-import { interval } from 'rxjs';
+import { interval, Subscription } from 'rxjs';
 import { ThfModalComponent } from '@totvs/thf-ui/components/thf-modal/thf-modal.component';
 import { ThfModalAction } from '@totvs/thf-ui/components/thf-modal';
 import { AuthService } from '../app.auth.service';
 import { Sala } from '../models/sala.model';
 import { Estatistica } from '../models/estatistica.model';
+import { AcoesSala } from '../models/acoesSala.model';
 
 @Component({
   selector: 'app-jogo',
@@ -30,7 +31,7 @@ export class JogoComponent implements OnInit, OnDestroy {
   public pontuacao: Array<Estatistica>;
   public maisVotado: string;
   public sincSala = true;
-  public configSala: Sala = new Sala();
+  public configSala: Sala;
   public fimJogo: boolean;
   public descWidget: string;
   public jogadores: Array<User> = [];
@@ -54,10 +55,11 @@ export class JogoComponent implements OnInit, OnDestroy {
   };
 
   private nameUser: string;
-  private conUsers;
-  private conConfigSala;
-  private conRecnnect;
-  private conRecnnectSub;
+  private conUsers: Subscription;
+  private conConfigSala: Subscription;
+  private conRecnnect: any;
+  private conRecnnectSub: Subscription;
+  private conIsConfig: Subscription;
 
   @HostListener('window:beforeunload', ['$event']) unloadHandler(event: Event) {
     event.returnValue = false;
@@ -68,15 +70,21 @@ export class JogoComponent implements OnInit, OnDestroy {
    * Inicializador do componente
    */
   ngOnInit() {
-    this.configSala.idSala = this.activateRoute.snapshot.params['idSala'];
+    this.conIsConfig = this.activateRoute.queryParams.subscribe(
+      (queryParams: any) => {
+        this.jogoService.isConfiguracao = queryParams['config'] == 'true';
+      }
+    )
+  
+    let idSala = this.activateRoute.snapshot.params['idSala'];
     this.nameUser = this.activateRoute.snapshot.params['nameUser'];
     this.fimDeJogo(false);
     this.isJogador = this.activateRoute.snapshot.params['isJogador'] === 'true';
-    this.jogoService.setUser(this.configSala.idSala, this.nameUser, this.isJogador );
+    this.jogoService.setUser(idSala, this.nameUser, this.isJogador);
 
     if (this.myId === undefined) {
       this.route.navigate([`/entrar-sala`], { queryParams:
-        { idSala: this.configSala.idSala, nameUser: this.nameUser, isJogador: this.isJogador }});
+        { idSala: idSala, nameUser: this.nameUser, isJogador: this.isJogador }});
     }
 
     // Quando um usuário sai ou entra na seção.
@@ -140,6 +148,7 @@ export class JogoComponent implements OnInit, OnDestroy {
     this.conRecnnectSub.unsubscribe();
     this.conUsers.unsubscribe();
     this.conConfigSala.unsubscribe();
+    this.conIsConfig.unsubscribe();
   }
 
   /**
@@ -147,7 +156,7 @@ export class JogoComponent implements OnInit, OnDestroy {
    * Metodo para alterar o valor da propriedade fimJogo
    */
   private fimDeJogo(acabou: boolean): void {
-    this.fimJogo = acabou || this.configSala.forceFimJogo;
+    this.fimJogo = acabou || (this.configSala !== undefined && this.configSala.forceFimJogo);
     if (this.fimJogo) {
       this.descWidget = 'Estatísticas';
     } else {
@@ -267,5 +276,9 @@ export class JogoComponent implements OnInit, OnDestroy {
         this.maisVotado = this.pontuacao[0].carta.label;
       });
     }
+  }
+
+  public isPodeExec(acao: AcoesSala): boolean {
+    return this.jogoService.isPodeExcAcao(acao, this.isJogador, this.observadores);
   }
 }

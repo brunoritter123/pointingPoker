@@ -1,6 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Sala } from '../models/sala.model';
+import { AcoesSala } from '../models/acoesSala.model';
+import { JogoService } from '../jogo/jogo.service';
 import { ThfDialogService } from '@totvs/thf-ui/services/thf-dialog/thf-dialog.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Carta } from '../models/carta.model';
 
 
 @Component({
@@ -9,25 +13,18 @@ import { ThfDialogService } from '@totvs/thf-ui/services/thf-dialog/thf-dialog.s
   styleUrls: ['./configuracao.component.css']
 })
 export class ConfiguracaoComponent implements OnInit {
+  @Input() configSala: Sala;
 
-  public configSala: Sala =  new Sala();
-  public configSalaTmp: Sala =  new Sala();
-
-  public cbResetar = "Default";
-  public cbFinalizar = "Default";
-  public removeJogador = "Default";
-  public removeAdm = "Default";
-  public ordemCarta = "";
-  public novaCarta = "";
+  public cbResetar       = ""
+  public cbFinalizar     = ""
+  public removeJogador   = ""
+  public removeAdm       = ""
+  public ordemCarta      = "";
+  public novaCarta       = "";
   public isAlterouCartas = false;
-  public cartas: Array<object>;
+  public cartas: Array<any> = [];
 
-  public opcoes = [
-    {label: 'Ambos', value: 'Ambos' },
-    {label: 'Administrador', value: 'Administrador' },
-    {label: 'Default', value: 'Default'},
-    {label: 'Jogador', value: 'Jogador' }
-  ];
+  public opcoes: Array<AcoesSala> = AcoesSala.getOpcoes();
 
   public cartasEspecias: Array<string> = ['?', '...', 'Café'];
 
@@ -41,18 +38,26 @@ export class ConfiguracaoComponent implements OnInit {
     { label: 'Padrão'     , action: () => this.alteraCartas('Padrão') }, 
     { label: 'Fibonacci'  , action: () => this.alteraCartas('Fibonacci')   },
     { label: 'Tamanho'    , action: () => this.alteraCartas('Tamanho')     }, 
+    { label: 'Salvo'      , action: () => this.alteraCartas('Salvo') },
     { label: 'Limpar'     , action: () => this.alteraCartas('Limpar') }
   ];
 
-  constructor( private thfAlert: ThfDialogService ) { }
+  constructor( 
+    private jogoService: JogoService,
+    private thfAlert: ThfDialogService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute, ) { }
 
   ngOnInit() {
-    Object.assign(this.configSalaTmp, this.configSala)
-    this.alteraCartas('Padrão')
+    this.cbResetar     = this.configSala.resetar.value;
+    this.cbFinalizar   = this.configSala.finalizar.value;
+    this.removeJogador = this.configSala.removerJogador.value;
+    this.removeAdm     = this.configSala.removerAdm.value;
+    this.alteraCartas('Salvo')
   }
 
+
   public alteraCartas(aplicar: string){
-    let executar = true;
     if(this.isAlterouCartas){
       this.thfAlert.confirm({
         title: 'Atenção',
@@ -93,6 +98,17 @@ export class ConfiguracaoComponent implements OnInit {
         this.cartas = [];
         break;
 
+      case 'Salvo':
+        this.cartasEspecias = [];
+        this.configSala.cartas.forEach( (carta) => {
+          if (carta.value !== undefined){
+            this.cartas.push({value: carta.label});
+          } else {
+            this.cartasEspecias.push(carta.label)
+          }
+        })
+
+
       default:
         break;
     }
@@ -100,12 +116,44 @@ export class ConfiguracaoComponent implements OnInit {
   }
 
   public save() {
-    console.log("save");
-    debugger;
+    let cartasNew: Array<Carta> = [];
+    this.cartas.forEach( (carta, id) => {
+      cartasNew.push({
+        id: id,
+        value: id,
+        label: carta.value,
+        type: 'default' });
+    });
+
+    this.cartasEspecias.forEach( (carta, id) => {
+      cartasNew.push( {
+        id: this.cartas.length + id + 1,
+        value: undefined,
+        label: carta,
+        type: 'default'
+      });
+    });
+
+    this.configSala.finalizar = AcoesSala.findOpcao(this.cbFinalizar);
+    this.configSala.removerAdm = AcoesSala.findOpcao(this.removeAdm);
+    this.configSala.removerJogador = AcoesSala.findOpcao(this.removeJogador);
+    this.configSala.resetar = AcoesSala.findOpcao(this.cbResetar);
+    this.configSala.cartas = cartasNew;
+
+    this.jogoService.sendUpdateSala(this.configSala, true);
+
+    this.cancel()
   }
 
   public cancel() {
-    console.log("cancel");
+    this.jogoService.isConfiguracao = false;
+    this.router.navigate(
+      [], 
+      {
+        relativeTo: this.activatedRoute,
+        queryParams: { config: 'false' },
+        queryParamsHandling: "merge"
+      });
   }
 
   public addCarta() {
@@ -137,9 +185,5 @@ export class ConfiguracaoComponent implements OnInit {
 
   public proximaOrdem(){
     this.ordemCarta = (this.cartas.length + 1).toString();
-  }
-
-  public alteracaoCartaEspecias() {
-    console.log(this.cartasEspecias);
   }
 }
