@@ -35,6 +35,6 @@ export class ObservadorComponent {
   }
 
   public podeRemover(jogador: User):boolean {
-    return jogador.status === 'OFF' && this.jogoService.isPodeExcAcao( this.configSala.removerJogador, this.isJogador, this.observadores)
+    return jogador.status === 'OFF' && this.jogoService.isPodeExcAcao( this.configSala.removerAdm, this.isJogador, this.observadores)
   }
 }
