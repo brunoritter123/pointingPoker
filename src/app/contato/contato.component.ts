@@ -9,7 +9,7 @@ export class ContatoComponent {
 
   public contact = {
     name: 'Bruno de Lima Ritter',
-    email: 'contato@scrumpoker.com.br'
+    email: 'brunolritter123@gmail.com'
   };
 
   sendContact(email) {
@@ -17,7 +17,7 @@ export class ContatoComponent {
   }
 
   apoiar() {
-    window.open('http://vaka.me/n6dus6', '_blank');
+    window.open('https://github.com/brunoritter123/pointingPoker', '_blank');
   }
 
 }
