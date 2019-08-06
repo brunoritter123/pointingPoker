@@ -6,6 +6,7 @@ export class User {
   public status: string;
   public nome: string;
   public isJogador: boolean;
+  public idCarta: number;
   public voto: Carta;
 
   static novo(obj: any): User {
@@ -33,6 +34,12 @@ export class User {
       newUser.nome = obj.nome;
     } else {
       newUser.nome = undefined;
+    }
+
+    if (obj.hasOwnProperty('idCarta')) {
+      newUser.idCarta = obj.idCarta;
+    } else {
+      newUser.idCarta = undefined;
     }
 
     if (obj.hasOwnProperty('isJogador')) {

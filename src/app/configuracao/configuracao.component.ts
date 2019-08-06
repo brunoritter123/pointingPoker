@@ -49,10 +49,10 @@ export class ConfiguracaoComponent implements OnInit {
     private activatedRoute: ActivatedRoute, ) { }
 
   ngOnInit() {
-    this.cbResetar     = this.configSala.resetar.value;
-    this.cbFinalizar   = this.configSala.finalizar.value;
-    this.removeJogador = this.configSala.removerJogador.value;
-    this.removeAdm     = this.configSala.removerAdm.value;
+    this.cbResetar     = this.configSala.resetar;
+    this.cbFinalizar   = this.configSala.finalizar;
+    this.removeJogador = this.configSala.removerJogador;
+    this.removeAdm     = this.configSala.removerAdm;
     this.alteraCartas('Salvo')
   }
 
@@ -101,7 +101,7 @@ export class ConfiguracaoComponent implements OnInit {
       case 'Salvo':
         this.cartasEspecias = [];
         this.configSala.cartas.forEach( (carta) => {
-          if (carta.value !== undefined){
+          if (carta.value){
             this.cartas.push({value: carta.label});
           } else {
             this.cartasEspecias.push(carta.label)
@@ -134,10 +134,10 @@ export class ConfiguracaoComponent implements OnInit {
       });
     });
 
-    this.configSala.finalizar = AcoesSala.findOpcao(this.cbFinalizar);
-    this.configSala.removerAdm = AcoesSala.findOpcao(this.removeAdm);
-    this.configSala.removerJogador = AcoesSala.findOpcao(this.removeJogador);
-    this.configSala.resetar = AcoesSala.findOpcao(this.cbResetar);
+    this.configSala.finalizar = this.cbFinalizar;
+    this.configSala.removerAdm = this.removeAdm;
+    this.configSala.removerJogador = this.removeJogador;
+    this.configSala.resetar = this.cbResetar;
     this.configSala.cartas = cartasNew;
 
     this.jogoService.sendUpdateSala(this.configSala, true);

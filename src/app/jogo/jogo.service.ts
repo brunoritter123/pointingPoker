@@ -67,6 +67,7 @@ export class JogoService {
     let iAmOn = false;
     const observable = new Observable(observer => {
       this.socket.on('get-user', (ret: any ) => {
+        console.log(ret)
         const timeEnvio: number = ret.timeEnvio;
         const data: any = ret.users;
 
@@ -129,11 +130,11 @@ export class JogoService {
     return !this.isConnected() || !this.iAmOn || this.timeUltEnvio < this.timeDesconect;
   }
 
-  public isPodeExcAcao(acao: AcoesSala, isJogador: boolean , adms: Array<User>): boolean {
-    let ok: boolean = adms.length == 0 || acao.value == '3'
+  public isPodeExcAcao(acao: string, isJogador: boolean , adms: Array<User>): boolean {
+    let ok: boolean = adms.length == 0 || acao == '3'
 
     if (!ok) {
-      ok = (isJogador && acao.value == '2') || (!isJogador && acao.value == '1')  
+      ok = (isJogador && acao == '2') || (!isJogador && acao == '1')  
     }
 
     return ok;

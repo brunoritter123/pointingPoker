@@ -6,10 +6,10 @@ export class Sala {
   constructor(
     public idSala: string = '',
     public forceFimJogo: boolean = false,
-    public finalizar: AcoesSala = AcoesSala.getDefFinalizar(),
-    public resetar: AcoesSala = AcoesSala.getDefResetar(),
-    public removerJogador: AcoesSala = AcoesSala.getDefRemoveJogador(),
-    public removerAdm: AcoesSala = AcoesSala.getDefRemoveAdm(),
+    public finalizar: string = AcoesSala.getDefFinalizar().value,
+    public resetar: string = AcoesSala.getDefResetar().value,
+    public removerJogador: string = AcoesSala.getDefRemoveJogador().value,
+    public removerAdm: string = AcoesSala.getDefRemoveAdm().value,
     public cartas: Array<Carta> =
       [ {id: 1, value: 1, label: '01', type: 'default' },
         {id: 2, value: 2, label: '02', type: 'default' },
