@@ -5,7 +5,7 @@ import { User } from './user.model';
 export class Sala {
   constructor(
     public idSala: string = '',
-    public forceFimJogo: boolean = false,
+    public forceFimJogo: number = 0, // 0 ou 1
     public finalizar: string = AcoesSala.getDefFinalizar().value,
     public resetar: string = AcoesSala.getDefResetar().value,
     public removerJogador: string = AcoesSala.getDefRemoveJogador().value,

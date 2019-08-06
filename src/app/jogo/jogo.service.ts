@@ -44,7 +44,7 @@ export class JogoService {
   }
 
   sendVoto(carta: any) {
-    this.socket.emit('add-voto', this.myId, carta, new Date().getTime());
+    this.socket.emit('add-voto', this.myId, carta, this.idSala, new Date().getTime());
   }
 
   isConnected(): boolean {
@@ -67,7 +67,6 @@ export class JogoService {
     let iAmOn = false;
     const observable = new Observable(observer => {
       this.socket.on('get-user', (ret: any ) => {
-        console.log(ret)
         const timeEnvio: number = ret.timeEnvio;
         const data: any = ret.users;
 

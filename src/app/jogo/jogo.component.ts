@@ -89,26 +89,35 @@ export class JogoComponent implements OnInit, OnDestroy {
 
 		// Quando um usuário sai ou entra na seção.
 		this.conUsers = this.jogoService.getUsersConnect().subscribe( (users: Array<User>) => {
-			console.log(users)
 			this.jogadores = [];
 			this.observadores = [];
+
+			
+			// Verifica a carta selecionada
+			let existCardSel = false;
+			users.forEach(us => {
+				if (us.idCarta) {
+					this.configSala.cartas.forEach( (carta: Carta) => {
+						if (carta.id === us.idCarta) {
+							us.voto = carta;
+						}
+					});
+
+					if (us.idUser === this.myId) {
+						this.setCartaSel(us.idCarta);
+						this.isJogador = us.isJogador;
+						existCardSel = true;
+					}
+				}
+			});
+
+			if (!existCardSel) {
+				this.setCartaSel(undefined);
+			}
 
 			// Separa o tipo de usuário
 			this.jogadores = users.filter(us => us.isJogador);
 			this.observadores = users.filter(us => !us.isJogador);
-
-			// Verifica a carta selecionada
-			let existCardSel = false;
-			users.forEach(us => {
-				if (us.idUser === this.myId && us.idCarta) {
-					this.setCartaSel(us.idCarta);
-					this.isJogador = us.isJogador;
-					existCardSel = true;
-				}
-			});
-			if (!existCardSel) {
-				this.setCartaSel(undefined);
-			}
 
 			this.todosVotaram(users);
 			this.GeraEstatistica()
@@ -117,7 +126,7 @@ export class JogoComponent implements OnInit, OnDestroy {
 		// Observa recebe a configuração da sala
 		this.conConfigSala = this.jogoService.getSala().subscribe( (sala: Sala) => {
 			this.configSala = sala;
-			this.fimDeJogo(this.configSala.forceFimJogo);
+			this.fimDeJogo(this.configSala.forceFimJogo == 1);
 			this.GeraEstatistica();
 			if (this.jogoService.cartaSel !== undefined && this.jogoService.cartaSel.id !== undefined) {
 				this.setCartaSel(this.jogoService.cartaSel.id);
@@ -157,7 +166,7 @@ export class JogoComponent implements OnInit, OnDestroy {
 	 * Metodo para alterar o valor da propriedade fimJogo
 	 */
 	private fimDeJogo(acabou: boolean): void {
-		this.fimJogo = acabou || (this.configSala !== undefined && this.configSala.forceFimJogo);
+		this.fimJogo = acabou || (this.configSala !== undefined && this.configSala.forceFimJogo == 1);
 		if (this.fimJogo) {
 			this.descWidget = 'Estatísticas';
 		} else {
@@ -186,7 +195,7 @@ export class JogoComponent implements OnInit, OnDestroy {
 	 */
 	public fimClick(): void {
 		if (this.isConnected) {
-			this.configSala.forceFimJogo = true;
+			this.configSala.forceFimJogo = 1;
 			this.jogoService.sendUpdateSala(this.configSala);
 		}
 	}
@@ -197,7 +206,7 @@ export class JogoComponent implements OnInit, OnDestroy {
 	 */
 	public resetClick(): void {
 		if (this.isConnected) {
-			this.configSala.forceFimJogo = false;
+			this.configSala.forceFimJogo = 0;
 			this.jogoService.sendReset();
 			this.jogoService.sendUpdateSala(this.configSala);
 		}
