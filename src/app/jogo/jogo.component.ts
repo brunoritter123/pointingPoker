@@ -128,7 +128,6 @@ export class JogoComponent implements OnInit, OnDestroy {
 			this.configSala = sala;
 			this.fimDeJogo(this.configSala.forceFimJogo == 1);
 			this.GeraEstatistica();
-			debugger
 			if (this.jogoService.cartaSel !== undefined && this.jogoService.cartaSel.id !== undefined) {
 				this.setCartaSel(this.jogoService.cartaSel.id);
 			}

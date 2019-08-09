@@ -118,7 +118,7 @@ export class JogoService {
   }
 
   sendUpdateSala(configSala, isUpdConfig = false) {
-    this.socket.emit('update-sala', this.myId, this.userName, isUpdConfig, configSala);
+    this.socket.emit('update-sala', this.myId, this.userName, isUpdConfig, configSala, new Date().getTime());
   }
 
   sendReset() {

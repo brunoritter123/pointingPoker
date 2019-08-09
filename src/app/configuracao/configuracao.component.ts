@@ -101,7 +101,7 @@ export class ConfiguracaoComponent implements OnInit {
       case 'Salvo':
         this.cartasEspecias = [];
         this.configSala.cartas.forEach( (carta) => {
-          if (carta.value){
+          if (typeof carta.value == 'number'){
             this.cartas.push({value: carta.label});
           } else {
             this.cartasEspecias.push(carta.label)
