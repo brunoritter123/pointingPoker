@@ -5,5 +5,6 @@
 
 export const environment = {
   production: false,
-  API: 'localhost:3000'
+  API: 'localhost:3000',
+  google_client_id: '490896064905-rlnp8cbqkarl6m23362s5tg1urbbftuj'
 };
