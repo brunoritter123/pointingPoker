@@ -33,16 +33,16 @@ export class ConfiguracaoComponent implements OnInit {
     { value: '...', label: 'Infinito' },
     { value: 'Café', label: 'Xícara de café' }
   ];
-  
+
   public readonly sequencias: Array<object> = [
-    { label: 'Padrão'     , action: () => this.alteraCartas('Padrão') }, 
+    { label: 'Padrão'     , action: () => this.alteraCartas('Padrão') },
     { label: 'Fibonacci'  , action: () => this.alteraCartas('Fibonacci')   },
-    { label: 'Tamanho'    , action: () => this.alteraCartas('Tamanho')     }, 
+    { label: 'Tamanho'    , action: () => this.alteraCartas('Tamanho')     },
     { label: 'Salvo'      , action: () => this.alteraCartas('Salvo') },
     { label: 'Limpar'     , action: () => this.alteraCartas('Limpar') }
   ];
 
-  constructor( 
+  constructor(
     private jogoService: JogoService,
     private thfAlert: ThfDialogService,
     private router: Router,
@@ -93,7 +93,7 @@ export class ConfiguracaoComponent implements OnInit {
                         {value: 'XXL'}
         ]
         break;
-      
+
       case 'Limpar':
         this.cartas = [];
         break;
@@ -116,10 +116,10 @@ export class ConfiguracaoComponent implements OnInit {
   }
 
   public save() {
-    let cartasNew: Array<Carta> = [];
+    let cartasNew: Array<any> = [];
     this.cartas.forEach( (carta, id) => {
       cartasNew.push({
-        id: id,
+        idSala: this.configSala.idSala,
         value: id,
         label: carta.value,
         type: 'default' });
@@ -127,7 +127,7 @@ export class ConfiguracaoComponent implements OnInit {
 
     this.cartasEspecias.forEach( (carta, id) => {
       cartasNew.push( {
-        id: this.cartas.length + id + 1,
+        idSala: this.configSala.idSala,
         value: undefined,
         label: carta,
         type: 'default'
@@ -148,7 +148,7 @@ export class ConfiguracaoComponent implements OnInit {
   public cancel() {
     this.jogoService.isConfiguracao = false;
     this.router.navigate(
-      [], 
+      [],
       {
         relativeTo: this.activatedRoute,
         queryParams: { config: 'false' },
