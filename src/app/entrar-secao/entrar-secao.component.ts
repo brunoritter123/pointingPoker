@@ -25,9 +25,9 @@ export class EntrarSecaoComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    const sala: string = this.activateRoute.snapshot.queryParams['idSala'];
-    const nameUser: string = this.activateRoute.snapshot.queryParams['nameUser'];
-    const isJogador: boolean = this.activateRoute.snapshot.queryParams['isJogador'] === 'true';
+    const sala: string       = this.authService.idSala    //this.activateRoute.snapshot.queryParams['idSala'];
+    const nameUser: string   = this.authService.name      //this.activateRoute.snapshot.queryParams['nameUser'];
+    const isJogador: boolean = this.authService.isJogador //this.activateRoute.snapshot.queryParams['isJogador'] === 'true';
 
     if (nameUser > '') {
       this.idSala = sala;
@@ -46,6 +46,7 @@ export class EntrarSecaoComponent implements OnInit {
 
   public entrar(local) {
     const goConfig = local == 'configuracao';
+    this.authService.saveConfig(this.idSala, this.nome, this.jogador)
   
     if (this.authService.id === undefined) {
       this.confirmLogin();

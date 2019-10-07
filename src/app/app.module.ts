@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ThfModule } from '@totvs/thf-ui';
+import { CookieService } from 'ngx-cookie-service';
 
 import { EntrarSecaoComponent } from './entrar-secao/entrar-secao.component';
 import { JogoComponent } from './jogo/jogo.component';
@@ -35,7 +36,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     HttpClientModule,
     BrowserAnimationsModule
   ],
-  providers: [AuthService, ThfDialogService],
+  providers: [
+    AuthService,
+    ThfDialogService,
+    CookieService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
