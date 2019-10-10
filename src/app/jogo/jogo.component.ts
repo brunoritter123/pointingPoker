@@ -9,7 +9,6 @@ import { ThfModalAction } from '@totvs/thf-ui/components/thf-modal';
 import { AuthService } from '../app.auth.service';
 import { Sala } from '../models/sala.model';
 import { Estatistica } from '../models/estatistica.model';
-import { AcoesSala } from '../models/acoesSala.model';
 
 @Component({
 	selector: 'app-jogo',
@@ -92,7 +91,6 @@ export class JogoComponent implements OnInit, OnDestroy {
 			this.jogadores = [];
 			this.observadores = [];
 
-			
 			// Verifica a carta selecionada
 			let existCardSel = false;
 			users.forEach(us => {

@@ -3,13 +3,10 @@ import { CookieService } from 'ngx-cookie-service';
 
 @Injectable()
 export class AuthService {
-  public userAuth = false;
   public idSala: string;
   public isJogador: boolean;
   public id: string;
   public name: string;
-  public email: string;
-  public imageUrl: string;
 
   constructor(
    private cookieService: CookieService
@@ -34,19 +31,20 @@ export class AuthService {
   }
 
   public saveConfig(idSala: string, nome: string, isJogador: boolean): void {
+    const dtExpires = new Date(2100, 1, 1)
     this.idSala    = idSala
     this.name      = nome
     this.isJogador = isJogador
-    this.cookieService.set( 'idSala', idSala );
-    this.cookieService.set( 'nome', nome );
-    this.cookieService.set( 'isJogador', isJogador.toString() );
+    this.cookieService.set( 'idSala', idSala, dtExpires );
+    this.cookieService.set( 'nome', nome, dtExpires );
+    this.cookieService.set( 'isJogador', isJogador.toString(), dtExpires );
 
     if (this.cookieService.check(idSala.toUpperCase())) {
       this.id = this.cookieService.get(idSala.toUpperCase())
   
     } else {
       this.id = idSala.toUpperCase()+this.aleatorio(25)
-      this.cookieService.set( idSala.toUpperCase(), this.id );
+      this.cookieService.set( idSala.toUpperCase(), this.id, dtExpires );
     }
   }
 
