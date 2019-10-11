@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { ThfMenuItem, ThfModalComponent, ThfModalAction } from '@totvs/thf-ui';
+import { PoMenuItem, PoModalComponent, PoModalAction } from '@portinari/portinari-ui';
 
 @Component({
   selector: 'app-root',
@@ -7,18 +7,18 @@ import { ThfMenuItem, ThfModalComponent, ThfModalAction } from '@totvs/thf-ui';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  @ViewChild(ThfModalComponent, { static: true }) thfModal: ThfModalComponent;
+  @ViewChild(PoModalComponent, { static: true }) thfModal: PoModalComponent;
 
   constructor() {}
 
   public title = 'Scrum Poker';
 
-  public menus: Array<ThfMenuItem> = [
+  public menus: Array<PoMenuItem> = [
     { label: 'Início', link: '/', icon: 'home' },
     { label: 'Sobre', action: this.openModal, icon: 'user' }
   ];
 
-  public primaryAction: ThfModalAction = {
+  public primaryAction: PoModalAction = {
     action: () => {
       this.thfModal.close();
     },

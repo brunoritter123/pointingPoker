@@ -25,7 +25,7 @@
               "src/sw-register.js"
             ],
             "styles": [
-              "node_modules/@totvs/thf-theme/css/thf-theme-default.min.css",
+              "node_modules/@totvs/portinari-theme/css/po-theme-default.min.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -76,7 +76,7 @@
             "tsConfig": "src/tsconfig.spec.json",
             "scripts": [],
             "styles": [
-              "node_modules/@totvs/thf-theme/css/thf-theme-default.min.css",
+              "node_modules/@totvs/portinari-theme/css/po-theme-default.min.css",
               "src/styles.css"
             ],
             "assets": [

@@ -1,20 +1,20 @@
-<div class="thf-wrapper">
-    <thf-toolbar
-    t-title="{{title}}"
-    ></thf-toolbar>
+<div class="po-wrapper">
+    <po-toolbar
+    p-title="{{title}}"
+    ></po-toolbar>
 
-  <thf-menu display = "none"
-    [t-menus]="menus" >
-  </thf-menu>
+  <po-menu display = "none"
+    [p-menus]="menus" >
+  </po-menu>
 
   <router-outlet></router-outlet>
 </div>
 
-<thf-modal
-  t-click-out="true"
-  t-hide-close="true"
-  t-size="md"
-  t-title="Sobre"
-  [t-primary-action]="primaryAction">
+<po-modal
+  p-click-out="true"
+  p-hide-close="true"
+  p-size="md"
+  p-title="Sobre"
+  [p-primary-action]="primaryAction">
   <app-contato></app-contato>
-</thf-modal>
+</po-modal>

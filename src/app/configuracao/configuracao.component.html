@@ -1,54 +1,54 @@
-<thf-page-edit t-title="Configuração">
-  <div class="thf-row">
+<po-page-edit p-title="Configuração">
+  <div class="po-row">
 
-    <thf-widget t-title="Cartas" class="pad-b-10 thf-sm-12 thf-md-6 thf-lg-6 thf-xl-6">
-      <div class="thf-row">
-        <div class="thf-sm-12 thf-md-12 thf-lg-12 thf-xl-12">
-          <thf-multiselect name="cartasEspecias" [(ngModel)]="cartasEspecias" t-placeholder="Cartas Especiais"
-            t-hide-search="true" [t-options]="opcoesCartasEspecias">
-          </thf-multiselect>
+    <po-widget p-title="Cartas" class="pad-b-10 po-sm-12 po-md-6 po-lg-6 po-xl-6">
+      <div class="po-row">
+        <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12">
+          <po-multiselect name="cartasEspecias" [(ngModel)]="cartasEspecias" p-placeholder="Cartas Especiais"
+            p-hide-search="true" [p-options]="opcoesCartasEspecias">
+          </po-multiselect>
         </div>
       </div>
 
-      <div calss="thf-row">
-        <thf-dropdown class="thf-mb-1 thf-sm-12 thf-md-12 thf-lg-12 thf-xl-12" t-label="Aplicar Sequência"
-          [t-actions]="sequencias">
-        </thf-dropdown>
+      <div calss="po-row">
+        <po-dropdown class="po-mb-1 po-sm-12 po-md-12 po-lg-12 po-xl-12" p-label="Aplicar Sequência"
+          [p-actions]="sequencias">
+        </po-dropdown>
       </div>
 
-      <div class="thf-row">
+      <div class="po-row">
 
-        <thf-input [(ngModel)]="ordemCarta" class="thf-mb-1 thf-sm-3 thf-md-3 thf-lg-3" t-label="Ordem">
-        </thf-input>
+        <po-input [(ngModel)]="ordemCarta" class="po-mb-1 po-sm-3 po-md-3 po-lg-3" p-label="Ordem">
+        </po-input>
 
-        <thf-input [(ngModel)]="novaCarta" class="thf-mb-1 thf-sm-3 thf-md-3 thf-lg-5" t-label="Carta" (keyup.enter)="addCarta()">
-        </thf-input>
+        <po-input [(ngModel)]="novaCarta" class="po-mb-1 po-sm-3 po-md-3 po-lg-5" p-label="Carta" (keyup.enter)="addCarta()">
+        </po-input>
 
-        <thf-button (t-click)="addCarta()" class="thf-mt-4  thf-sm-6 thf-md-6 thf-lg-4" t-label="Adicionar"
-          t-type="primary">
-        </thf-button>
+        <po-button (p-click)="addCarta()" class="po-mt-4  po-sm-6 po-md-6 po-lg-4" p-label="Adicionar"
+          p-type="primary">
+        </po-button>
 
       </div>
 
-      <div class="thf-row thf-mb-1">
-        <thf-disclaimer-group class="thf-mb-1" [t-disclaimers]="cartas" t-hide-remove-all="true" (t-change)="proximaOrdem()">
-        </thf-disclaimer-group>
+      <div class="po-row po-mb-1">
+        <po-disclaimer-group class="po-mb-1" [p-disclaimers]="cartas" p-hide-remove-all="true" (p-change)="proximaOrdem()">
+        </po-disclaimer-group>
       </div>
 
-    </thf-widget>
+    </po-widget>
 
-    <thf-widget t-title="Ações" class="pad-b-10 thf-sm-12 thf-md-6 thf-lg-6 thf-xl-6">
-      <thf-select name="cbResetar" [(ngModel)]="cbResetar" t-label="Opção de Resetar" [t-options]="opcoes">
-      </thf-select>
+    <po-widget p-title="Ações" class="pad-b-10 po-sm-12 po-md-6 po-lg-6 po-xl-6">
+      <po-select name="cbResetar" [(ngModel)]="cbResetar" p-label="Opção de Resetar" [p-options]="opcoes">
+      </po-select>
 
-      <thf-select name="cbFinalizar" [(ngModel)]="cbFinalizar" t-label="Opção de Finalizar" [t-options]="opcoes">
-      </thf-select>
+      <po-select name="cbFinalizar" [(ngModel)]="cbFinalizar" p-label="Opção de Finalizar" [p-options]="opcoes">
+      </po-select>
 
-      <thf-select name="removeJogador" [(ngModel)]="removeJogador" t-label="Remover Jogadores" [t-options]="opcoes">
-      </thf-select>
+      <po-select name="removeJogador" [(ngModel)]="removeJogador" p-label="Remover Jogadores" [p-options]="opcoes">
+      </po-select>
 
-      <thf-select name="removeAdm" [(ngModel)]="removeAdm" t-label="Remover Administradores" [t-options]="opcoes">
-      </thf-select>
-    </thf-widget>
+      <po-select name="removeAdm" [(ngModel)]="removeAdm" p-label="Remover Administradores" [p-options]="opcoes">
+      </po-select>
+    </po-widget>
   </div>
-</thf-page-edit>
+</po-page-edit>

@@ -1,21 +1,21 @@
-<thf-widget t-title="Jogadores: {{jogadores.length}}">
-  <h3 class="thf-sm-6 thf-md-6 thf-lg-6 txt-thf">Jogador</h3>
-  <h3 class="thf-sm-6 thf-md-6 thf-lg-6 txt-thf">Voto</h3>
+<po-widget p-title="Jogadores: {{jogadores.length}}">
+  <h3 class="po-sm-6 po-md-6 po-lg-6 txt-thf">Jogador</h3>
+  <h3 class="po-sm-6 po-md-6 po-lg-6 txt-thf">Voto</h3>
   <div *ngFor="let jogador of jogadores">
-    <div class="thf-row">
+    <div class="po-row">
       <h4
         (click)="remove(jogador)"
-        class="thf-sm-6 thf-md-6 thf-lg-6"
+        class="po-sm-6 po-md-6 po-lg-6"
         [class.off]="jogador.status === 'OFF'"
         [class.click]="podeRemover(jogador)"
         [class.f-bold]="jogador.idUser === myId">
         {{jogador.nome}}
       </h4>
-      <h4 class="thf-sm-6 thf-md-6 thf-lg-6">
+      <h4 class="po-sm-6 po-md-6 po-lg-6">
         <span *ngIf="fimJogo"> {{jogador.voto.label}}</span>
         <span *ngIf="!fimJogo && !jogador.voto.label" class="txt-vermelho"> - </span>
-        <span *ngIf="!fimJogo && jogador.voto.label > ''" class="thf-icon thf-icon-ok txt-verde"> </span>
+        <span *ngIf="!fimJogo && jogador.voto.label > ''" class="po-icon po-icon-ok txt-verde"> </span>
       </h4>
     </div>
   </div>
-</thf-widget>
+</po-widget>

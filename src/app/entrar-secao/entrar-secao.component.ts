@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '../../../node_modules/@angular/router';
 import { AuthService } from '../app.auth.service';
-import { ThfNotificationService, ThfDialogService } from '@totvs/thf-ui';
+import { PoNotificationService, PoDialogService } from '@portinari/portinari-ui';
 
 @Component({
   selector: 'app-entrar-secao',
   templateUrl: './entrar-secao.component.html',
   styleUrls: ['./entrar-secao.component.css'],
-  providers: [ThfNotificationService, ThfDialogService]
+  providers: [PoNotificationService, PoDialogService]
 })
 export class EntrarSecaoComponent implements OnInit {
 
@@ -17,10 +17,10 @@ export class EntrarSecaoComponent implements OnInit {
 
   constructor(
     private activateRoute: ActivatedRoute,
-    private thfNotification: ThfNotificationService,
+    private thfNotification: PoNotificationService,
     private router: Router,
     public authService: AuthService,
-    private thfAlert: ThfDialogService
+    private thfAlert: PoDialogService
   ) { }
 
   ngOnInit() {

@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Sala } from '../models/sala.model';
 import { AcoesSala } from '../models/acoesSala.model';
 import { JogoService } from '../jogo/jogo.service';
-import { ThfDialogService } from '@totvs/thf-ui';
+import { PoDialogService } from '@portinari/portinari-ui';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -42,7 +42,7 @@ export class ConfiguracaoComponent implements OnInit {
 
   constructor(
     private jogoService: JogoService,
-    private thfAlert: ThfDialogService,
+    private thfAlert: PoDialogService,
     private router: Router,
     private activatedRoute: ActivatedRoute, ) { }
 

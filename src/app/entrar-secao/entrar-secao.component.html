@@ -1,53 +1,53 @@
-<thf-page-default>
-    <div class="thf-sm-12 thf-md-7 thf-lg-4 thf-xl-3"> 
+<po-page-default>
+    <div class="po-sm-12 po-md-7 po-lg-4 po-xl-3"> 
       <form #f="ngForm">
-        <thf-widget t-title="Criar/Entrar na Sala">
+        <po-widget p-title="Criar/Entrar na Sala">
 
-          <thf-input
-            class="thf-md-12"
+          <po-input
+            class="po-md-12"
             name="idSala"
             [(ngModel)]="idSala"
-            [t-maxlength]="12"
-            [t-minlength]="3"
-            t-required="true"
-            t-placeholder="ID Sala">
-          </thf-input>
+            [p-maxlength]="12"
+            [p-minlength]="3"
+            p-required="true"
+            p-placeholder="ID Sala">
+          </po-input>
 
-          <thf-input
-            class="thf-md-12"
+          <po-input
+            class="po-md-12"
             name="nome"
             [(ngModel)]="nome"
-            [t-maxlength]="12"
-            [t-minlength]="3"
-            t-required="true"
-            t-placeholder="Nome"
+            [p-maxlength]="12"
+            [p-minlength]="3"
+            p-required="true"
+            p-placeholder="Nome"
             (keyup.enter)="entrar('jogo')">
-          </thf-input>
+          </po-input>
 
-          <thf-switch
+          <po-switch
             name="jogador"
-            class="thf-md-12"
+            class="po-md-12"
             id="jogador"
             [(ngModel)]="jogador"
-            t-label-off="Administrador"
-            t-label-on="Jogador"
-            t-required="true" >
-          </thf-switch>
+            p-label-off="Administrador"
+            p-label-on="Jogador"
+            p-required="true" >
+          </po-switch>
 
-          <thf-button
-            (t-click)="entrar('jogo')"
-            class="pad-b-20 thf-md-12"
-            t-label="Criar/Entrar"
-            t-type="primary" >
-          </thf-button>
+          <po-button
+            (p-click)="entrar('jogo')"
+            class="pad-b-20 po-md-12"
+            p-label="Criar/Entrar"
+            p-type="primary" >
+          </po-button>
 
-          <thf-button
-            (t-click)="entrar('configuracao')"
-            class="pad-b-20 thf-md-12"
-            t-label="Configurar"
-            t-type="default" >
-          </thf-button>
-        </thf-widget>
+          <po-button
+            (p-click)="entrar('configuracao')"
+            class="pad-b-20 po-md-12"
+            p-label="Configurar"
+            p-type="default" >
+          </po-button>
+        </po-widget>
       </form>
     </div>
-</thf-page-default>
+</po-page-default>

@@ -1,11 +1,11 @@
 
 :host /deep/
-.thf-menu-logo{
+.po-menu-logo{
 	background:url(../assets/topMenu.png) no-repeat 20% 10% !important;
 	background-attachment: fixed;
 }
 
 :host /deep/
-.thf-disclaimer{
+.po-disclaimer{
 	margin-bottom: 10px !important;
 }

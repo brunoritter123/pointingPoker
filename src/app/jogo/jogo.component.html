@@ -1,39 +1,39 @@
 
 <div *ngIf="!jogoService.isConfiguracao">
-  <thf-page-default>
+  <po-page-default>
     <div style="margin-bottom: 35px">
       <div *ngIf="sincSala">
-        <thf-loading-overlay
-          t-screen-lock="true"
-          t-text="Sincronizando com sala..." >
-        </thf-loading-overlay>
+        <po-loading-overlay
+          p-screen-lock="true"
+          p-text="Sincronizando com sala..." >
+        </po-loading-overlay>
       </div>
 
-      <div class="thf-row" *ngIf= "configSala !== undefined">
-        <div class="pad-b-10 thf-sm-12 thf-md-7 thf-lg-6 thf-xl-3">
-          <thf-widget t-title="Sala: {{configSala.idSala}}">
+      <div class="po-row" *ngIf= "configSala !== undefined">
+        <div class="pad-b-10 po-sm-12 po-md-7 po-lg-6 po-xl-3">
+          <po-widget p-title="Sala: {{configSala.idSala}}">
 
             <!--Cartas-->
             <div class="row">
               <div *ngIf="isJogador && !fimJogo">
-                <div class="thf-sm-12">
-                  <thf-button *ngFor="let carta of configSala.cartas" (t-click)="cartaClick(carta)" class="pad-b-10 thf-sm-6 thf-md-6 thf-lg-4"
-                    t-label={{carta.label}} [t-type]="isCardSel(carta.id)">
-                  </thf-button>
+                <div class="po-sm-12">
+                  <po-button *ngFor="let carta of configSala.cartas" (p-click)="cartaClick(carta)" class="pad-b-10 po-sm-6 po-md-6 po-lg-4"
+                    p-label={{carta.label}} [p-type]="isCardSel(carta.id)">
+                  </po-button>
                 </div>
               </div>
 
               <!--Estatisticas-->
               <div *ngIf="fimJogo">
-                <h3 class="thf-sm-12 txt-vermelho">Mais Votado: {{maisVotado}}</h3>
-                <h3 class="thf-sm-6 thf-md-6 thf-lg-6">Ponto</h3>
-                <h3 class="thf-sm-6 thf-md-6 thf-lg-6">Votos</h3>
+                <h3 class="po-sm-12 txt-vermelho">Mais Votado: {{maisVotado}}</h3>
+                <h3 class="po-sm-6 po-md-6 po-lg-6">Ponto</h3>
+                <h3 class="po-sm-6 po-md-6 po-lg-6">Votos</h3>
                 <div *ngFor="let ponto of pontuacao">
-                  <h4 class="thf-sm-6 thf-md-6 thf-lg-6">
+                  <h4 class="po-sm-6 po-md-6 po-lg-6">
                     <span *ngIf="ponto.carta.label > ''">{{ponto.carta.label}}</span>
                     <span *ngIf="!ponto.carta.label" class="txt-vermelho"> - </span>
                   </h4>
-                  <h4 class="thf-sm-6 thf-md-6 thf-lg-6">{{ponto.votos}}</h4>
+                  <h4 class="po-sm-6 po-md-6 po-lg-6">{{ponto.votos}}</h4>
                 </div>
               </div>
             </div>
@@ -43,50 +43,50 @@
               <p>&#160;</p>
 
               <div class="row">
-                <thf-button
+                <po-button
                   *ngIf="isPodeExec(configSala.resetar)"
-                  class="pad-b-10 thf-sm-12 thf-md-6 thf-lg-6 thf-xl-6"
-                  (t-click)="resetClick()"
-                  t-label="Resetar"
-                  t-type="primary">
-                </thf-button>
-                <thf-button
+                  class="pad-b-10 po-sm-12 po-md-6 po-lg-6 po-xl-6"
+                  (p-click)="resetClick()"
+                  p-label="Resetar"
+                  p-type="primary">
+                </po-button>
+                <po-button
                   *ngIf="isPodeExec(configSala.finalizar)"
-                  class="pad-b-10 thf-sm-12 thf-md-6 thf-lg-6 thf-xl-6"
-                  (t-click)="fimClick()"
-                  t-label="Finalizar"
-                  t-type="primary">
-                </thf-button>
+                  class="pad-b-10 po-sm-12 po-md-6 po-lg-6 po-xl-6"
+                  (p-click)="fimClick()"
+                  p-label="Finalizar"
+                  p-type="primary">
+                </po-button>
               </div>
             </div>
 
-          </thf-widget>
+          </po-widget>
 
         </div>
 
         <!--Jogadores-->
-        <div class="pad-b-10 thf-sm-12 thf-md-5 thf-lg-3 thf-xl-3">
+        <div class="pad-b-10 po-sm-12 po-md-5 po-lg-3 po-xl-3">
           <app-votos [jogadores]="jogadores" [observadores]="observadores" [fimJogo]="fimJogo" [isJogador]="isJogador" [myId]="myId" [configSala]="configSala">
           </app-votos>
         </div>
 
         <!--Adminstrador-->
-        <div *ngIf="observadores !== undefined && observadores.length > 0" class="pad-b-10 thf-sm-12 thf-md-5 thf-lg-3 thf-xl-3">
+        <div *ngIf="observadores !== undefined && observadores.length > 0" class="pad-b-10 po-sm-12 po-md-5 po-lg-3 po-xl-3">
           <app-observador [observadores]="observadores" [myId]="myId" [isJogador]="isJogador" [configSala]="configSala">
           </app-observador>
         </div>
       </div>
     </div>
-  </thf-page-default>
+  </po-page-default>
 
 </div>
 
-<div class="thf-row" *ngIf="jogoService.isConfiguracao">
+<div class="po-row" *ngIf="jogoService.isConfiguracao">
   <div *ngIf="sincSala">
-    <thf-loading-overlay
-      t-screen-lock="true"
-      t-text="Sincronizando com sala..." >
-    </thf-loading-overlay>
+    <po-loading-overlay
+      p-screen-lock="true"
+      p-text="Sincronizando com sala..." >
+    </po-loading-overlay>
   </div>
 
   <app-configuracao *ngIf="configSala !== undefined"
@@ -94,13 +94,13 @@
   </app-configuracao>
  </div>
 
-<thf-modal
-  t-click-out="true"
-  t-hide-close="true"
-  t-size="md"
-  t-title="Desconectado."
-  [t-primary-action]="primaryAction"
-  [t-secondary-action]="secondaryAction">
+<po-modal
+  p-click-out="true"
+  p-hide-close="true"
+  p-size="md"
+  p-title="Desconectado."
+  [p-primary-action]="primaryAction"
+  [p-secondary-action]="secondaryAction">
 
   <h1 class="txt-vermelho">Xiiiiiii... você está offline.! :(</h1>
-</thf-modal>
+</po-modal>

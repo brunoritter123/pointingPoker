@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { User } from '../../models/user.model';
 import { JogoService } from '../jogo.service';
-import { ThfDialogService } from '@totvs/thf-ui';
+import { PoDialogService } from '@portinari/portinari-ui';
 import { Sala } from '../../models/sala.model';
 
 @Component({
@@ -17,7 +17,7 @@ export class ObservadorComponent {
 
   constructor(
     private jogoService: JogoService,
-    private thfAlert: ThfDialogService
+    private thfAlert: PoDialogService
   ) { }
 
   public remove(user: User): void {

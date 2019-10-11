@@ -1,23 +1,23 @@
-<div class="thf-row">
-  <thf-widget
-    class="thf-sm-12 thf-md-12 thf-lg-12"
-    t-title="Contato"
-    t-primary-label="Enviar e-mail"
-    (t-primary-action)="sendContact(contact.email)"
-    t-secondary-label="Apoiar"
-    (t-secondary-action)="apoiar()">
+<div class="po-row">
+  <po-widget
+    class="po-sm-12 po-md-12 po-lg-12"
+    p-title="Contato"
+    p-primary-label="Enviar e-mail"
+    (p-primary-action)="sendContact(contact.email)"
+    p-secondary-label="Apoiar"
+    (p-secondary-action)="apoiar()">
 
-    <thf-avatar
-      class="thf-sm-12 thf-md-4 thf-lg-4"
-      t-size="lg"
-      t-src="../../assets/eu.jpg">
-    </thf-avatar>
+    <po-avatar
+      class="po-sm-12 po-md-4 po-lg-4"
+      p-size="lg"
+      p-src="../../assets/eu.jpg">
+    </po-avatar>
 
-    <div class="thf-sm-12 thf-md-8 thf-lg-8">
+    <div class="po-sm-12 po-md-8 po-lg-8">
       <p><strong>Autor:</strong> {{ contact.name }}</p>
       <p><strong>E-mail:</strong> {{ contact.email }}</p>
       <p><strong>Versão:</strong> v2.0</p>
     </div>
 
-  </thf-widget>
+  </po-widget>
 </div>

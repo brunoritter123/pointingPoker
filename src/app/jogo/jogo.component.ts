@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Carta } from '../models/carta.model';
 import { User } from '../models/user.model';
 import { interval, Subscription } from 'rxjs';
-import { ThfModalAction, ThfModalComponent } from '@totvs/thf-ui';
+import { PoModalAction, PoModalComponent } from '@portinari/portinari-ui';
 import { AuthService } from '../app.auth.service';
 import { Sala } from '../models/sala.model';
 import { Estatistica } from '../models/estatistica.model';
@@ -17,7 +17,7 @@ import { Estatistica } from '../models/estatistica.model';
 })
 
 export class JogoComponent implements OnInit, OnDestroy {
-	@ViewChild(ThfModalComponent, { static: true }) thfModal: ThfModalComponent;
+	@ViewChild(PoModalComponent, { static: true }) thfModal: PoModalComponent;
 
 	constructor(
 		private authService: AuthService,
@@ -37,14 +37,14 @@ export class JogoComponent implements OnInit, OnDestroy {
 	public isConnected = false;
 	public isJogador = false;
 	public myId: string = this.authService.id;
-	public primaryAction: ThfModalAction = {
+	public primaryAction: PoModalAction = {
 		action: () => {
 			this.thfModal.close();
 		},
 		label: 'Estou online'
 	};
 
-	public secondaryAction: ThfModalAction = {
+	public secondaryAction: PoModalAction = {
 		action: () => {
 				this.route.navigate([`/entrar-sala`], {
 					queryParams: { idSala: this.configSala.idSala, nameUser: this.nameUser, isJogador: this.isJogador }});
