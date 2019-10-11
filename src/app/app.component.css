@@ -1,11 +1,5 @@
 
 :host /deep/
-.po-menu-logo{
-	background:url(../assets/topMenu.png) no-repeat 20% 10% !important;
-	background-attachment: fixed;
-}
-
-:host /deep/
 .po-disclaimer{
 	margin-bottom: 10px !important;
 }
