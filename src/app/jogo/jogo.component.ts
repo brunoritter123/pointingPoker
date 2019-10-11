@@ -4,8 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Carta } from '../models/carta.model';
 import { User } from '../models/user.model';
 import { interval, Subscription } from 'rxjs';
-import { ThfModalComponent } from '@totvs/thf-ui/components/thf-modal/thf-modal.component';
-import { ThfModalAction } from '@totvs/thf-ui/components/thf-modal';
+import { ThfModalAction, ThfModalComponent } from '@totvs/thf-ui';
 import { AuthService } from '../app.auth.service';
 import { Sala } from '../models/sala.model';
 import { Estatistica } from '../models/estatistica.model';
@@ -18,7 +17,7 @@ import { Estatistica } from '../models/estatistica.model';
 })
 
 export class JogoComponent implements OnInit, OnDestroy {
-	@ViewChild(ThfModalComponent) thfModal: ThfModalComponent;
+	@ViewChild(ThfModalComponent, { static: true }) thfModal: ThfModalComponent;
 
 	constructor(
 		private authService: AuthService,

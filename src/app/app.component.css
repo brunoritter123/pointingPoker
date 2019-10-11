@@ -1,9 +1,8 @@
 
 :host /deep/
 .thf-menu-logo{
-	background:url(../assets/topMenu.png) no-repeat 10% 100% !important;
+	background:url(../assets/topMenu.png) no-repeat 20% 10% !important;
 	background-attachment: fixed;
-	background-size: 100px 50px !important;
 }
 
 :host /deep/

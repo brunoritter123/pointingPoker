@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '../../../node_modules/@angular/router';
-import { ThfNotificationService } from '@totvs/thf-ui/services/thf-notification/thf-notification.service';
 import { AuthService } from '../app.auth.service';
-import { ThfDialogService } from '@totvs/thf-ui/services/thf-dialog/thf-dialog.service';
+import { ThfNotificationService, ThfDialogService } from '@totvs/thf-ui';
 
 @Component({
   selector: 'app-entrar-secao',

@@ -1,7 +1,5 @@
-import { Component, ViewChild} from '@angular/core';
-import { ThfMenuItem } from '@totvs/thf-ui/components/thf-menu';
-import { ThfModalComponent } from '@totvs/thf-ui/components/thf-modal/thf-modal.component';
-import { ThfModalAction } from '@totvs/thf-ui/components/thf-modal';
+import { Component, ViewChild } from '@angular/core';
+import { ThfMenuItem, ThfModalComponent, ThfModalAction } from '@totvs/thf-ui';
 
 @Component({
   selector: 'app-root',
@@ -9,7 +7,7 @@ import { ThfModalAction } from '@totvs/thf-ui/components/thf-modal';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  @ViewChild(ThfModalComponent) thfModal: ThfModalComponent;
+  @ViewChild(ThfModalComponent, { static: true }) thfModal: ThfModalComponent;
 
   constructor() {}
 

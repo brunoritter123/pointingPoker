@@ -1,7 +1,7 @@
 import { Component, Input} from '@angular/core';
 import { User } from '../../models/user.model';
 import { JogoService } from '../jogo.service';
-import { ThfDialogService } from '@totvs/thf-ui/services/thf-dialog/thf-dialog.service';
+import { ThfDialogService } from '@totvs/thf-ui';
 import { Sala } from '../../models/sala.model';
 
 @Component({

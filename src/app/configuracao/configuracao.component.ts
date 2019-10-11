@@ -2,10 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Sala } from '../models/sala.model';
 import { AcoesSala } from '../models/acoesSala.model';
 import { JogoService } from '../jogo/jogo.service';
-import { ThfDialogService } from '@totvs/thf-ui/services/thf-dialog/thf-dialog.service';
+import { ThfDialogService } from '@totvs/thf-ui';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Carta } from '../models/carta.model';
-
 
 @Component({
   selector: 'app-configuracao',

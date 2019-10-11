@@ -3,8 +3,8 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { ThfModule } from '@totvs/thf-ui';
 import { CookieService } from 'ngx-cookie-service';
+import { ThfModule, ThfDialogService } from '@totvs/thf-ui';
 
 import { EntrarSecaoComponent } from './entrar-secao/entrar-secao.component';
 import { JogoComponent } from './jogo/jogo.component';
@@ -14,7 +14,6 @@ import { VotosComponent } from './jogo/votos/votos.component';
 import { ObservadorComponent } from './jogo/observador/observador.component';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthService } from './app.auth.service';
-import { ThfDialogService } from '@totvs/thf-ui/services/thf-dialog/thf-dialog.service';
 import { ConfiguracaoComponent } from './configuracao/configuracao.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
