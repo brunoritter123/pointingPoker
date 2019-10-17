@@ -7,7 +7,7 @@ import { PoMenuItem, PoModalComponent, PoModalAction } from '@portinari/portinar
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  @ViewChild(PoModalComponent, { static: true }) thfModal: PoModalComponent;
+  @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
 
   constructor() {}
 
@@ -20,13 +20,13 @@ export class AppComponent {
 
   public primaryAction: PoModalAction = {
     action: () => {
-      this.thfModal.close();
+      this.poModal.close();
     },
     label: 'Fechar'
   };
 
   public openModal(): boolean {
-    this.thfModal.open();
+    this.poModal.open();
     return true;
   }
 

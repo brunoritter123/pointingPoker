@@ -67,11 +67,16 @@ export class User {
         newUser.voto.type = undefined;
       }
 
+      if (!newUser.voto.hasOwnProperty('nmUltHist')) {
+        newUser.voto.nmUltHist = undefined;
+      }
+
     } else {
       newUser.voto = { id: undefined,
                        value: undefined,
                        label: undefined,
-                       type: undefined };
+                       type: undefined,
+                       nmUltHist: undefined };
     }
 
     return newUser;

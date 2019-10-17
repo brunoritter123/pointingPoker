@@ -5,6 +5,7 @@ export class Carta {
     public value: number | undefined,
     public label: string = '',
     public type: string = '',
+    public nmUltHist: string = ''
   ) {}
 
 }

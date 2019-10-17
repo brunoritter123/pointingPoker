@@ -99,6 +99,23 @@ export class JogoService {
     this.socket.emit('remove', this.idSala, idUser, new Date().getTime());
   }
 
+  setCarta(carta: Carta): void {
+    this.socket.emit('concluir', this.idSala, carta, new Date().getTime());
+  }
+
+  setNmHistoria(nmHistoria: string): void {
+    this.socket.emit('update-historia', this.idSala, nmHistoria, new Date().getTime());
+  }
+
+  getCarta() {
+    const observable = new Observable(observer => {
+      this.socket.on('get-carta', (data) => {
+        observer.next(data);
+      });
+    });
+    return observable;
+  }
+
   getSala() {
     const observable = new Observable(observer => {
       this.socket.on('get-sala', (data) => {

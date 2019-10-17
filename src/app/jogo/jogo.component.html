@@ -15,11 +15,42 @@
 
             <!--Cartas-->
             <div class="row">
-              <div *ngIf="isJogador && !fimJogo">
-                <div class="po-sm-12">
-                  <po-button *ngFor="let carta of configSala.cartas" (p-click)="cartaClick(carta)" class="pad-b-10 po-sm-6 po-md-6 po-lg-4"
-                    p-label={{carta.label}} [p-type]="isCardSel(carta.id)">
+              <po-input
+                class="po-md-12"
+                name="nmHistoria"
+                (p-blur)="emitNomeHistoria()"
+                [(ngModel)]="nmHistoria"
+                [p-maxlength]="50"
+                p-required="false"
+                p-placeholder="Descrição da História">
+              </po-input>
+
+              <div *ngIf="!fimJogo">
+                <div *ngIf="isJogador" class="po-sm-12">
+                  <po-button #card *ngFor="let carta of configSala.cartas" (p-click)="cartaClick(carta)" class="pad-b-10 po-sm-6 po-md-6 po-lg-4"
+                    p-label={{carta.label}} [p-type]="isCardSel(carta.id)" p-tooltip="{{carta.nmUltHist}}">
                   </po-button>
+                </div>
+
+                <!--Botões-->
+                <div>
+                  <p>&#160;</p>
+                  <div class="row">
+                    <po-button
+                      *ngIf="isPodeExec(configSala.resetar)"
+                      class="pad-b-10 po-sm-12 po-md-6 po-lg-6 po-xl-6"
+                      (p-click)="resetClick()"
+                      p-label="Resetar"
+                      p-type="primary">
+                    </po-button>
+                    <po-button
+                      *ngIf="isPodeExec(configSala.finalizar)"
+                      class="pad-b-10 po-sm-12 po-md-6 po-lg-6 po-xl-6"
+                      (p-click)="fimClick()"
+                      p-label="Finalizar"
+                      p-type="primary">
+                    </po-button>
+                  </div>
                 </div>
               </div>
 
@@ -35,28 +66,27 @@
                   </h4>
                   <h4 class="po-sm-6 po-md-6 po-lg-6">{{ponto.votos}}</h4>
                 </div>
-              </div>
-            </div>
 
-            <!--Botões-->
-            <div>
-              <p>&#160;</p>
-
-              <div class="row">
-                <po-button
-                  *ngIf="isPodeExec(configSala.resetar)"
-                  class="pad-b-10 po-sm-12 po-md-6 po-lg-6 po-xl-6"
-                  (p-click)="resetClick()"
-                  p-label="Resetar"
-                  p-type="primary">
-                </po-button>
-                <po-button
-                  *ngIf="isPodeExec(configSala.finalizar)"
-                  class="pad-b-10 po-sm-12 po-md-6 po-lg-6 po-xl-6"
-                  (p-click)="fimClick()"
-                  p-label="Finalizar"
-                  p-type="primary">
-                </po-button>
+                <!--Botões-->
+                <div>
+                  <p>&#160;</p>
+                  <div class="row">
+                    <po-button
+                      *ngIf="isPodeExec(configSala.resetar)"
+                      class="pad-b-10 po-sm-12 po-md-6 po-lg-6 po-xl-6"
+                      (p-click)="resetClick(false)"
+                      p-label="Revotar"
+                      p-type="primary">
+                    </po-button>
+                    <po-button
+                      *ngIf="isPodeExec(configSala.finalizar)"
+                      class="pad-b-10 po-sm-12 po-md-6 po-lg-6 po-xl-6"
+                      (p-click)="concluirClick()"
+                      p-label="Concluir"
+                      p-type="primary">
+                    </po-button>
+                  </div>
+                </div>
               </div>
             </div>
 

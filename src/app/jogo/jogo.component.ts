@@ -17,7 +17,7 @@ import { Estatistica } from '../models/estatistica.model';
 })
 
 export class JogoComponent implements OnInit, OnDestroy {
-	@ViewChild(PoModalComponent, { static: true }) thfModal: PoModalComponent;
+	@ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
 
 	constructor(
 		private authService: AuthService,
@@ -26,7 +26,9 @@ export class JogoComponent implements OnInit, OnDestroy {
 		private route: Router,
 	) { }
 
+	public nmHistoria: string = "";
 	public pontuacao: Array<Estatistica>;
+	public cartaMaisVotada: Carta;
 	public maisVotado: string;
 	public sincSala = true;
 	public configSala: Sala;
@@ -39,7 +41,7 @@ export class JogoComponent implements OnInit, OnDestroy {
 	public myId: string = this.authService.id;
 	public primaryAction: PoModalAction = {
 		action: () => {
-			this.thfModal.close();
+			this.poModal.close();
 		},
 		label: 'Estou online'
 	};
@@ -52,8 +54,11 @@ export class JogoComponent implements OnInit, OnDestroy {
 		label: 'Sair da Sala'
 	};
 
+	public content: string = 'teste';
+
 	private nameUser: string;
 	private conUsers: Subscription;
+	private conCarta: Subscription;
 	private conConfigSala: Subscription;
 	private conRecnnect: any;
 	private conRecnnectSub: Subscription;
@@ -84,6 +89,16 @@ export class JogoComponent implements OnInit, OnDestroy {
 			this.route.navigate([`/entrar-sala`], { queryParams:
 				{ idSala: idSala, nameUser: this.nameUser, isJogador: this.isJogador }});
 		}
+
+		// Quando uma carta é alterada
+		this.conCarta = this.jogoService.getCarta().subscribe( (carta: any) => {
+
+			this.configSala.cartas.forEach(cartaCfg => {
+				if (cartaCfg.id == carta.id) {
+					cartaCfg = carta
+				}
+			})
+		});
 
 		// Quando um usuário sai ou entra na seção.
 		this.conUsers = this.jogoService.getUsersConnect().subscribe( (users: Array<User>) => {
@@ -121,12 +136,23 @@ export class JogoComponent implements OnInit, OnDestroy {
 		});
 
 		// Observa recebe a configuração da sala
-		this.conConfigSala = this.jogoService.getSala().subscribe( (sala: Sala) => {
-			this.configSala = sala;
-			this.fimDeJogo(this.configSala.forceFimJogo == 1);
-			this.GeraEstatistica();
-			if (this.jogoService.cartaSel !== undefined && this.jogoService.cartaSel.id !== undefined) {
-				this.setCartaSel(this.jogoService.cartaSel.id);
+		this.conConfigSala = this.jogoService.getSala().subscribe( (data: any) => {
+			const sala: Sala = data.sala;
+			const nmHistoria: string = data.nmHistoria;
+
+			if (!!sala) {
+				this.configSala = sala;
+				this.fimDeJogo(this.configSala.forceFimJogo == 1);
+				this.GeraEstatistica();
+				if (this.jogoService.cartaSel !== undefined && this.jogoService.cartaSel.id !== undefined) {
+					this.setCartaSel(this.jogoService.cartaSel.id);
+				}
+				this.nmHistoria = sala.nmHistoria;
+			}
+
+			if (!!nmHistoria) {
+				this.configSala.nmHistoria = nmHistoria;
+				this.nmHistoria = nmHistoria;
 			}
 		});
 
@@ -136,7 +162,7 @@ export class JogoComponent implements OnInit, OnDestroy {
 			this.sincSala = this.isConnected && this.jogoService.isSincronizando();
 
 			if (navigator.onLine !== this.isConnected && !this.isConnected) {
-				this.thfModal.close();
+				this.poModal.close();
 			}
 
 			this.isConnected = navigator.onLine;
@@ -154,8 +180,17 @@ export class JogoComponent implements OnInit, OnDestroy {
 	ngOnDestroy() {
 		this.conRecnnectSub.unsubscribe();
 		this.conUsers.unsubscribe();
+		this.conCarta.unsubscribe();
 		this.conConfigSala.unsubscribe();
 		this.conIsConfig.unsubscribe();
+	}
+
+	/**
+	 * emitNomeHistoria()
+	 * Metodo para emitir nome da historia
+	 */
+	public emitNomeHistoria() {
+		this.jogoService.setNmHistoria(this.nmHistoria);
 	}
 
 	/**
@@ -201,16 +236,32 @@ export class JogoComponent implements OnInit, OnDestroy {
 	 * resetClick()
 	 * Função para resetar o jogo
 	 */
-	public resetClick(): void {
+	public resetClick(lReset:boolean = true): void {
 		if (this.isConnected) {
+			if (lReset) {
+				this.nmHistoria = "";
+			}
 			this.configSala.forceFimJogo = 0;
 			this.jogoService.sendReset();
 			this.jogoService.sendUpdateSala(this.configSala);
 		}
 	}
 
+	/**
+	 * resetClick()
+	 * Função para resetar o jogo
+	 */
+	public concluirClick() {
+		if (!!this.nmHistoria && !!this.cartaMaisVotada && this.cartaMaisVotada.hasOwnProperty('id') && !!this.cartaMaisVotada.id) {
+			this.cartaMaisVotada.nmUltHist = this.nmHistoria;
+			this.jogoService.setCarta(this.cartaMaisVotada)
+		}
+
+		this.resetClick();
+	}
+
 	private openModal(): boolean {
-		this.thfModal.open();
+		this.poModal.open();
 		return true;
 	}
 
@@ -280,6 +331,7 @@ export class JogoComponent implements OnInit, OnDestroy {
 				});
 
 				this.maisVotado = this.pontuacao[0].carta.label;
+				this.cartaMaisVotada = this.pontuacao[0].carta;
 			});
 		}
 	}
