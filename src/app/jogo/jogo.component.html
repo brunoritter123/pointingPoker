@@ -25,6 +25,13 @@
                 p-placeholder="Descrição da História">
               </po-input>
 
+              <div *ngIf="!isJogador" class="po-sm-12">
+                  <po-table
+                  [p-items]="configSala.cartas"
+                  [p-columns]="columnsTable">
+                </po-table>
+              </div>
+
               <div *ngIf="!fimJogo">
                 <div *ngIf="isJogador" class="po-sm-12">
                   <po-button #card *ngFor="let carta of configSala.cartas" (p-click)="cartaClick(carta)" class="pad-b-10 po-sm-6 po-md-6 po-lg-4"

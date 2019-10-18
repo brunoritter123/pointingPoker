@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Carta } from '../models/carta.model';
 import { User } from '../models/user.model';
 import { interval, Subscription } from 'rxjs';
-import { PoModalAction, PoModalComponent } from '@portinari/portinari-ui';
+import { PoModalAction, PoModalComponent, PoTableColumn } from '@portinari/portinari-ui';
 import { AuthService } from '../app.auth.service';
 import { Sala } from '../models/sala.model';
 import { Estatistica } from '../models/estatistica.model';
@@ -26,6 +26,7 @@ export class JogoComponent implements OnInit, OnDestroy {
 		private route: Router,
 	) { }
 
+	public columnsTable: Array<PoTableColumn>;
 	public nmHistoria: string = "";
 	public pontuacao: Array<Estatistica>;
 	public cartaMaisVotada: Carta;
@@ -73,12 +74,16 @@ export class JogoComponent implements OnInit, OnDestroy {
 	 * Inicializador do componente
 	 */
 	ngOnInit() {
+		this.columnsTable = [
+			{ property: 'label', label: 'Carta' },
+			{ property: 'nmUltHist', label: 'Última História'},
+		]
 		this.conIsConfig = this.activateRoute.queryParams.subscribe(
 			(queryParams: any) => {
 				this.jogoService.isConfiguracao = queryParams['config'] == 'true';
 			}
 		)
-	
+
 		let idSala = this.activateRoute.snapshot.params['idSala'];
 		this.nameUser = this.activateRoute.snapshot.params['nameUser'];
 		this.fimDeJogo(false);
