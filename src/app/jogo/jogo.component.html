@@ -25,18 +25,21 @@
                 p-placeholder="Descrição da História">
               </po-input>
 
-              <div *ngIf="!isJogador" class="po-sm-12">
-                  <po-table
-                  [p-items]="configSala.cartas"
-                  [p-columns]="columnsTable">
-                </po-table>
-              </div>
 
               <div *ngIf="!fimJogo">
+                <!--Cartas-->
                 <div *ngIf="isJogador" class="po-sm-12">
                   <po-button #card *ngFor="let carta of configSala.cartas" (p-click)="cartaClick(carta)" class="pad-b-10 po-sm-6 po-md-6 po-lg-4"
                     p-label={{carta.label}} [p-type]="isCardSel(carta.id)" p-tooltip="{{carta.nmUltHist}}">
                   </po-button>
+                </div>
+
+                <!--Hitórico-->
+                <div *ngIf="!isJogador" class="po-sm-12">
+                    <po-table
+                    [p-items]="configSala.cartas"
+                    [p-columns]="columnsTable">
+                  </po-table>
                 </div>
 
                 <!--Botões-->
@@ -45,7 +48,7 @@
                   <div class="row">
                     <po-button
                       *ngIf="isPodeExec(configSala.resetar)"
-                      class="pad-b-10 po-sm-12 po-md-6 po-lg-6 po-xl-6"
+                      class="pad-b-10 po-sm-12 po-md-6 po-lg-6 po-xl-6 selecionado"
                       (p-click)="resetClick()"
                       p-label="Resetar"
                       p-type="primary">
@@ -81,7 +84,7 @@
                     <po-button
                       *ngIf="isPodeExec(configSala.resetar)"
                       class="pad-b-10 po-sm-12 po-md-6 po-lg-6 po-xl-6"
-                      (p-click)="resetClick(false)"
+                      (p-click)="resetClick()"
                       p-label="Revotar"
                       p-type="primary">
                     </po-button>

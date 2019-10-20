@@ -241,11 +241,8 @@ export class JogoComponent implements OnInit, OnDestroy {
 	 * resetClick()
 	 * Função para resetar o jogo
 	 */
-	public resetClick(lReset:boolean = true): void {
+	public resetClick(): void {
 		if (this.isConnected) {
-			if (lReset) {
-				this.nmHistoria = "";
-			}
 			this.configSala.forceFimJogo = 0;
 			this.jogoService.sendReset();
 			this.jogoService.sendUpdateSala(this.configSala);

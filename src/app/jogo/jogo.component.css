@@ -1,0 +1,13 @@
+:host /deep/
+.po-button-danger {
+    background-color: #c64840;
+    border: 1px solid #c64840;
+    color: #ffffff;
+}
+
+:host /deep/
+.po-button-danger:hover {
+    background-color: #9e3933;
+    border: 1px solid #9e3933;
+    color: #ffffff;
+}

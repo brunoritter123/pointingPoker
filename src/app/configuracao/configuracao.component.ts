@@ -33,7 +33,8 @@ export class ConfiguracaoComponent implements OnInit {
   ];
 
   public readonly sequencias: Array<object> = [
-    { label: 'Padrão'     , action: () => this.alteraCartas('Padrão') },
+    { label: 'Padrão 1'   , action: () => this.alteraCartas('Padrão 1') },
+    { label: 'Padrão 2'   , action: () => this.alteraCartas('Padrão 2') },
     { label: 'Fibonacci'  , action: () => this.alteraCartas('Fibonacci')   },
     { label: 'Tamanho'    , action: () => this.alteraCartas('Tamanho')     },
     { label: 'Salvo'      , action: () => this.alteraCartas('Salvo') },
@@ -77,7 +78,14 @@ export class ConfiguracaoComponent implements OnInit {
         ]
         break;
 
-      case 'Padrão':
+      case 'Padrão 1':
+        this.cartas = [ {value: '01'}, {value: '02'}, {value: '03'},
+                        {value: '05'}, {value: '08'}, {value: '13'},
+                        {value: '21'}, {value: '34'}, {value: '55'}
+        ]
+        break;
+
+      case 'Padrão 2':
         this.cartas = [ {value: ' 0'}, {value: ' ½'}, {value: '01'},
                         {value: '02'}, {value: '03'}, {value: '05'},
                         {value: '08'}, {value: '13'}, {value: '20'},
@@ -98,6 +106,7 @@ export class ConfiguracaoComponent implements OnInit {
 
       case 'Salvo':
         this.cartasEspecias = [];
+        this.cartas = [];
         this.configSala.cartas.forEach( (carta) => {
           if (typeof carta.value == 'number'){
             this.cartas.push({value: carta.label});
@@ -136,7 +145,16 @@ export class ConfiguracaoComponent implements OnInit {
     this.configSala.removerAdm = this.removeAdm;
     this.configSala.removerJogador = this.removeJogador;
     this.configSala.resetar = this.cbResetar;
-    this.configSala.cartas = cartasNew;
+
+    let lAltCartas: boolean = false;
+    this.configSala.cartas.forEach( (carta, index) => {
+      if (carta.label != cartasNew[index].label) {
+        lAltCartas = true;
+      }
+    })
+    if (lAltCartas){
+      this.configSala.cartas = cartasNew;
+    }
 
     this.jogoService.sendUpdateSala(this.configSala, true);
 
