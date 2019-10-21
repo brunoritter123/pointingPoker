@@ -1,63 +1,42 @@
-
 <div *ngIf="!jogoService.isConfiguracao">
   <po-page-default>
     <div style="margin-bottom: 35px">
       <div *ngIf="sincSala">
-        <po-loading-overlay
-          p-screen-lock="true"
-          p-text="Sincronizando com sala..." >
+        <po-loading-overlay p-screen-lock="true" p-text="Sincronizando com sala...">
         </po-loading-overlay>
       </div>
 
-      <div class="po-row" *ngIf= "configSala !== undefined">
-        <div class="pad-b-10 po-sm-12 po-md-7 po-lg-6 po-xl-3">
-          <po-widget p-title="Sala: {{configSala.idSala}}">
+      <div class="po-row" *ngIf="configSala !== undefined">
+        <div class="pad-b-10 po-sm-12 po-md-7 po-lg-6 po-xl-6">
+
+          <po-widget p-title="Sala: {{configSala.idSala}}" class="pad-b-10 po-sm-12 po-md-12 po-lg-12 po-xl-12">
 
             <!--Cartas-->
             <div class="row">
-              <po-input
-                class="po-md-12"
-                name="nmHistoria"
-                (p-blur)="emitNomeHistoria()"
-                [(ngModel)]="nmHistoria"
-                [p-maxlength]="50"
-                p-required="false"
-                p-placeholder="Descrição da História">
+              <po-input class="po-md-12" name="nmHistoria" (p-blur)="emitNomeHistoria()" [(ngModel)]="nmHistoria"
+                [p-maxlength]="50" p-required="false" p-placeholder="Descrição da História">
               </po-input>
 
 
               <div *ngIf="!fimJogo">
                 <!--Cartas-->
                 <div *ngIf="isJogador" class="po-sm-12">
-                  <po-button #card *ngFor="let carta of configSala.cartas" (p-click)="cartaClick(carta)" class="pad-b-10 po-sm-6 po-md-6 po-lg-4"
-                    p-label={{carta.label}} [p-type]="isCardSel(carta.id)" p-tooltip="{{carta.nmUltHist}}">
+                  <po-button #card *ngFor="let carta of configSala.cartas" (p-click)="cartaClick(carta)"
+                    class="pad-b-10 po-sm-6 po-md-6 po-lg-4" p-label={{carta.label}} [p-type]="isCardSel(carta.id)"
+                    p-tooltip="{{carta.nmUltHist}}">
                   </po-button>
-                </div>
-
-                <!--Hitórico-->
-                <div *ngIf="!isJogador" class="po-sm-12">
-                    <po-table
-                    [p-items]="configSala.cartas"
-                    [p-columns]="columnsTable">
-                  </po-table>
                 </div>
 
                 <!--Botões-->
                 <div>
                   <p>&#160;</p>
                   <div class="row">
-                    <po-button
-                      *ngIf="isPodeExec(configSala.resetar)"
-                      class="pad-b-10 po-sm-12 po-md-6 po-lg-6 po-xl-6 selecionado"
-                      (p-click)="resetClick()"
-                      p-label="Resetar"
-                      p-type="primary">
+                    <po-button *ngIf="isPodeExec(configSala.resetar)"
+                      class="pad-b-10 po-sm-12 po-md-6 po-lg-6 po-xl-6 selecionado" (p-click)="resetClick()"
+                      p-label="Resetar" p-type="primary">
                     </po-button>
-                    <po-button
-                      *ngIf="isPodeExec(configSala.finalizar)"
-                      class="pad-b-10 po-sm-12 po-md-6 po-lg-6 po-xl-6"
-                      (p-click)="fimClick()"
-                      p-label="Finalizar"
+                    <po-button *ngIf="isPodeExec(configSala.finalizar)"
+                      class="pad-b-10 po-sm-12 po-md-6 po-lg-6 po-xl-6" (p-click)="fimClick()" p-label="Finalizar"
                       p-type="primary">
                     </po-button>
                   </div>
@@ -81,65 +60,59 @@
                 <div>
                   <p>&#160;</p>
                   <div class="row">
-                    <po-button
-                      *ngIf="isPodeExec(configSala.resetar)"
-                      class="pad-b-10 po-sm-12 po-md-6 po-lg-6 po-xl-6"
-                      (p-click)="resetClick()"
-                      p-label="Revotar"
-                      p-type="primary">
+                    <po-button *ngIf="isPodeExec(configSala.resetar)" class="pad-b-10 po-sm-12 po-md-6 po-lg-6 po-xl-6"
+                      (p-click)="resetClick()" p-label="Revotar" p-type="primary">
                     </po-button>
-                    <po-button
-                      *ngIf="isPodeExec(configSala.finalizar)"
-                      class="pad-b-10 po-sm-12 po-md-6 po-lg-6 po-xl-6"
-                      (p-click)="concluirClick()"
-                      p-label="Concluir"
+                    <po-button *ngIf="isPodeExec(configSala.finalizar)"
+                      class="pad-b-10 po-sm-12 po-md-6 po-lg-6 po-xl-6" (p-click)="concluirClick()" p-label="Concluir"
                       p-type="primary">
                     </po-button>
                   </div>
                 </div>
               </div>
             </div>
-
           </po-widget>
 
+          <!--Régua-->
+          <po-widget *ngIf="!isJogador" p-title="Régua" class="pad-b-10 po-sm-12 po-md-12 po-lg-12 po-xl-12">
+            <po-table [p-items]="configSala.cartas" [p-columns]="columnsRegua">
+            </po-table>
+          </po-widget>
         </div>
 
-        <!--Jogadores-->
-        <div class="pad-b-10 po-sm-12 po-md-5 po-lg-3 po-xl-3">
-          <app-votos [jogadores]="jogadores" [observadores]="observadores" [fimJogo]="fimJogo" [isJogador]="isJogador" [myId]="myId" [configSala]="configSala">
-          </app-votos>
+        <div class="pad-b-10 po-sm-12 po-md-5 po-lg-6 po-xl-6">
+          <!--Jogadores-->
+          <div class="pad-b-10 po-sm-12 po-md-12 po-lg-8 po-xl-8">
+            <app-votos [jogadores]="jogadores" [observadores]="observadores" [fimJogo]="fimJogo" [isJogador]="isJogador"
+              [myId]="myId" [configSala]="configSala">
+            </app-votos>
+          </div>
+
+          <!--Adminstrador-->
+          <div *ngIf="observadores !== undefined && observadores.length > 0"
+            class="pad-b-10 po-sm-12 po-md-12 po-lg-4 po-xl-4">
+            <app-observador [observadores]="observadores" [myId]="myId" [isJogador]="isJogador"
+              [configSala]="configSala">
+            </app-observador>
+          </div>
         </div>
 
-        <!--Adminstrador-->
-        <div *ngIf="observadores !== undefined && observadores.length > 0" class="pad-b-10 po-sm-12 po-md-5 po-lg-3 po-xl-3">
-          <app-observador [observadores]="observadores" [myId]="myId" [isJogador]="isJogador" [configSala]="configSala">
-          </app-observador>
-        </div>
       </div>
     </div>
   </po-page-default>
-
 </div>
 
 <div class="po-row" *ngIf="jogoService.isConfiguracao">
   <div *ngIf="sincSala">
-    <po-loading-overlay
-      p-screen-lock="true"
-      p-text="Sincronizando com sala..." >
+    <po-loading-overlay p-screen-lock="true" p-text="Sincronizando com sala...">
     </po-loading-overlay>
   </div>
 
-  <app-configuracao *ngIf="configSala !== undefined"
-    [configSala]="configSala">
+  <app-configuracao *ngIf="configSala !== undefined" [configSala]="configSala">
   </app-configuracao>
- </div>
+</div>
 
-<po-modal
-  p-click-out="true"
-  p-hide-close="true"
-  p-size="md"
-  p-title="Desconectado."
-  [p-primary-action]="primaryAction"
+<po-modal p-click-out="true" p-hide-close="true" p-size="md" p-title="Desconectado." [p-primary-action]="primaryAction"
   [p-secondary-action]="secondaryAction">
 
   <h1 class="txt-vermelho">Xiiiiiii... você está offline.! :(</h1>

@@ -26,7 +26,7 @@ export class JogoComponent implements OnInit, OnDestroy {
 		private route: Router,
 	) { }
 
-	public columnsTable: Array<PoTableColumn>;
+	public columnsRegua: Array<PoTableColumn>;
 	public nmHistoria: string = "";
 	public pontuacao: Array<Estatistica>;
 	public cartaMaisVotada: Carta;
@@ -74,7 +74,7 @@ export class JogoComponent implements OnInit, OnDestroy {
 	 * Inicializador do componente
 	 */
 	ngOnInit() {
-		this.columnsTable = [
+		this.columnsRegua = [
 			{ property: 'label', label: 'Carta' },
 			{ property: 'nmUltHist', label: 'Última História'},
 		]
