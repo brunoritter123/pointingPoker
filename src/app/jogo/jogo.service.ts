@@ -9,7 +9,7 @@ import { AuthService } from '../app.auth.service';
 import { AcoesSala } from '../models/acoesSala.model';
 
 @Injectable()
-export class JogoService {                                                                                                                                                                                                                                                                                
+export class JogoService {
   public myId = this.authService.id;
   public cartaSel: Carta;
   public iAmOn = false;
@@ -150,7 +150,7 @@ export class JogoService {
     let ok: boolean = adms.length == 0 || acao == '3'
 
     if (!ok) {
-      ok = (isJogador && acao == '2') || (!isJogador && acao == '1')  
+      ok = (isJogador && acao == '2') || (!isJogador && acao == '1')
     }
 
     return ok;

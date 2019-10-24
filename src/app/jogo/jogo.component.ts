@@ -8,7 +8,7 @@ import { PoModalAction, PoModalComponent, PoTableColumn } from '@portinari/porti
 import { AuthService } from '../app.auth.service';
 import { Sala } from '../models/sala.model';
 import { Estatistica } from '../models/estatistica.model';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators'; 
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
 	selector: 'app-jogo',
@@ -230,9 +230,14 @@ export class JogoComponent implements OnInit, OnDestroy {
 	 * Função para executar ao clicar em uma carta
 	 */
 	public cartaClick(carta: Carta): void {
-		if (!this.fimJogo && carta !== undefined && this.isConnected) {
-			this.setCartaSel(carta.id);
-			this.jogoService.sendVoto(carta);
+		if (!this.fimJogo && !!carta && this.isConnected) {
+			if (!!this.jogoService.cartaSel && this.jogoService.cartaSel.id == carta.id) {
+				this.setCartaSel(undefined);
+				this.jogoService.sendVoto(undefined);
+			} else {
+				this.setCartaSel(carta.id);
+				this.jogoService.sendVoto(carta);
+			}
 		}
 	}
 
