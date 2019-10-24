@@ -3,11 +3,12 @@ import { JogoService } from './jogo.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Carta } from '../models/carta.model';
 import { User } from '../models/user.model';
-import { interval, Subscription } from 'rxjs';
+import { interval, Subscription, Subject } from 'rxjs';
 import { PoModalAction, PoModalComponent, PoTableColumn } from '@portinari/portinari-ui';
 import { AuthService } from '../app.auth.service';
 import { Sala } from '../models/sala.model';
 import { Estatistica } from '../models/estatistica.model';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators'; 
 
 @Component({
 	selector: 'app-jogo',
@@ -57,6 +58,7 @@ export class JogoComponent implements OnInit, OnDestroy {
 
 	public content: string = 'teste';
 
+	private subjectDescHist: Subject<string> = new Subject<string>()
 	private nameUser: string;
 	private conUsers: Subscription;
 	private conCarta: Subscription;
@@ -94,6 +96,14 @@ export class JogoComponent implements OnInit, OnDestroy {
 			this.route.navigate([`/entrar-sala`], { queryParams:
 				{ idSala: idSala, nameUser: this.nameUser, isJogador: this.isJogador }});
 		}
+
+		this.subjectDescHist
+			.pipe(
+				debounceTime(1500), // executa a ação do switchMap após 1,5 segundo
+				distinctUntilChanged() // não repetir o mesmo nome da história anterior.
+			).subscribe((nmHistoria: string) => {
+				this.jogoService.setNmHistoria(nmHistoria);
+			});
 
 		// Quando uma carta é alterada
 		this.conCarta = this.jogoService.getCarta().subscribe( (carta: any) => {
@@ -195,7 +205,7 @@ export class JogoComponent implements OnInit, OnDestroy {
 	 * Metodo para emitir nome da historia
 	 */
 	public emitNomeHistoria() {
-		this.jogoService.setNmHistoria(this.nmHistoria);
+		this.subjectDescHist.next(this.nmHistoria);
 	}
 
 	/**

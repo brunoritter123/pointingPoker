@@ -13,8 +13,8 @@
 
             <!--Cartas-->
             <div class="row">
-              <po-input class="po-md-12" name="nmHistoria" (p-blur)="emitNomeHistoria()" [(ngModel)]="nmHistoria"
-                [p-maxlength]="50" p-required="false" p-placeholder="Descrição da História">
+              <po-input class="po-md-12" name="nmHistoria" [(ngModel)]="nmHistoria"
+                [p-maxlength]="50" p-required="false" p-placeholder="Descrição da História" (keyup)="emitNomeHistoria()">
               </po-input>
 
 
