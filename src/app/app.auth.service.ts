@@ -44,13 +44,14 @@ export class AuthService {
   public testConJira(): Observable<any> {
     this.httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type':  'application/json',
+        'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
         'Authorization': `Basic ${ btoa(this.userJira + ':' + this.passJira) }`
       })
     };
 
-    return this.http.get(this.baseUrlJira + '/rest/api/2/issue/DJURFAT1-10081', this.httpOptions);
+    //return this.http.get(this.baseUrlJira + '/rest/api/2/issue/DJURFAT1-10081', this.httpOptions);
+    return this.http.get('/jira' + '/rest/api/2/issue/DJURFAT1-10081', this.httpOptions);
   }
 
   public saveConfig(idSala: string, nome: string, isJogador: boolean, isIntegraJira: boolean): void {
