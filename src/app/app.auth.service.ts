@@ -44,7 +44,7 @@ export class AuthService {
   public testConJira(): Observable<any> {
     this.httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type':  'text/html',
+        'Content-Type':  'application/json',
         'Access-Control-Allow-Origin': '*',
         'Authorization': `Basic ${ btoa(this.userJira + ':' + this.passJira) }`
       })
