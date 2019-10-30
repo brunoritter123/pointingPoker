@@ -4,6 +4,7 @@
         <po-widget p-title="Criar/Entrar na Sala">
 
           <po-input
+            p-label="ID Sala"
             class="po-md-12"
             name="idSala"
             [(ngModel)]="idSala"
@@ -14,25 +15,47 @@
           </po-input>
 
           <po-input
+            p-label="Nome"
             class="po-md-12"
             name="nome"
             [(ngModel)]="nome"
             [p-maxlength]="12"
             [p-minlength]="3"
             p-required="true"
-            p-placeholder="Nome"
+            p-placeholder="Informe seu nome"
             (keyup.enter)="entrar('jogo')">
           </po-input>
 
+          <po-divider class="po-sm-12"></po-divider>
+
           <po-switch
+            p-label= "Perfil:"
+            [p-label-position]="switchLabelPosition"
             name="jogador"
-            class="po-md-12"
+            class="po-sm-12 po-md-12"
             id="jogador"
             [(ngModel)]="jogador"
             p-label-off="Administrador"
             p-label-on="Jogador"
-            p-required="true" >
+            p-required="true">
           </po-switch>
+
+          <po-divider class="po-sm-12"></po-divider>
+
+          <po-switch
+            p-label= "Integração com Jira:"
+            [p-label-position]="switchLabelPosition"
+            name="integraJira"
+            class="po-sm-12 po-md-12"
+            id="integraJira"
+            [(ngModel)]="integraJira"
+            p-label-off="Não"
+            p-label-on="Sim"
+            p-required="true"
+            [p-label-position]="switchLabelPosition">
+          </po-switch>
+
+          <po-divider class="po-sm-12"></po-divider>
 
           <po-button
             (p-click)="entrar('jogo')"

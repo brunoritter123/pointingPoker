@@ -1,0 +1,30 @@
+<po-url
+    p-label="Base URL"
+    p-placeholder="Exemplo: https://seu-dominio.atlassian.net"
+    name="baseUrl"
+    [(ngModel)]="baseUrl"
+    (keyup)="keyUpBaseUrl()"
+    p-clean
+    p-required>
+</po-url>
+
+<po-login
+    p-label="Login"
+    p-placeholder="Usuário"
+    name="userLogin"
+    [(ngModel)]="userLogin"
+    (keyup)="keyUpLogin()"
+    p-clean
+    p-maxlength="100"
+    p-required>
+</po-login>
+
+<po-password
+    p-label="Senha"
+    p-placeholder="Informe a senha"
+    name="Senha"
+    [(ngModel)]="userPassword"
+    (keyup)="keyUpPassword()"
+    p-clean
+    p-required>
+</po-password>

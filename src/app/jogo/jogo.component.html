@@ -108,12 +108,15 @@
     </po-loading-overlay>
   </div>
 
-  <app-configuracao *ngIf="configSala !== undefined" [configSala]="configSala">
+<app-configuracao *ngIf="configSala !== undefined" [configSala]="configSala">
   </app-configuracao>
 </div>
 
-<po-modal p-click-out="true" p-hide-close="true" p-size="md" p-title="Desconectado." [p-primary-action]="primaryAction"
+<po-modal p-click-out="true" p-hide-close="true" p-size="md" [p-title]="titleModel" [p-primary-action]="primaryAction"
   [p-secondary-action]="secondaryAction">
 
-  <h1 class="txt-vermelho">Xiiiiiii... você está offline.! :(</h1>
+  <h1 *ngIf="opcModal == 'offline'" class="txt-vermelho">Xiiiiiii... você está offline.! :(</h1>
+
+  <app-login *ngIf="opcModal == 'loginJira'"></app-login>
 </po-modal>
+

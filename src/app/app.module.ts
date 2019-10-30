@@ -16,6 +16,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AuthService } from './app.auth.service';
 import { ConfiguracaoComponent } from './configuracao/configuracao.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ContatoComponent,
     VotosComponent,
     ObservadorComponent,
-    ConfiguracaoComponent
+    ConfiguracaoComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '../../../node_modules/@angular/router';
+import { Router } from '../../../node_modules/@angular/router';
 import { AuthService } from '../app.auth.service';
-import { PoNotificationService, PoDialogService } from '@portinari/portinari-ui';
+import { PoNotificationService, PoDialogService, PoSwitchLabelPosition } from '@portinari/portinari-ui';
 
 @Component({
   selector: 'app-entrar-secao',
@@ -13,10 +13,11 @@ export class EntrarSecaoComponent implements OnInit {
 
   public idSala = '';
   public jogador = true;
+  public integraJira = false;
   public nome    = '';
+  public switchLabelPosition: PoSwitchLabelPosition = PoSwitchLabelPosition.Left;
 
   constructor(
-    private activateRoute: ActivatedRoute,
     private thfNotification: PoNotificationService,
     private router: Router,
     public authService: AuthService,
@@ -24,14 +25,11 @@ export class EntrarSecaoComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    const sala: string       = this.authService.idSala
-    const nameUser: string   = this.authService.name
-    const isJogador: boolean = this.authService.isJogador
-
-    if (nameUser > '') {
-      this.idSala = sala;
-      this.nome = nameUser;
-      this.jogador = isJogador;
+    if (!!this.authService.name) {
+      this.idSala = this.authService.idSala;
+      this.nome = this.authService.name;
+      this.jogador = this.authService.isJogador;
+      this.integraJira = this.authService.isIntegraJira;
     }
   }
 
@@ -39,13 +37,13 @@ export class EntrarSecaoComponent implements OnInit {
     this.thfAlert.confirm({
       title: 'Atenção',
       message: 'Não foi possível ler o cookie de identificação.',
-      confirm: () => this.authService.saveConfig(this.idSala, this.nome, this.jogador)
+      confirm: () => this.authService.saveConfig(this.idSala, this.nome, this.jogador, this.integraJira)
     });
   }
 
   public entrar(local) {
     const goConfig = local == 'configuracao';
-    this.authService.saveConfig(this.idSala, this.nome, this.jogador)
+    this.authService.saveConfig(this.idSala, this.nome, this.jogador, this.integraJira)
   
     if (this.authService.id === undefined) {
       this.confirmLogin();

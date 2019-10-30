@@ -41,20 +41,11 @@ export class JogoComponent implements OnInit, OnDestroy {
 	public isConnected = false;
 	public isJogador = false;
 	public myId: string = this.authService.id;
-	public primaryAction: PoModalAction = {
-		action: () => {
-			this.poModal.close();
-		},
-		label: 'Estou online'
-	};
-
-	public secondaryAction: PoModalAction = {
-		action: () => {
-				this.route.navigate([`/entrar-sala`], {
-					queryParams: { idSala: this.configSala.idSala, nameUser: this.nameUser, isJogador: this.isJogador }});
-		},
-		label: 'Sair da Sala'
-	};
+	public isIntegraJira: boolean = this.authService.isIntegraJira;
+	public opcModal: string;
+	public titleModel: string;
+	public primaryAction: PoModalAction;
+	public secondaryAction: PoModalAction;
 
 	public content: string = 'teste';
 
@@ -76,6 +67,10 @@ export class JogoComponent implements OnInit, OnDestroy {
 	 * Inicializador do componente
 	 */
 	ngOnInit() {
+		if (this.isIntegraJira) {
+			this.openLogin()
+		}
+
 		this.columnsRegua = [
 			{ property: 'label', label: 'Carta' },
 			{ property: 'nmUltHist', label: 'Última História'},
@@ -176,14 +171,14 @@ export class JogoComponent implements OnInit, OnDestroy {
 		this.conRecnnectSub = this.conRecnnect.subscribe(() => {
 			this.sincSala = this.isConnected && this.jogoService.isSincronizando();
 
-			if (navigator.onLine !== this.isConnected && !this.isConnected) {
+			if (navigator.onLine !== this.isConnected && !this.isConnected && this.opcModal == 'offline') {
 				this.poModal.close();
 			}
 
 			this.isConnected = navigator.onLine;
 
 			if (!this.isConnected) {
-				this.openModal();
+				this.openModalOffline();
 			}
 		});
 	}
@@ -277,11 +272,7 @@ export class JogoComponent implements OnInit, OnDestroy {
 		this.resetClick();
 	}
 
-	private openModal(): boolean {
-		this.poModal.open();
-		return true;
-	}
-
+	
 	public setCartaSel(id: number | undefined) {
 		if (id) {
 			this.configSala.cartas.forEach( (carta: Carta) => {
@@ -289,71 +280,123 @@ export class JogoComponent implements OnInit, OnDestroy {
 					this.jogoService.cartaSel = carta;
 				}
 			});
-
+			
 		} else {
 			this.jogoService.cartaSel = undefined;
 		}
 	}
-
+	
 	public isCardSel(id: number): string {
 		if (this.jogoService.cartaSel !== undefined && id === this.jogoService.cartaSel.id) {
 			return 'danger';
-
+			
 		} else {
 			return 'default';
-
+			
 		}
 	}
-
+	
 	private todosVotaram(users: Array<User>): void {
 		const index = users.findIndex(us => us.voto.id === undefined);
-
-			if (index < 0) {
-				this.fimDeJogo(true);
-				this.GeraEstatistica()
-			} else {
-				this.fimDeJogo(false);
-			}
+		
+		if (index < 0) {
+			this.fimDeJogo(true);
+			this.GeraEstatistica()
+		} else {
+			this.fimDeJogo(false);
+		}
 	}
-
+	
 	private GeraEstatistica() {
-			let existeArray: boolean;
-			let novoPonto: Estatistica;
-
-			if (this.fimJogo) {
+		let existeArray: boolean;
+		let novoPonto: Estatistica;
+		
+		if (this.fimJogo) {
 			this.pontuacao = [];
-
+			
 			this.jogadores.forEach(jogador => {
 				existeArray = false;
-
+				
 				this.pontuacao.forEach(ponto => {
 					if (ponto.carta.label === jogador.voto.label ) {
 						existeArray = true;
 						ponto.votos += 1;
 					}
 				});
-
+				
 				if (!existeArray) {
 					novoPonto = new Estatistica(jogador.voto, 1);
 					this.pontuacao.push(novoPonto);
 				}
-
+				
 				this.pontuacao.sort( (a: Estatistica , b: Estatistica) => {
 					let ret: number = b.votos - a.votos;
 					if (ret === 0) {
 						ret = b.carta.value - a.carta.value;
 					}
-
+					
 					return ret;
 				});
-
+				
 				this.maisVotado = this.pontuacao[0].carta.label;
 				this.cartaMaisVotada = this.pontuacao[0].carta;
 			});
 		}
 	}
-
+	
 	public isPodeExec(acao: string): boolean {
 		return this.jogoService.isPodeExcAcao(acao, this.isJogador, this.observadores);
+	}
+
+	private openModalOffline(): boolean {
+		this.opcModal == 'offline'
+		this.titleModel = 'Desconectado';
+
+		this.primaryAction = {
+			action: () => {
+				this.poModal.close();
+			},
+			label: 'Estou online'
+		};
+
+		this.secondaryAction = {
+			action: () => {
+				this.route.navigate([`/entrar-sala`]);
+			},
+			label: 'Sair da Sala'
+		};
+
+		this.poModal.open();
+		return true;
+	}
+
+	public openLogin(): boolean {
+		this.opcModal = 'loginJira';
+		this.titleModel = 'Login Jira';
+
+		this.primaryAction = {
+			action: () => {
+				this.conJira()
+			},
+			label: 'Conectar'
+		};
+
+		this.secondaryAction = {
+			action: () => {
+				this.poModal.close();
+			},
+			label: 'Cancelar'
+		};
+
+		this.poModal.open();
+		return true;
+	}
+
+	private conJira(): void {
+		this.authService.testConJira()
+		.subscribe(resp => {
+			const keys = resp.headers.keys();
+			console.log(keys);
+		});
 	}
 }
