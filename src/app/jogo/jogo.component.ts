@@ -395,8 +395,8 @@ export class JogoComponent implements OnInit, OnDestroy {
 	private conJira(): void {
 		this.authService.testConJira()
 		.subscribe(resp => {
-			const keys = resp.headers.keys();
-			console.log(keys);
+			//const keys = resp.headers.keys();
+			console.log(resp);
 		});
 	}
 }

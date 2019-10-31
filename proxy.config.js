@@ -1,10 +1,9 @@
 const proxy = [
     {
-        context: '/jira',
-        target: 'https://jiraproducao.totvs.com.br',
-        changeOrigin: true,
-        pathRewrite: {'^/jira' : ''}
+      context: ['/api'],
+      target: 'http://localhost:3000/',
+      secure: false,
+      loglevel: 'debug'
     }
-
-    ];
-module.exports = proxy;
+  ];
+  module.exports = proxy;
