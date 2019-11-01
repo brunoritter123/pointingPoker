@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
+import {Injectable, EventEmitter} from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { PoToolbarProfile } from '@portinari/portinari-ui';
 
 @Injectable()
 export class AuthService {
@@ -15,6 +15,7 @@ export class AuthService {
   public passJira: string = '';
   public jiraLoginOk: boolean = false;
   private httpOptions: any;
+  public emitirAuth = new EventEmitter<PoToolbarProfile>();
 
 
   constructor(
@@ -41,16 +42,39 @@ export class AuthService {
     }
   }
 
-  public testConJira(): Observable<any> {
+  public conectarJira(): Promise<any> {
 
     this.httpOptions = {
       headers: new HttpHeaders({
-        'Base-Url': this.baseUrlJira,
+        'Base-Url': this.baseUrlJira + '/rest/api/2',
         'Authorization': `Basic ${ btoa(this.userJira + ':' + this.passJira) }`
       })
     };
 
-    return this.http.get('/api/jira/rest/api/2/issue/DJURFAT1-10081', this.httpOptions);
+    return this.http.get( '/api/jira/user?username=' + this.userJira, this.httpOptions)
+    .toPromise()
+    .then( (resp: any) => {
+      console.log(resp)
+      this.emitirAuth.emit(this.getProfile(
+        resp.avatarUrls["32x32"],
+        resp.emailAddress,
+        resp.displayName
+      ));
+      return true
+    })
+    .catch( err => {
+      console.error(err)
+      return false
+    })
+  }
+
+  public getProfile(imageUrl: string, email: string, name: string): PoToolbarProfile {
+    const newProfile: PoToolbarProfile  = {
+      avatar: imageUrl,
+      subtitle: email,
+      title: name
+    };
+    return newProfile;
   }
 
   public saveConfig(idSala: string, nome: string, isJogador: boolean, isIntegraJira: boolean): void {
