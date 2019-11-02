@@ -4,9 +4,9 @@ import { User } from '../models/user.model';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Carta } from '../models/carta.model';
-import { Sala } from '../models/sala.model';
 import { AuthService } from '../app.auth.service';
-import { AcoesSala } from '../models/acoesSala.model';
+import { HttpClient } from '@angular/common/http';
+import { PoNotificationService } from '@portinari/portinari-ui';
 
 @Injectable()
 export class JogoService {
@@ -34,7 +34,10 @@ export class JogoService {
   private timeDesconect: number = new Date().getTime();
   public isConfiguracao: boolean ;
 
-  constructor( private authService: AuthService) { }
+  constructor(
+    private authService: AuthService,
+    private http: HttpClient,
+    private poNotification: PoNotificationService) { }
 
   setUser(idSala: string, userName: string, isJogador: boolean): void {
     this.userName = userName;
@@ -155,4 +158,26 @@ export class JogoService {
 
     return ok;
   };
+
+  public getIssueJira(idIssue: string): Promise<any> {
+    return this.http.get( '/api/jira/issue/' + idIssue, this.authService.httpOptions)
+    .toPromise()
+    .then( (resp: any) => {
+      return resp.fields.summary
+    })
+    .catch( err => {
+      console.error(err)
+
+      if (err.status == 401) {
+        this.poNotification.warning("Acesso não autorizado.")
+        this.authService.openLoginJira()
+      } else if (err.status == 404) {
+        this.poNotification.warning("Issue não encontrada.")
+      } else {
+        this.poNotification.error("Sem resposta do servidor.")
+      }
+
+      return ''
+    })
+  }
 }

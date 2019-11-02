@@ -46,10 +46,11 @@ export class JogoComponent implements OnInit, OnDestroy {
 	public titleModel: string;
 	public primaryAction: PoModalAction;
 	public secondaryAction: PoModalAction;
-
+	public idIssue: string = '';
 	public content: string = 'teste';
 
 	private subjectDescHist: Subject<string> = new Subject<string>()
+	private subjectIdIssue: Subject<string> = new Subject<string>()
 	private nameUser: string;
 	private conUsers: Subscription;
 	private conCarta: Subscription;
@@ -98,6 +99,20 @@ export class JogoComponent implements OnInit, OnDestroy {
 				distinctUntilChanged() // não repetir o mesmo nome da história anterior.
 			).subscribe((nmHistoria: string) => {
 				this.jogoService.setNmHistoria(nmHistoria);
+			});
+
+		this.subjectIdIssue
+			.pipe(
+				debounceTime(1500), // executa a ação do switchMap após 1,5 segundo
+				distinctUntilChanged() // não repetir o mesmo nome da história anterior.
+			).subscribe((idIssue: string) => {
+				this.jogoService.getIssueJira(idIssue)
+				.then((descricaoIssue: string) => {
+					if (!!descricaoIssue) {
+						this.nmHistoria = descricaoIssue.substr(0, 200);
+						this.jogoService.setNmHistoria(this.nmHistoria);
+					}
+				})
 			});
 
 		// Quando uma carta é alterada
@@ -201,6 +216,14 @@ export class JogoComponent implements OnInit, OnDestroy {
 	 */
 	public emitNomeHistoria() {
 		this.subjectDescHist.next(this.nmHistoria);
+	}
+
+	/**
+	 * emitIdIssue()
+	 * Metodo para emitir a ID Issue
+	 */
+	public emitIdIssue() {
+		this.subjectIdIssue.next(this.idIssue);
 	}
 
 	/**

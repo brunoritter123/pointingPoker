@@ -3,10 +3,10 @@ import { CookieService } from 'ngx-cookie-service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { PoToolbarProfile } from '@portinari/portinari-ui';
 import { PoNotificationService } from '@portinari/portinari-ui';
-import { promise } from 'protractor';
 
 @Injectable()
 export class AuthService {
+  public conectandoJira = false
   public idSala: string = '';
   public isJogador: boolean = true;
   public id: string = '';
@@ -16,7 +16,7 @@ export class AuthService {
   public userJira: string = '';
   public passJira: string = '';
   public jiraLoginOk: boolean = false;
-  private httpOptions: any;
+  public httpOptions: any;
   public emitirAuth = new EventEmitter<PoToolbarProfile>();
   public emitirConectarJira = new EventEmitter<void>();
 
@@ -26,6 +26,7 @@ export class AuthService {
    private poNotification: PoNotificationService
   ) {
     this.getConfig()
+    this.poNotification.setDefaultDuration(5000)
   }
 
   public getAuthJiraCookie(): boolean{
@@ -63,11 +64,13 @@ export class AuthService {
   }
 
   public conectarJira(): Promise<any> {
+    this.conectandoJira = true;
     this.parseBaseUrl()
 
     if(!this.userJira || !this.passJira || !this.baseUrlJira) {
       this.poNotification.warning("Informe todos os campos.")
       return new Promise((resolve, reject) => {
+        this.conectandoJira = false;
         return false
       });
     }
@@ -95,6 +98,7 @@ export class AuthService {
       this.jiraLoginOk = true;
 
       this.poNotification.success("Conectado.!")
+      this.conectandoJira = false;
       return true
     })
     .catch( err => {
@@ -106,6 +110,7 @@ export class AuthService {
         this.poNotification.error("Erro ao tentar conectar.")
       }
 
+      this.conectandoJira = false;
       return false
     })
   }

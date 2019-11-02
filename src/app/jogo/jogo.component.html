@@ -13,8 +13,12 @@
 
             <!--Cartas-->
             <div class="row">
+              <po-input *ngIf="authService.jiraLoginOk" class="po-md-6" name="idIssue" [(ngModel)]="idIssue"
+                [p-maxlength]="20" p-required="false" p-placeholder="ID Issue" (keyup)="emitIdIssue()">
+              </po-input>
+
               <po-input class="po-md-12" name="nmHistoria" [(ngModel)]="nmHistoria"
-                [p-maxlength]="50" p-required="false" p-placeholder="Descrição da História" (keyup)="emitNomeHistoria()">
+                [p-maxlength]="200" p-required="false" p-placeholder="Descrição da História" (keyup)="emitNomeHistoria()">
               </po-input>
 
 
