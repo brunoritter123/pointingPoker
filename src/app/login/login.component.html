@@ -3,8 +3,7 @@
     p-label="Base URL"
     p-placeholder="https://seu-dominio.atlassian.net"
     name="baseUrl"
-    [(ngModel)]="baseUrl"
-    (keyup)="keyUpBaseUrl()"
+    [(ngModel)]="authService.baseUrlJira"
     p-clean
     p-required>
 </po-url>
@@ -14,8 +13,7 @@
     p-label="Login"
     p-placeholder="Usuário"
     name="userLogin"
-    [(ngModel)]="userLogin"
-    (keyup)="keyUpLogin()"
+    [(ngModel)]="authService.userJira"
     p-clean
     p-maxlength="100"
     p-required>
@@ -25,9 +23,8 @@
     class="po-sm-12"
     p-label="Senha"
     p-placeholder="Informe a senha"
-    name="Senha"
-    [(ngModel)]="userPassword"
-    (keyup)="keyUpPassword()"
+    name="senha"
+    [(ngModel)]="authService.passJira"
     p-clean
     p-required>
 </po-password>

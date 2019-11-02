@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from '../app.auth.service';
+import { PoPasswordComponent } from '@portinari/portinari-ui';
 
 @Component({
   selector: 'app-login',
@@ -7,25 +8,14 @@ import { AuthService } from '../app.auth.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  public baseUrl: string;
-  public userLogin: string;
-  public userPassword: string;
+  @ViewChild(PoPasswordComponent, { static: true }) senha: PoPasswordComponent;
 
   constructor(private authService: AuthService) { }
 
   ngOnInit() {
-  }
-
-  public keyUpBaseUrl(): void {
-    this.authService.baseUrlJira = this.baseUrl;
-  }
-
-  public keyUpLogin(): void {
-    this.authService.userJira = this.userLogin;
-  }
-
-  public keyUpPassword(): void {
-    this.authService.passJira = this.userPassword;
+    if (this.authService.getAuthJiraCookie()) {
+      this.senha.focus()
+    }
   }
 
 }

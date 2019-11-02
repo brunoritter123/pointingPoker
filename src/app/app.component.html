@@ -14,9 +14,10 @@
 
 <po-modal
   p-click-out="true"
-  p-hide-close="true"
   p-size="md"
-  p-title="Sobre"
+  [p-title]="titleModel"
   [p-primary-action]="primaryAction">
-  <app-contato></app-contato>
+
+  <app-contato *ngIf="opcModal == 'contato'"></app-contato>
+  <app-login *ngIf="opcModal == 'loginJira'"></app-login>
 </po-modal>

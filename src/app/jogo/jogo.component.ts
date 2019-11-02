@@ -68,7 +68,7 @@ export class JogoComponent implements OnInit, OnDestroy {
 	 */
 	ngOnInit() {
 		if (this.isIntegraJira) {
-			this.openLogin()
+			this.authService.openLoginJira()
 		}
 
 		this.columnsRegua = [
@@ -272,7 +272,7 @@ export class JogoComponent implements OnInit, OnDestroy {
 		this.resetClick();
 	}
 
-	
+
 	public setCartaSel(id: number | undefined) {
 		if (id) {
 			this.configSala.cartas.forEach( (carta: Carta) => {
@@ -280,25 +280,25 @@ export class JogoComponent implements OnInit, OnDestroy {
 					this.jogoService.cartaSel = carta;
 				}
 			});
-			
+
 		} else {
 			this.jogoService.cartaSel = undefined;
 		}
 	}
-	
+
 	public isCardSel(id: number): string {
 		if (this.jogoService.cartaSel !== undefined && id === this.jogoService.cartaSel.id) {
 			return 'danger';
-			
+
 		} else {
 			return 'default';
-			
+
 		}
 	}
-	
+
 	private todosVotaram(users: Array<User>): void {
 		const index = users.findIndex(us => us.voto.id === undefined);
-		
+
 		if (index < 0) {
 			this.fimDeJogo(true);
 			this.GeraEstatistica()
@@ -306,44 +306,44 @@ export class JogoComponent implements OnInit, OnDestroy {
 			this.fimDeJogo(false);
 		}
 	}
-	
+
 	private GeraEstatistica() {
 		let existeArray: boolean;
 		let novoPonto: Estatistica;
-		
+
 		if (this.fimJogo) {
 			this.pontuacao = [];
-			
+
 			this.jogadores.forEach(jogador => {
 				existeArray = false;
-				
+
 				this.pontuacao.forEach(ponto => {
 					if (ponto.carta.label === jogador.voto.label ) {
 						existeArray = true;
 						ponto.votos += 1;
 					}
 				});
-				
+
 				if (!existeArray) {
 					novoPonto = new Estatistica(jogador.voto, 1);
 					this.pontuacao.push(novoPonto);
 				}
-				
+
 				this.pontuacao.sort( (a: Estatistica , b: Estatistica) => {
 					let ret: number = b.votos - a.votos;
 					if (ret === 0) {
 						ret = b.carta.value - a.carta.value;
 					}
-					
+
 					return ret;
 				});
-				
+
 				this.maisVotado = this.pontuacao[0].carta.label;
 				this.cartaMaisVotada = this.pontuacao[0].carta;
 			});
 		}
 	}
-	
+
 	public isPodeExec(acao: string): boolean {
 		return this.jogoService.isPodeExcAcao(acao, this.isJogador, this.observadores);
 	}
@@ -368,32 +368,5 @@ export class JogoComponent implements OnInit, OnDestroy {
 
 		this.poModal.open();
 		return true;
-	}
-
-	public openLogin(): boolean {
-		this.opcModal = 'loginJira';
-		this.titleModel = 'Login Jira';
-
-		this.primaryAction = {
-			action: () => {
-				this.conJira()
-			},
-			label: 'Conectar'
-		};
-
-		this.secondaryAction = {
-			action: () => {
-				this.poModal.close();
-			},
-			label: 'Cancelar'
-		};
-
-		this.poModal.open();
-		return true;
-	}
-
-	private conJira(): void {
-		this.authService.conectarJira()
-		.then(ret => console.log(ret))
 	}
 }
