@@ -177,7 +177,7 @@ export class JogoService {
         this.poNotification.error("Sem resposta do servidor.")
       }
 
-      return ''
+      throw err;
     })
   }
 }

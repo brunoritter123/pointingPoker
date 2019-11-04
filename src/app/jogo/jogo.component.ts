@@ -27,6 +27,9 @@ export class JogoComponent implements OnInit, OnDestroy {
 		private route: Router,
 	) { }
 
+	public helpIdIssue: string = '';
+	public isLoadIssue: boolean = false;
+	public isIssueValida: boolean = false;
 	public columnsRegua: Array<PoTableColumn>;
 	public nmHistoria: string = "";
 	public pontuacao: Array<Estatistica>;
@@ -103,15 +106,30 @@ export class JogoComponent implements OnInit, OnDestroy {
 
 		this.subjectIdIssue
 			.pipe(
-				debounceTime(1500), // executa a ação do switchMap após 1,5 segundo
-				distinctUntilChanged() // não repetir o mesmo nome da história anterior.
+				debounceTime(500) // executa a ação do switchMap após 1,5 segundo
 			).subscribe((idIssue: string) => {
+				if (!idIssue) {
+					this.isIssueValida = false
+					return
+				}
+
+				this.helpIdIssue = 'Carregando...'
+				this.isLoadIssue = true;
+
 				this.jogoService.getIssueJira(idIssue)
 				.then((descricaoIssue: string) => {
 					if (!!descricaoIssue) {
 						this.nmHistoria = descricaoIssue.substr(0, 200);
 						this.jogoService.setNmHistoria(this.nmHistoria);
 					}
+					this.isIssueValida = true
+					
+				}).catch(err => {
+					this.isIssueValida = false
+	
+				}).then( () => {
+					this.helpIdIssue = ''
+					this.isLoadIssue = false
 				})
 			});
 

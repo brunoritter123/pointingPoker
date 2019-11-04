@@ -11,14 +11,17 @@
 
           <po-widget p-title="Sala: {{configSala.idSala}}" class="pad-b-10 po-sm-12 po-md-12 po-lg-12 po-xl-12">
 
-            <!--Cartas-->
+            <!--ID Jira-->
             <div class="row">
-              <po-input *ngIf="authService.jiraLoginOk" class="po-md-6" name="idIssue" [(ngModel)]="idIssue"
-                [p-maxlength]="20" p-required="false" p-placeholder="ID Issue" (keyup)="emitIdIssue()">
+              <po-input *ngIf="authService.jiraLoginOk" class="po-sm-12 po-md-8" name="idIssue" [(ngModel)]="idIssue"
+                [p-maxlength]="20" p-required="false" p-placeholder="ID Issue" (keyup)="emitIdIssue()"
+                [p-help]="helpIdIssue" p-clean=true>
               </po-input>
 
+              <!--Nome Historia-->
               <po-input class="po-md-12" name="nmHistoria" [(ngModel)]="nmHistoria"
-                [p-maxlength]="200" p-required="false" p-placeholder="Descrição da História" (keyup)="emitNomeHistoria()">
+                [p-maxlength]="200" p-required="false" p-placeholder="Descrição da História" (keyup)="emitNomeHistoria()"
+                [p-disabled]=isLoadIssue p-clean=true>
               </po-input>
 
 
