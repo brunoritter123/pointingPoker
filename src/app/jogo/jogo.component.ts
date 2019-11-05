@@ -27,7 +27,6 @@ export class JogoComponent implements OnInit, OnDestroy {
 		private route: Router,
 	) { }
 
-	public helpIdIssue: string = '';
 	public isLoadIssue: boolean = false;
 	public isIssueValida: boolean = false;
 	public columnsRegua: Array<PoTableColumn>;
@@ -106,14 +105,13 @@ export class JogoComponent implements OnInit, OnDestroy {
 
 		this.subjectIdIssue
 			.pipe(
-				debounceTime(500) // executa a ação do switchMap após 1,5 segundo
+				debounceTime(1000) // executa a ação do switchMap após 1,5 segundo
 			).subscribe((idIssue: string) => {
 				if (!idIssue) {
 					this.isIssueValida = false
 					return
 				}
 
-				this.helpIdIssue = 'Carregando...'
 				this.isLoadIssue = true;
 
 				this.jogoService.getIssueJira(idIssue)
@@ -128,7 +126,6 @@ export class JogoComponent implements OnInit, OnDestroy {
 					this.isIssueValida = false
 	
 				}).then( () => {
-					this.helpIdIssue = ''
 					this.isLoadIssue = false
 				})
 			});

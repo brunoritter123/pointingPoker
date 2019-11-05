@@ -13,10 +13,15 @@
 
             <!--ID Jira-->
             <div class="row">
-              <po-input *ngIf="authService.jiraLoginOk" class="po-sm-12 po-md-8" name="idIssue" [(ngModel)]="idIssue"
-                [p-maxlength]="20" p-required="false" p-placeholder="ID Issue" (keyup)="emitIdIssue()"
-                [p-help]="helpIdIssue" p-clean=true>
-              </po-input>
+              <div class="row">
+                <po-input *ngIf="authService.jiraLoginOk" class="po-pr-0 po-sm-8 po-md-8" name="idIssue" [(ngModel)]="idIssue"
+                  [p-maxlength]="20" p-required="false" p-placeholder="ID Issue" (keyup)="emitIdIssue()"
+                  p-clean=true>
+                </po-input>
+                <div *ngIf="isLoadIssue" class="po-sm-4 po-md-4">
+                    <img src="../../assets/gifLoad.gif" alt="load" height="42" width="42">
+                </div>
+              </div>
 
               <!--Nome Historia-->
               <po-input class="po-md-12" name="nmHistoria" [(ngModel)]="nmHistoria"
