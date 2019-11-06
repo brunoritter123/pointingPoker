@@ -17,7 +17,7 @@
                 <po-input *ngIf="authService.jiraLoginOk" class="po-pr-0 po-sm-8 po-md-8" name="idIssue" [(ngModel)]="idIssue"
                   [p-maxlength]="20" p-required="false" p-placeholder="ID Issue" (keyup)="emitIdIssue()"
                   [p-readonly]=isLoadIssue p-no-autocomplete=true [p-clean]=!isLoadIssue p-icon="po-icon-search"
-                  p-error-pattern="Issue não encontrada" [p-minlength]="isIssueValida ? null : 1000">
+                  p-error-pattern="Issue não encontrada" [ngClass]="{'ng-invalid': !!idIssue && !isIssueValida}">
                 </po-input>
                 <span *ngIf="isLoadIssue" class="po-pl-0">
                   <img class="load-img" src="../../assets/gifLoad.gif" alt="load">

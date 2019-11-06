@@ -108,7 +108,7 @@ export class JogoComponent implements OnInit, OnDestroy {
 				debounceTime(1500) // executa a ação do switchMap após 1,5 segundo
 			).subscribe((idIssue: string) => {
 				if (!idIssue) {
-					this.isIssueValida = false
+					this.isIssueValida = true
 					return
 				}
 
