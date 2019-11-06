@@ -11,3 +11,23 @@
     border: 1px solid #9e3933;
     color: #ffffff;
 }
+
+@media (max-width:1366px){
+    .load-img{
+        transform: translate(-39px, 8%);
+        max-width:100%;
+        max-height:42px;
+        width: auto;
+        height: auto;
+    }
+}
+
+@media (min-width:1367px){
+    .load-img{
+        transform: translate(-47px, 10%);
+        max-width:100%;
+        max-height:50px;
+        width: auto;
+        height: auto;
+    }
+}

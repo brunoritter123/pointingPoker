@@ -28,7 +28,7 @@ export class JogoComponent implements OnInit, OnDestroy {
 	) { }
 
 	public isLoadIssue: boolean = false;
-	public isIssueValida: boolean = false;
+	public isIssueValida: boolean = true;
 	public columnsRegua: Array<PoTableColumn>;
 	public nmHistoria: string = "";
 	public pontuacao: Array<Estatistica>;
@@ -105,7 +105,7 @@ export class JogoComponent implements OnInit, OnDestroy {
 
 		this.subjectIdIssue
 			.pipe(
-				debounceTime(1000) // executa a ação do switchMap após 1,5 segundo
+				debounceTime(1500) // executa a ação do switchMap após 1,5 segundo
 			).subscribe((idIssue: string) => {
 				if (!idIssue) {
 					this.isIssueValida = false

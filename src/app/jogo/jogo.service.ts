@@ -172,7 +172,7 @@ export class JogoService {
         this.poNotification.warning("Acesso não autorizado.")
         this.authService.openLoginJira()
       } else if (err.status == 404) {
-        this.poNotification.warning("Issue não encontrada.")
+        //this.poNotification.warning("Issue não encontrada.")
       } else {
         this.poNotification.error("Sem resposta do servidor.")
       }
