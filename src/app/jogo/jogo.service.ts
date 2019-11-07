@@ -7,6 +7,7 @@ import { Carta } from '../models/carta.model';
 import { AuthService } from '../app.auth.service';
 import { HttpClient } from '@angular/common/http';
 import { PoNotificationService } from '@portinari/portinari-ui';
+import { CompileShallowModuleMetadata } from '@angular/compiler';
 
 @Injectable()
 export class JogoService {
@@ -172,7 +173,36 @@ export class JogoService {
         this.poNotification.warning("Acesso não autorizado.")
         this.authService.openLoginJira()
       } else if (err.status == 404) {
-        //this.poNotification.warning("Issue não encontrada.")
+        this.poNotification.warning("Issue não encontrada.")
+      } else {
+        this.poNotification.error("Sem resposta do servidor.")
+      }
+
+      throw err;
+    })
+  }
+
+  public sendStoryPoints(idIssue: string, point: string): Promise<any> {
+    if (!this.authService.fieldStoryPoints) return
+
+    const body = `{ "${this.authService.fieldStoryPoints}": ${point}.0 }`
+
+    console.log(body)
+    console.log(JSON.parse(body))
+
+    return this.http.put('/api/jira/issue/' + idIssue, JSON.parse(body), this.authService.httpOptions)
+    .toPromise()
+    .then( (resp: any) => {
+      return true
+    })
+    .catch( err => {
+      console.error(err)
+
+      if (err.status == 401) {
+        this.poNotification.warning("Acesso não autorizado.")
+        this.authService.openLoginJira()
+      } else if (err.status == 404) {
+        this.poNotification.warning("Issue não encontrada.")
       } else {
         this.poNotification.error("Sem resposta do servidor.")
       }

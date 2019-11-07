@@ -19,6 +19,7 @@ export class AuthService {
   public httpOptions: any;
   public emitirAuth = new EventEmitter<PoToolbarProfile>();
   public emitirConectarJira = new EventEmitter<void>();
+  public fieldStoryPoints: string = "";
 
   constructor(
    private cookieService: CookieService,
@@ -99,6 +100,8 @@ export class AuthService {
 
       this.poNotification.success("Conectado.!")
       this.conectandoJira = false;
+      this.getFieldStoryPoints()
+
       return true
     })
     .catch( err => {
@@ -112,6 +115,24 @@ export class AuthService {
 
       this.conectandoJira = false;
       return false
+    })
+  }
+
+  private getFieldStoryPoints(){
+    return this.http.get( '/api/jira/field', this.httpOptions)
+    .toPromise()
+    .then( (resp: any) => {
+      const fieldStoryPoints = resp.find( field => field.name == 'Story Points' )
+
+      if (!!fieldStoryPoints) {
+        this.fieldStoryPoints = fieldStoryPoints.id
+      }
+
+      return this.fieldStoryPoints
+    })
+    .catch( err => {
+      console.error(err)
+      throw err
     })
   }
 

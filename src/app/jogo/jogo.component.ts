@@ -105,7 +105,8 @@ export class JogoComponent implements OnInit, OnDestroy {
 
 		this.subjectIdIssue
 			.pipe(
-				debounceTime(1500) // executa a ação do switchMap após 1,5 segundo
+				debounceTime(1500), // executa a ação do switchMap após 1,5 segundo
+				distinctUntilChanged() // não repetir o mesmo nome da história anterior.
 			).subscribe((idIssue: string) => {
 				if (!idIssue) {
 					this.isIssueValida = true
@@ -305,6 +306,9 @@ export class JogoComponent implements OnInit, OnDestroy {
 		if (!!this.nmHistoria && !!this.cartaMaisVotada && this.cartaMaisVotada.hasOwnProperty('id') && !!this.cartaMaisVotada.id) {
 			this.cartaMaisVotada.nmUltHist = this.nmHistoria;
 			this.jogoService.setCarta(this.cartaMaisVotada)
+			if (this.isIssueValida) {
+				this.jogoService.sendStoryPoints(this.idIssue, this.cartaMaisVotada.label)
+			}
 		}
 
 		this.resetClick();
