@@ -75,7 +75,7 @@ export class JogoComponent implements OnInit, OnDestroy {
 		}
 
 		this.columnsRegua = [
-			{ property: 'label', label: 'Carta' },
+			{ property: 'label', label: 'Ponto' },
 			{ property: 'nmUltHist', label: 'Última História'},
 		]
 		this.conIsConfig = this.activateRoute.queryParams.subscribe(
@@ -290,22 +290,30 @@ export class JogoComponent implements OnInit, OnDestroy {
 	 * resetClick()
 	 * Função para resetar o jogo
 	 */
-	public resetClick(): void {
+	public resetClick(revotar: boolean = false): void {
 		if (this.isConnected) {
 			this.configSala.forceFimJogo = 0;
 			this.jogoService.sendReset();
 			this.jogoService.sendUpdateSala(this.configSala);
+			if (!revotar){
+				this.idIssue = ''
+				this.isIssueValida = true
+				this.jogoService.setNmHistoria("");
+			}
 		}
 	}
 
 	/**
-	 * resetClick()
-	 * Função para resetar o jogo
+	 * concluirClick()
+	 * Função para concluir o jogo
 	 */
 	public concluirClick() {
-		if (!!this.nmHistoria && !!this.cartaMaisVotada && this.cartaMaisVotada.hasOwnProperty('id') && !!this.cartaMaisVotada.id) {
-			this.cartaMaisVotada.nmUltHist = this.nmHistoria;
-			this.jogoService.setCarta(this.cartaMaisVotada)
+		if (!!this.cartaMaisVotada && this.cartaMaisVotada.hasOwnProperty('id') && !!this.cartaMaisVotada.id) {
+			if (!!this.nmHistoria){
+				this.cartaMaisVotada.nmUltHist = this.nmHistoria;
+				this.jogoService.setCarta(this.cartaMaisVotada)
+			}
+
 			if (this.isIssueValida) {
 				this.jogoService.sendStoryPoints(this.idIssue, this.cartaMaisVotada.label)
 			}

@@ -173,7 +173,7 @@ export class JogoService {
         this.poNotification.warning("Acesso não autorizado.")
         this.authService.openLoginJira()
       } else if (err.status == 404) {
-        this.poNotification.warning("Issue não encontrada.")
+        this.poNotification.warning(`Issue: '${idIssue}' não encontrada.`)
       } else {
         this.poNotification.error("Sem resposta do servidor.")
       }
@@ -185,14 +185,16 @@ export class JogoService {
   public sendStoryPoints(idIssue: string, point: string): Promise<any> {
     if (!this.authService.fieldStoryPoints) return
 
-    const body = `{ "${this.authService.fieldStoryPoints}": ${point}.0 }`
-
-    console.log(body)
-    console.log(JSON.parse(body))
+    const body = `{ 
+      "fields": {
+        "${this.authService.fieldStoryPoints}": ${point}
+      }
+    }`
 
     return this.http.put('/api/jira/issue/' + idIssue, JSON.parse(body), this.authService.httpOptions)
     .toPromise()
     .then( (resp: any) => {
+      this.poNotification.success(`Issue: '${idIssue}' teve sua pontuação alterada para: ${point}`)
       return true
     })
     .catch( err => {
@@ -202,7 +204,7 @@ export class JogoService {
         this.poNotification.warning("Acesso não autorizado.")
         this.authService.openLoginJira()
       } else if (err.status == 404) {
-        this.poNotification.warning("Issue não encontrada.")
+        this.poNotification.warning(`Issue: '${idIssue}' não foi encontrada.`)
       } else {
         this.poNotification.error("Sem resposta do servidor.")
       }
