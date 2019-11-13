@@ -10,7 +10,7 @@ import { PoPasswordComponent } from '@portinari/portinari-ui';
 export class LoginComponent implements OnInit {
   @ViewChild(PoPasswordComponent, { static: true }) senha: PoPasswordComponent;
 
-  constructor(private authService: AuthService) { }
+  constructor(public authService: AuthService) { }
 
   ngOnInit() {
     if (this.authService.getAuthJiraCookie()) {

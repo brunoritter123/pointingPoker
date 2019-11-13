@@ -191,6 +191,8 @@ export class JogoService {
       }
     }`
 
+    console.log(body);
+
     return this.http.put('/api/jira/issue/' + idIssue, JSON.parse(body), this.authService.httpOptions)
     .toPromise()
     .then( (resp: any) => {

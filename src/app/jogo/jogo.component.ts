@@ -97,16 +97,17 @@ export class JogoComponent implements OnInit, OnDestroy {
 
 		this.subjectDescHist
 			.pipe(
-				debounceTime(1500), // executa a ação do switchMap após 1,5 segundo
-				distinctUntilChanged() // não repetir o mesmo nome da história anterior.
+				debounceTime(1500) // executa a ação do switchMap após 1,5 segundo
+				//,distinctUntilChanged() // não repetir o mesmo nome da história anterior.
 			).subscribe((nmHistoria: string) => {
-				this.jogoService.setNmHistoria(nmHistoria);
+				this.configSala.nmHistoria = nmHistoria
+				this.jogoService.sendUpdateSala(this.configSala);
 			});
 
 		this.subjectIdIssue
 			.pipe(
-				debounceTime(1500), // executa a ação do switchMap após 1,5 segundo
-				distinctUntilChanged() // não repetir o mesmo nome da história anterior.
+				debounceTime(1500) // executa a ação do switchMap após 1,5 segundo
+				//,distinctUntilChanged() // não repetir o mesmo nome da história anterior.
 			).subscribe((idIssue: string) => {
 				if (!idIssue) {
 					this.isIssueValida = true
@@ -292,14 +293,15 @@ export class JogoComponent implements OnInit, OnDestroy {
 	 */
 	public resetClick(revotar: boolean = false): void {
 		if (this.isConnected) {
+			debugger
 			this.configSala.forceFimJogo = 0;
 			this.jogoService.sendReset();
-			this.jogoService.sendUpdateSala(this.configSala);
 			if (!revotar){
 				this.idIssue = ''
 				this.isIssueValida = true
-				this.jogoService.setNmHistoria("");
+				this.configSala.nmHistoria = '';
 			}
+			this.jogoService.sendUpdateSala(this.configSala);
 		}
 	}
 
