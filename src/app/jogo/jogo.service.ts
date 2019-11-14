@@ -185,13 +185,14 @@ export class JogoService {
   public sendStoryPoints(idIssue: string, point: string): Promise<any> {
     if (!this.authService.fieldStoryPoints) return
 
+    const pointInt = parseInt(point)
+    if (!pointInt && pointInt != 0 ) return
+
     const body = `{ 
       "fields": {
-        "${this.authService.fieldStoryPoints}": ${point}
+        "${this.authService.fieldStoryPoints}": ${pointInt}
       }
     }`
-
-    console.log(body);
 
     return this.http.put('/api/jira/issue/' + idIssue, JSON.parse(body), this.authService.httpOptions)
     .toPromise()
