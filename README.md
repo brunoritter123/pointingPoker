@@ -5,9 +5,9 @@ Esse projeto tem o objetivo de deixa o [**planning poker**](https://www.culturaa
 Tentamos sempre manter as dependências nas versões mais atulizadas.
 
 **Principais dependências:**
-- [Angular](https://angular.io/)
-- [Portinari](https://portinari.io/)
-- [Socket.IO](https://socket.io/)
+- [Angular](https://angular.io/): Plataforma de desenvolvimento.
+- [Portinari](https://portinari.io/): Biblioteca de componentes.
+- [Socket.IO](https://socket.io/): Ferramenta para comunicação em tempo real. (WebSocket)
 
 
 ## Build
