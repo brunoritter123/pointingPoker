@@ -3,7 +3,7 @@ Esse projeto tem o objetivo de deixa o [**planning poker**](https://www.culturaa
 
 ## Dependências
 Tentamos sempre manter as dependências nas versões mais atulizadas.
-- [Angular](https://angular.io/).
+- [Angular](https://angular.io/)
 - [Portinari](https://portinari.io/)
 - [Socket.IO](https://socket.io/)
 
