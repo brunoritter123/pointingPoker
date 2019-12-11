@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Carta } from '../models/carta.model';
 import { User } from '../models/user.model';
 import { interval, Subscription, Subject } from 'rxjs';
-import { PoModalAction, PoModalComponent, PoTableColumn } from '@portinari/portinari-ui';
+import { PoModalAction, PoModalComponent } from '@portinari/portinari-ui';
 import { AuthService } from '../app.auth.service';
 import { Sala } from '../models/sala.model';
 import { Estatistica } from '../models/estatistica.model';
@@ -19,6 +19,9 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 export class JogoComponent implements OnInit, OnDestroy {
 	@ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
+	@HostListener('window:beforeunload', ['$event']) unloadHandler(event: Event) {
+		event.returnValue = false;
+	}
 
 	constructor(
 		private authService: AuthService,
@@ -29,7 +32,6 @@ export class JogoComponent implements OnInit, OnDestroy {
 
 	public isLoadIssue: boolean = false;
 	public isIssueValida: boolean = true;
-	public columnsRegua: Array<PoTableColumn>;
 	public nmHistoria: string = "";
 	public pontuacao: Array<Estatistica>;
 	public cartaMaisVotada: Carta;
@@ -41,7 +43,7 @@ export class JogoComponent implements OnInit, OnDestroy {
 	public jogadores: Array<User> = [];
 	public observadores: Array<User> = [];
 	public isConnected = false;
-	public isJogador = false;
+	public isJogador = this.authService.isJogador
 	public myId: string = this.authService.id;
 	public isIntegraJira: boolean = this.authService.isIntegraJira;
 	public opcModal: string;
@@ -53,17 +55,13 @@ export class JogoComponent implements OnInit, OnDestroy {
 
 	private subjectDescHist: Subject<string> = new Subject<string>()
 	private subjectIdIssue: Subject<string> = new Subject<string>()
-	private nameUser: string;
+	private nameUser: string = this.authService.name
 	private conUsers: Subscription;
 	private conCarta: Subscription;
 	private conConfigSala: Subscription;
 	private conRecnnect: any;
 	private conRecnnectSub: Subscription;
 	private conIsConfig: Subscription;
-
-	@HostListener('window:beforeunload', ['$event']) unloadHandler(event: Event) {
-		event.returnValue = false;
-	}
 
 	/**
 	 * ngOnInit
@@ -74,31 +72,23 @@ export class JogoComponent implements OnInit, OnDestroy {
 			this.authService.openLoginJira()
 		}
 
-		this.columnsRegua = [
-			{ property: 'label', label: 'Ponto' },
-			{ property: 'nmUltHist', label: 'Última História'},
-		]
 		this.conIsConfig = this.activateRoute.queryParams.subscribe(
 			(queryParams: any) => {
 				this.jogoService.isConfiguracao = queryParams['config'] == 'true';
 			}
 		)
 
-		let idSala = this.activateRoute.snapshot.params['idSala'];
-		this.nameUser = this.activateRoute.snapshot.params['nameUser'];
 		this.fimDeJogo(false);
-		this.isJogador = this.activateRoute.snapshot.params['isJogador'] === 'true';
-		this.jogoService.setUser(idSala, this.nameUser, this.isJogador);
+		this.jogoService.setUser(this.authService.idSala, this.nameUser, this.isJogador);
 
 		if (this.myId === undefined) {
-			this.route.navigate([`/entrar-sala`], { queryParams:
-				{ idSala: idSala, nameUser: this.nameUser, isJogador: this.isJogador }});
+			this.route.navigate([`/entrar-sala`]);
 		}
 
 		this.subjectDescHist
 			.pipe(
 				debounceTime(1500) // executa a ação do switchMap após 1,5 segundo
-				//,distinctUntilChanged() // não repetir o mesmo nome da história anterior.
+				, distinctUntilChanged() // não repetir o mesmo nome da história anterior.
 			).subscribe((nmHistoria: string) => {
 				this.configSala.nmHistoria = nmHistoria
 				this.jogoService.sendUpdateSala(this.configSala);
@@ -107,7 +97,6 @@ export class JogoComponent implements OnInit, OnDestroy {
 		this.subjectIdIssue
 			.pipe(
 				debounceTime(1500) // executa a ação do switchMap após 1,5 segundo
-				//,distinctUntilChanged() // não repetir o mesmo nome da história anterior.
 			).subscribe((idIssue: string) => {
 				if (!idIssue) {
 					this.isIssueValida = true
@@ -115,26 +104,24 @@ export class JogoComponent implements OnInit, OnDestroy {
 				}
 
 				this.isLoadIssue = true;
-
 				this.jogoService.getIssueJira(idIssue)
-				.then((descricaoIssue: string) => {
-					if (!!descricaoIssue) {
-						this.nmHistoria = descricaoIssue.substr(0, 200);
-						this.jogoService.setNmHistoria(this.nmHistoria);
-					}
-					this.isIssueValida = true
-					
-				}).catch(err => {
-					this.isIssueValida = false
-	
-				}).then( () => {
-					this.isLoadIssue = false
-				})
+					.then((descricaoIssue: string) => {
+						if (!!descricaoIssue) {
+							this.nmHistoria = descricaoIssue.substr(0, 200);
+							this.jogoService.setNmHistoria(this.nmHistoria);
+						}
+						this.isIssueValida = true
+
+					}).catch(err => {
+						this.isIssueValida = false
+
+					}).then(() => {
+						this.isLoadIssue = false
+					})
 			});
 
 		// Quando uma carta é alterada
-		this.conCarta = this.jogoService.getCarta().subscribe( (carta: any) => {
-
+		this.conCarta = this.jogoService.getCarta().subscribe((carta: any) => {
 			this.configSala.cartas.forEach(cartaCfg => {
 				if (cartaCfg.id == carta.id) {
 					cartaCfg = carta
@@ -143,7 +130,7 @@ export class JogoComponent implements OnInit, OnDestroy {
 		});
 
 		// Quando um usuário sai ou entra na seção.
-		this.conUsers = this.jogoService.getUsersConnect().subscribe( (users: Array<User>) => {
+		this.conUsers = this.jogoService.getUsersConnect().subscribe((users: Array<User>) => {
 			this.jogadores = [];
 			this.observadores = [];
 
@@ -151,7 +138,7 @@ export class JogoComponent implements OnInit, OnDestroy {
 			let existCardSel = false;
 			users.forEach(us => {
 				if (us.idCarta) {
-					this.configSala.cartas.forEach( (carta: Carta) => {
+					this.configSala.cartas.forEach((carta: Carta) => {
 						if (carta.id === us.idCarta) {
 							us.voto = carta;
 						}
@@ -178,7 +165,7 @@ export class JogoComponent implements OnInit, OnDestroy {
 		});
 
 		// Observa recebe a configuração da sala
-		this.conConfigSala = this.jogoService.getSala().subscribe( (data: any) => {
+		this.conConfigSala = this.jogoService.getSala().subscribe((data: any) => {
 			const sala: Sala = data.sala;
 			const nmHistoria: string = data.nmHistoria;
 
@@ -296,7 +283,7 @@ export class JogoComponent implements OnInit, OnDestroy {
 			debugger
 			this.configSala.forceFimJogo = 0;
 			this.jogoService.sendReset();
-			if (!revotar){
+			if (!revotar) {
 				this.idIssue = ''
 				this.isIssueValida = true
 				this.configSala.nmHistoria = '';
@@ -311,7 +298,7 @@ export class JogoComponent implements OnInit, OnDestroy {
 	 */
 	public concluirClick() {
 		if (!!this.cartaMaisVotada && this.cartaMaisVotada.hasOwnProperty('id') && !!this.cartaMaisVotada.id) {
-			if (!!this.nmHistoria){
+			if (!!this.nmHistoria) {
 				this.cartaMaisVotada.nmUltHist = this.nmHistoria;
 				this.jogoService.setCarta(this.cartaMaisVotada)
 			}
@@ -327,7 +314,7 @@ export class JogoComponent implements OnInit, OnDestroy {
 
 	public setCartaSel(id: number | undefined) {
 		if (id) {
-			this.configSala.cartas.forEach( (carta: Carta) => {
+			this.configSala.cartas.forEach((carta: Carta) => {
 				if (carta.id === id) {
 					this.jogoService.cartaSel = carta;
 				}
@@ -370,7 +357,7 @@ export class JogoComponent implements OnInit, OnDestroy {
 				existeArray = false;
 
 				this.pontuacao.forEach(ponto => {
-					if (ponto.carta.label === jogador.voto.label ) {
+					if (ponto.carta.label === jogador.voto.label) {
 						existeArray = true;
 						ponto.votos += 1;
 					}
@@ -381,7 +368,7 @@ export class JogoComponent implements OnInit, OnDestroy {
 					this.pontuacao.push(novoPonto);
 				}
 
-				this.pontuacao.sort( (a: Estatistica , b: Estatistica) => {
+				this.pontuacao.sort((a: Estatistica, b: Estatistica) => {
 					let ret: number = b.votos - a.votos;
 					if (ret === 0) {
 						ret = b.carta.value - a.carta.value;

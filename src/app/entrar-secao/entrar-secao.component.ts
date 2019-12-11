@@ -14,7 +14,7 @@ export class EntrarSecaoComponent implements OnInit {
   public idSala = '';
   public jogador = true;
   public integraJira = false;
-  public nome    = '';
+  public nome = '';
   public switchLabelPosition: PoSwitchLabelPosition = PoSwitchLabelPosition.Left;
 
   constructor(
@@ -37,14 +37,14 @@ export class EntrarSecaoComponent implements OnInit {
     this.thfAlert.confirm({
       title: 'Atenção',
       message: 'Não foi possível ler o cookie de identificação.',
-      confirm: () => this.authService.saveConfig(this.idSala, this.nome, this.jogador, this.integraJira)
+      confirm: () => this.authService.saveConfig(this.idSala.toUpperCase(), this.nome, this.jogador, this.integraJira)
     });
   }
 
   public entrar(local) {
     const goConfig = local == 'configuracao';
-    this.authService.saveConfig(this.idSala, this.nome, this.jogador, this.integraJira)
-  
+    this.authService.saveConfig(this.idSala.toUpperCase(), this.nome, this.jogador, this.integraJira)
+
     if (this.authService.id === undefined) {
       this.confirmLogin();
 
@@ -56,13 +56,13 @@ export class EntrarSecaoComponent implements OnInit {
 
     } else {
       this.router.navigate(
-          [`/jogo/${this.idSala.trim().toUpperCase()}/${this.nome.trim()}/${this.jogador}`], 
-          { queryParams: { config: goConfig } }
-        );
+        [`/jogo`],
+        { queryParams: { config: goConfig } }
+      );
     }
-   }
+  }
 
-   changeEvent(event: string) {
+  changeEvent(event: string) {
     console.log(event);
   }
 }

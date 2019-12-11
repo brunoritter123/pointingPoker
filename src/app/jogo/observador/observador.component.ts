@@ -1,7 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewChild, AfterViewInit } from '@angular/core';
 import { User } from '../../models/user.model';
 import { JogoService } from '../jogo.service';
-import { PoDialogService } from '@portinari/portinari-ui';
+import { PoDialogService, PoAccordionItemComponent } from '@portinari/portinari-ui';
 import { Sala } from '../../models/sala.model';
 
 @Component({
@@ -9,7 +9,8 @@ import { Sala } from '../../models/sala.model';
   templateUrl: './observador.component.html',
   providers: []
 })
-export class ObservadorComponent {
+export class ObservadorComponent implements AfterViewInit {
+  @ViewChild(PoAccordionItemComponent, { static: true }) item: PoAccordionItemComponent;
   @Input() observadores: Array<User>;
   @Input() myId: string;
   @Input() isJogador: boolean;
@@ -19,6 +20,10 @@ export class ObservadorComponent {
     private jogoService: JogoService,
     private thfAlert: PoDialogService
   ) { }
+
+  ngAfterViewInit(): void {
+    this.item.expand()
+  }
 
   public remove(user: User): void {
     if (this.podeRemover(user)) {
@@ -34,7 +39,7 @@ export class ObservadorComponent {
     });
   }
 
-  public podeRemover(jogador: User):boolean {
-    return jogador.status === 'OFF' && this.jogoService.isPodeExcAcao( this.configSala.removerAdm, this.isJogador, this.observadores)
+  public podeRemover(jogador: User): boolean {
+    return jogador.status === 'OFF' && this.jogoService.isPodeExcAcao(this.configSala.removerAdm, this.isJogador, this.observadores)
   }
 }

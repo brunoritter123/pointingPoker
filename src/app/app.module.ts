@@ -17,6 +17,8 @@ import { AuthService } from './app.auth.service';
 import { ConfiguracaoComponent } from './configuracao/configuracao.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './login/login.component';
+import { ReguaComponent } from './jogo/regua/regua.component';
+import { ListaJiraComponent } from './jogo/lista-jira/lista-jira.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,9 @@ import { LoginComponent } from './login/login.component';
     VotosComponent,
     ObservadorComponent,
     ConfiguracaoComponent,
-    LoginComponent
+    LoginComponent,
+    ReguaComponent,
+    ListaJiraComponent
   ],
   imports: [
     BrowserModule,

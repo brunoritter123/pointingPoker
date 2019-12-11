@@ -1,4 +1,4 @@
-import {Injectable, EventEmitter} from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { PoToolbarProfile } from '@portinari/portinari-ui';
@@ -22,15 +22,15 @@ export class AuthService {
   public fieldStoryPoints: string = "";
 
   constructor(
-   private cookieService: CookieService,
-   private http: HttpClient,
-   private poNotification: PoNotificationService
+    private cookieService: CookieService,
+    private http: HttpClient,
+    private poNotification: PoNotificationService
   ) {
     this.getConfig()
     this.poNotification.setDefaultDuration(5000)
   }
 
-  public getAuthJiraCookie(): boolean{
+  public getAuthJiraCookie(): boolean {
     this.baseUrlJira = this.cookieService.get('baseUrlJira')
     this.userJira = this.cookieService.get('userJira')
 
@@ -45,19 +45,19 @@ export class AuthService {
     this.baseUrlJira = this.cookieService.get('baseUrlJira')
     this.userJira = this.cookieService.get('userJira')
 
-    if (!!this.idSala){
+    if (!!this.idSala) {
       if (this.cookieService.check(this.idSala.toUpperCase())) {
         this.id = this.cookieService.get(this.idSala.toUpperCase())
 
       } else {
-        this.id = this.idSala.toUpperCase()+this.aleatorio(30)
-        this.cookieService.set( this.idSala.toUpperCase(), this.id );
+        this.id = this.idSala.toUpperCase() + this.aleatorio(30)
+        this.cookieService.set(this.idSala.toUpperCase(), this.id);
       }
     }
   }
 
   private parseBaseUrl() {
-    if (!this.baseUrlJira.match(/^http/i)){
+    if (!this.baseUrlJira.match(/^http/i)) {
       this.baseUrlJira = 'http://' + this.baseUrlJira
     }
     this.baseUrlJira = this.baseUrlJira.replace(new RegExp("/$", ""), "")
@@ -68,7 +68,7 @@ export class AuthService {
     this.conectandoJira = true;
     this.parseBaseUrl()
 
-    if(!this.userJira || !this.passJira || !this.baseUrlJira) {
+    if (!this.userJira || !this.passJira || !this.baseUrlJira) {
       this.poNotification.warning("Informe todos os campos.")
       return new Promise((resolve, reject) => {
         this.conectandoJira = false;
@@ -79,65 +79,65 @@ export class AuthService {
     this.httpOptions = {
       headers: new HttpHeaders({
         'Base-Url': this.baseUrlJira + '/rest/api/2',
-        'Authorization': `Basic ${ btoa(this.userJira + ':' + this.passJira) }`
+        'Authorization': `Basic ${btoa(this.userJira + ':' + this.passJira)}`
       })
     };
 
-    return this.http.get( '/api/jira/user?username=' + this.userJira, this.httpOptions)
-    .toPromise()
-    .then( (resp: any) => {
+    return this.http.get('/api/jira/user?username=' + this.userJira, this.httpOptions)
+      .toPromise()
+      .then((resp: any) => {
 
-      this.emitirAuth.emit(this.getProfile(
-        resp.avatarUrls["32x32"],
-        'Conectado no Jira',
-        resp.displayName
-      ));
+        this.emitirAuth.emit(this.getProfile(
+          resp.avatarUrls["32x32"],
+          'Conectado no Jira',
+          resp.displayName
+        ));
 
-      this.cookieService.set('baseUrlJira', this.baseUrlJira, new Date(2100, 1, 1) );
-      this.cookieService.set('userJira', this.userJira, new Date(2100, 1, 1) );
-      this.passJira = '';
-      this.jiraLoginOk = true;
+        this.cookieService.set('baseUrlJira', this.baseUrlJira, new Date(2100, 1, 1));
+        this.cookieService.set('userJira', this.userJira, new Date(2100, 1, 1));
+        this.passJira = '';
+        this.jiraLoginOk = true;
 
-      this.poNotification.success("Conectado.!")
-      this.conectandoJira = false;
-      this.getFieldStoryPoints()
+        this.poNotification.success("Conectado.!")
+        this.conectandoJira = false;
+        this.getFieldStoryPoints()
 
-      return true
-    })
-    .catch( err => {
-      console.error(err)
+        return true
+      })
+      .catch(err => {
+        console.error(err)
 
-      if (err.status == 401) {
-        this.poNotification.warning("Acesso não autorizado.")
-      } else {
-        this.poNotification.error("Erro ao tentar conectar.")
-      }
+        if (err.status == 401) {
+          this.poNotification.warning("Acesso não autorizado.")
+        } else {
+          this.poNotification.error("Erro ao tentar conectar.")
+        }
 
-      this.conectandoJira = false;
-      return false
-    })
+        this.conectandoJira = false;
+        return false
+      })
   }
 
-  private getFieldStoryPoints(){
-    return this.http.get( '/api/jira/field', this.httpOptions)
-    .toPromise()
-    .then( (resp: any) => {
-      const fieldStoryPoints = resp.find( field => field.name == 'Story Points' )
+  private getFieldStoryPoints() {
+    return this.http.get('/api/jira/field', this.httpOptions)
+      .toPromise()
+      .then((resp: any) => {
+        const fieldStoryPoints = resp.find(field => field.name == 'Story Points')
 
-      if (!!fieldStoryPoints) {
-        this.fieldStoryPoints = fieldStoryPoints.id
-      }
+        if (!!fieldStoryPoints) {
+          this.fieldStoryPoints = fieldStoryPoints.id
+        }
 
-      return this.fieldStoryPoints
-    })
-    .catch( err => {
-      console.error(err)
-      throw err
-    })
+        return this.fieldStoryPoints
+      })
+      .catch(err => {
+        console.error(err)
+        throw err
+      })
   }
 
   public getProfile(imageUrl: string, subtitle: string, name: string): PoToolbarProfile {
-    const newProfile: PoToolbarProfile  = {
+    const newProfile: PoToolbarProfile = {
       avatar: imageUrl,
       subtitle: subtitle,
       title: name
@@ -147,21 +147,21 @@ export class AuthService {
 
   public saveConfig(idSala: string, nome: string, isJogador: boolean, isIntegraJira: boolean): void {
     const dtExpires = new Date(2100, 1, 1)
-    this.idSala    = idSala
-    this.name      = nome
+    this.idSala = idSala
+    this.name = nome
     this.isJogador = isJogador
     this.isIntegraJira = isIntegraJira
-    this.cookieService.set( 'idSala', idSala, dtExpires );
-    this.cookieService.set( 'nome', nome, dtExpires );
-    this.cookieService.set( 'isJogador', isJogador.toString(), dtExpires );
-    this.cookieService.set( 'isIntegraJira', isIntegraJira.toString(), dtExpires );
+    this.cookieService.set('idSala', idSala, dtExpires);
+    this.cookieService.set('nome', nome, dtExpires);
+    this.cookieService.set('isJogador', isJogador.toString(), dtExpires);
+    this.cookieService.set('isIntegraJira', isIntegraJira.toString(), dtExpires);
 
     if (this.cookieService.check(idSala.toUpperCase())) {
       this.id = this.cookieService.get(idSala.toUpperCase())
 
     } else {
-      this.id = idSala.toUpperCase()+this.aleatorio(25)
-      this.cookieService.set( idSala.toUpperCase(), this.id, dtExpires );
+      this.id = idSala.toUpperCase() + this.aleatorio(25)
+      this.cookieService.set(idSala.toUpperCase(), this.id, dtExpires);
     }
   }
 
@@ -178,13 +178,13 @@ export class AuthService {
   }
 
   public openLoginJira(): void {
-    if(!this.jiraLoginOk){
+    if (!this.jiraLoginOk) {
       this.emitirConectarJira.emit()
     }
   }
 
   public sairJira(): void {
-    const newProfile: PoToolbarProfile  = {
+    const newProfile: PoToolbarProfile = {
       avatar: '',
       subtitle: '',
       title: ''

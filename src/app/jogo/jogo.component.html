@@ -14,10 +14,10 @@
             <!--ID Jira-->
             <div class="row">
               <div class="row">
-                <po-input *ngIf="authService.jiraLoginOk" class="po-pr-0 po-sm-8 po-md-8" name="idIssue" [(ngModel)]="idIssue"
-                  [p-maxlength]="20" p-required="false" p-placeholder="ID Issue" (keyup)="emitIdIssue()"
-                  [p-readonly]=isLoadIssue p-no-autocomplete=true [p-clean]=!isLoadIssue p-icon="po-icon-search"
-                  [ngClass]="{'ng-invalid': !!idIssue && !isIssueValida}">
+                <po-input *ngIf="authService.jiraLoginOk" class="po-pr-0 po-sm-8 po-md-8" name="idIssue"
+                  [(ngModel)]="idIssue" [p-maxlength]="20" p-required="false" p-placeholder="ID Issue"
+                  (keyup)="emitIdIssue()" [p-readonly]=isLoadIssue p-no-autocomplete=true [p-clean]=!isLoadIssue
+                  p-icon="po-icon-search" [ngClass]="{'ng-invalid': !!idIssue && !isIssueValida}">
                 </po-input>
                 <span *ngIf="isLoadIssue" class="po-pl-0 po-pb-0 po-mb-0">
                   <img class="load-img " src="../../assets/gifLoad.gif" alt="load">
@@ -25,8 +25,8 @@
               </div>
 
               <!--Nome Historia-->
-              <po-input class="po-md-12" name="nmHistoria" [(ngModel)]="nmHistoria"
-                [p-maxlength]="200" p-required="false" p-placeholder="Descrição da História" (keyup)="emitNomeHistoria()"
+              <po-input class="po-md-12" name="nmHistoria" [(ngModel)]="nmHistoria" [p-maxlength]="200"
+                p-required="false" p-placeholder="Descrição da História" (keyup)="emitNomeHistoria()"
                 [p-disabled]=isLoadIssue p-no-autocomplete=true p-clean=true>
               </po-input>
 
@@ -46,9 +46,8 @@
                     class="po-p-1 po-sm-12 po-md-6 po-lg-6 po-xl-6 selecionado" (p-click)="resetClick(false)"
                     p-label="Resetar" p-type="primary">
                   </po-button>
-                  <po-button *ngIf="isPodeExec(configSala.finalizar)"
-                    class="po-p-1 po-sm-12 po-md-6 po-lg-6 po-xl-6" (p-click)="fimClick()" p-label="Finalizar"
-                    p-type="primary">
+                  <po-button *ngIf="isPodeExec(configSala.finalizar)" class="po-p-1 po-sm-12 po-md-6 po-lg-6 po-xl-6"
+                    (p-click)="fimClick()" p-label="Finalizar" p-type="primary">
                   </po-button>
                 </div>
               </div>
@@ -72,9 +71,8 @@
                     <po-button *ngIf="isPodeExec(configSala.resetar)" class="po-p-1 po-sm-12 po-md-6 po-lg-6 po-xl-6"
                       (p-click)="resetClick(true)" p-label="Revotar" p-type="primary">
                     </po-button>
-                    <po-button *ngIf="isPodeExec(configSala.finalizar)"
-                      class="po-p-1 po-sm-12 po-md-6 po-lg-6 po-xl-6" (p-click)="concluirClick()" p-label="Concluir"
-                      p-type="primary">
+                    <po-button *ngIf="isPodeExec(configSala.finalizar)" class="po-p-1 po-sm-12 po-md-6 po-lg-6 po-xl-6"
+                      (p-click)="concluirClick()" p-label="Concluir" p-type="primary">
                     </po-button>
                   </div>
                 </div>
@@ -82,16 +80,12 @@
             </div>
           </po-widget>
 
-          <!--Régua-->
-          <po-widget p-title="Histórico de Pontuação" class="pad-b-10 po-sm-12 po-md-12 po-lg-12 po-xl-12">
-            <po-table [p-items]="configSala.cartas" [p-columns]="columnsRegua">
-            </po-table>
-          </po-widget>
+          <app-regua class="pad-b-10 po-sm-12 po-md-12 po-lg-12 po-xl-12" [configSala]="configSala"></app-regua>
         </div>
 
-        <div class="pad-b-10 po-sm-12 po-md-5 po-lg-6 po-xl-6">
+        <div class=" pad-b-10 po-sm-12 po-md-5 po-lg-6 po-xl-6">
           <!--Jogadores-->
-          <div class="pad-b-10 po-sm-12 po-md-12 po-lg-8 po-xl-8">
+          <div class="pad-b-10 po-sm-12 po-md-12 po-lg-7 po-xl-8">
             <app-votos [jogadores]="jogadores" [observadores]="observadores" [fimJogo]="fimJogo" [isJogador]="isJogador"
               [myId]="myId" [configSala]="configSala">
             </app-votos>
@@ -99,11 +93,13 @@
 
           <!--Adminstrador-->
           <div *ngIf="observadores !== undefined && observadores.length > 0"
-            class="pad-b-10 po-sm-12 po-md-12 po-lg-4 po-xl-4">
+            class="pad-b-10 po-sm-12 po-md-12 po-lg-5 po-xl-4">
             <app-observador [observadores]="observadores" [myId]="myId" [isJogador]="isJogador"
               [configSala]="configSala">
             </app-observador>
           </div>
+
+          <app-lista-jira class="pad-b-10 po-sm-12 po-md-12 po-lg-12 po-xl-12"></app-lista-jira>
         </div>
 
       </div>
@@ -117,7 +113,7 @@
     </po-loading-overlay>
   </div>
 
-<app-configuracao *ngIf="configSala !== undefined" [configSala]="configSala">
+  <app-configuracao *ngIf="configSala !== undefined" [configSala]="configSala">
   </app-configuracao>
 </div>
 

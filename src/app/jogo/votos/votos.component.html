@@ -1,21 +1,19 @@
-<po-widget p-title="Jogadores: {{jogadores.length}}">
-  <h3 class="po-sm-6 po-md-6 po-lg-6 txt-thf">Jogador</h3>
-  <h3 class="po-sm-6 po-md-6 po-lg-6 txt-thf">Ponto</h3>
-  <div *ngFor="let jogador of jogadores">
-    <div class="po-row">
-      <h4
-        (click)="remove(jogador)"
-        class="po-sm-6 po-md-6 po-lg-6"
-        [class.off]="jogador.status === 'OFF'"
-        [class.click]="podeRemover(jogador)"
-        [class.f-bold]="jogador.idUser === myId">
-        {{jogador.nome}}
-      </h4>
-      <h4 class="po-sm-6 po-md-6 po-lg-6">
-        <span *ngIf="fimJogo"> {{jogador.voto.label}}</span>
-        <span *ngIf="!fimJogo && !jogador.voto.label" class="txt-vermelho"> - </span>
-        <span *ngIf="!fimJogo && jogador.voto.label > ''" class="po-icon po-icon-ok txt-verde"> </span>
-      </h4>
+<po-accordion>
+  <po-accordion-item p-label="Jogadores: {{jogadores.length}}" #item>
+    <h3 class="po-sm-6 po-md-6 po-lg-6 txt-thf">Jogador</h3>
+    <h3 class="po-sm-6 po-md-6 po-lg-6 txt-thf">Ponto</h3>
+    <div *ngFor="let jogador of jogadores">
+      <div class="po-row">
+        <h4 (click)="remove(jogador)" class="po-sm-6 po-md-6 po-lg-6" [class.off]="jogador.status === 'OFF'"
+          [class.click]="podeRemover(jogador)" [class.f-bold]="jogador.idUser === myId">
+          {{jogador.nome}}
+        </h4>
+        <h4 class="po-sm-6 po-md-6 po-lg-6">
+          <span *ngIf="fimJogo"> {{jogador.voto.label}}</span>
+          <span *ngIf="!fimJogo && !jogador.voto.label" class="txt-vermelho"> - </span>
+          <span *ngIf="!fimJogo && jogador.voto.label > ''" class="po-icon po-icon-ok txt-verde"> </span>
+        </h4>
+      </div>
     </div>
-  </div>
-</po-widget>
+  </po-accordion-item>
+</po-accordion>
