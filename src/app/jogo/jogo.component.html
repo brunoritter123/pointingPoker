@@ -14,15 +14,12 @@
             <!--ID Jira-->
             <div class="row">
               <div class="row">
-                <po-input *ngIf="authService.jiraLoginOk" class="po-pr-0 po-sm-8 po-md-8" name="idIssue"
-                  [(ngModel)]="idIssue" [p-maxlength]="20" p-required="false" p-placeholder="ID Issue"
-                  (keyup)="emitIdIssue()" [p-readonly]=isLoadIssue p-no-autocomplete=true [p-clean]=!isLoadIssue
-                  p-icon="po-icon-search" [ngClass]="{'ng-invalid': !!idIssue && !isIssueValida}">
-                </po-input>
-                <span *ngIf="isLoadIssue" class="po-pl-0 po-pb-0 po-mb-0">
-                  <img class="load-img " src="../../assets/gifLoad.gif" alt="load">
-                </span>
+                <app-input-load *ngIf="authService.jiraLoginOk" name="idIssue" #idIssue class="po-sm-12 po-md-12"
+                  pMaxlength="20" [isLoad]=isLoadIssue pPlaceholder="ID Issue" [isValid]=isValidIssue
+                  (execKeyUp)=descrKeyUp($event)>
+                </app-input-load>
               </div>
+
 
               <!--Nome Historia-->
               <po-input class="po-md-12" name="nmHistoria" [(ngModel)]="nmHistoria" [p-maxlength]="200"
@@ -80,6 +77,7 @@
             </div>
           </po-widget>
 
+          <!-- Regua de Pontuação -->
           <app-regua class="pad-b-10 po-sm-12 po-md-12 po-lg-12 po-xl-12" [configSala]="configSala"></app-regua>
         </div>
 
@@ -99,7 +97,10 @@
             </app-observador>
           </div>
 
-          <app-lista-jira class="pad-b-10 po-sm-12 po-md-12 po-lg-12 po-xl-12"></app-lista-jira>
+          <!-- Lista de Issues do Jira -->
+          <app-lista-jira #listaJira class="pad-b-10 po-sm-12 po-md-12 po-lg-12 po-xl-12"
+            *ngIf="authService.jiraLoginOk" (votarIssue)="votarIssue($event)">
+          </app-lista-jira>
         </div>
 
       </div>

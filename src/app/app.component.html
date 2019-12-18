@@ -1,23 +1,17 @@
 <div class="po-wrapper">
-    <po-toolbar
-    p-title="{{title}}"
-    [p-profile]="profile"
-    [p-profile-actions]="profileActions"
-    ></po-toolbar>
+  <po-toolbar p-title="{{title}}" [p-profile]="profile" [p-profile-actions]="profileActions"></po-toolbar>
 
-  <po-menu display = "none"
-    [p-menus]="menus" >
+  <po-menu display="none" [p-menus]="menus">
   </po-menu>
 
   <router-outlet></router-outlet>
 </div>
 
-<po-modal
-  p-click-out="true"
-  p-size="md"
-  [p-title]="titleModel"
-  [p-primary-action]="primaryAction">
+<po-modal #modalSobre p-click-out="true" p-size="md" p-title="Sobre" [p-primary-action]="primaryActionSobre">
+  <app-contato></app-contato>
+</po-modal>
 
-  <app-contato *ngIf="opcModal == 'contato'"></app-contato>
-  <app-login *ngIf="opcModal == 'loginJira'"></app-login>
+<po-modal #modalJira p-click-out="true" p-size="md" p-title="Login Jira" [p-primary-action]="primaryActionJira"
+  [p-secondary-action]=secondaryActionJira>
+  <app-login (conectar)="conJira()"></app-login>
 </po-modal>

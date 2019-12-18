@@ -1,10 +1,8 @@
-<po-accordion>
-  <po-accordion-item p-label="Administrador: {{observadores.length}}" #item>
-    <div *ngFor="let observador of observadores">
-      <h4 (click)="remove(observador)" class="po-sm-12 po-md-12 po-lg-12" [class.off]="observador.status === 'OFF'"
-        [class.click]="this.podeRemover(observador)" [class.f-bold]="observador.idUser === myId">
-        {{observador.nome}}
-      </h4>
-    </div>
-  </po-accordion-item>
-</po-accordion>
+<po-widget p-title="Administrador: {{observadores.length}}">
+  <div *ngFor="let observador of observadores">
+    <h4 (click)="remove(observador)" class="po-sm-12 po-md-12 po-lg-12" [class.off]="observador.status === 'OFF'"
+      [class.click]="this.podeRemover(observador)" [class.f-bold]="observador.idUser === myId">
+      {{observador.nome}}
+    </h4>
+  </div>
+</po-widget>

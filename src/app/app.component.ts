@@ -8,47 +8,66 @@ import { AuthService } from './app.auth.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
-export class AppComponent implements OnInit, OnDestroy{
-  @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
+export class AppComponent implements OnInit, OnDestroy {
+  @ViewChild('modalJira', { static: true }) modalJira: PoModalComponent;
+  @ViewChild('modalSobre', { static: true }) modalSobre: PoModalComponent;
 
   private newAuth;
   private conectarJira;
 
   public title = 'Scrum Poker';
   private profActLogin: PoToolbarAction = { icon: 'po-icon-user', label: 'Login Jira', action: () => this.authService.openLoginJira() };
-  private profActSair: PoToolbarAction =  {
+  private profActSair: PoToolbarAction = {
     icon: 'po-icon-exit',
     label: 'Sair',
     type: 'danger',
     separator: true,
-    action: () => this.authService.sairJira() };
+    action: () => this.authService.sairJira()
+  };
   public profileActions: Array<PoToolbarAction> = [this.profActLogin];
-  public profile: PoToolbarProfile  = {
+  public profile: PoToolbarProfile = {
     avatar: '',
     subtitle: '',
     title: ''
   };
 
-  public opcModal: string;
-  public titleModel: string;
-  public primaryAction: PoModalAction;
+  public primaryActionJira: PoModalAction = {
+    action: () => {
+      this.conJira()
+    },
+    label: 'Conectar'
+  };
+
+  public primaryActionSobre: PoModalAction = {
+    action: () => {
+      this.modalSobre.close()
+    },
+    label: 'Fechar'
+  };
+
+  public secondaryActionJira: PoModalAction = {
+    action: () => {
+      this.modalJira.close()
+    },
+    label: 'Cancelar'
+  }
 
 
   constructor(
-    private authService: AuthService) {}
+    private authService: AuthService) { }
 
   ngOnInit() {
-    this.newAuth = this.authService.emitirAuth.subscribe( (newProfile) => {
+    this.newAuth = this.authService.emitirAuth.subscribe((newProfile) => {
       this.profile = newProfile;
       if (this.profile.title > '') {
         this.profileActions = [this.profActSair];
-        this.poModal.close();
+        this.modalJira.close();
       } else {
         this.profileActions = [this.profActLogin];
       }
     });
 
-    this.conectarJira = this.authService.emitirConectarJira.subscribe( () => {
+    this.conectarJira = this.authService.emitirConectarJira.subscribe(() => {
       this.openLogin()
     });
   }
@@ -66,32 +85,12 @@ export class AppComponent implements OnInit, OnDestroy{
 
 
   public openModal(): boolean {
-    this.opcModal = 'contato';
-    this.titleModel = 'Sobre';
-
-    this.primaryAction = {
-      action: () => {
-        this.poModal.close();
-      },
-      label: 'Fechar'
-    };
-
-    this.poModal.open();
+    this.modalSobre.open();
     return true;
   }
 
   public openLogin(): boolean {
-    this.opcModal = 'loginJira';
-    this.titleModel = 'Login Jira';
-
-    this.primaryAction = {
-      action: () => {
-        this.conJira()
-      },
-      label: 'Conectar'
-    };
-
-    this.poModal.open();
+    this.modalJira.open();
     return true;
   }
 

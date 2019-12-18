@@ -19,6 +19,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './login/login.component';
 import { ReguaComponent } from './jogo/regua/regua.component';
 import { ListaJiraComponent } from './jogo/lista-jira/lista-jira.component';
+import { InputLoadComponent } from './lib/component/input-load/input-load.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { ListaJiraComponent } from './jogo/lista-jira/lista-jira.component';
     ConfiguracaoComponent,
     LoginComponent,
     ReguaComponent,
-    ListaJiraComponent
+    ListaJiraComponent,
+    InputLoadComponent
   ],
   imports: [
     BrowserModule,
@@ -44,7 +46,7 @@ import { ListaJiraComponent } from './jogo/lista-jira/lista-jira.component';
   providers: [
     AuthService,
     PoDialogService,
-    CookieService ],
+    CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

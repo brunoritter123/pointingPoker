@@ -1,4 +1,4 @@
-import {Observable} from 'rxjs';
+import { Observable } from 'rxjs';
 import * as io from 'socket.io-client';
 import { User } from '../models/user.model';
 import { Injectable } from '@angular/core';
@@ -8,6 +8,7 @@ import { AuthService } from '../app.auth.service';
 import { HttpClient } from '@angular/common/http';
 import { PoNotificationService } from '@portinari/portinari-ui';
 import { CompileShallowModuleMetadata } from '@angular/compiler';
+import { promise } from 'protractor';
 
 @Injectable()
 export class JogoService {
@@ -22,18 +23,18 @@ export class JogoService {
     upgrade: false,
     reconnection: true,
     reconnectionDelay: 1000,
-    reconnectionDelayMax : 5000,
+    reconnectionDelayMax: 5000,
     reconnectionAttempts: Infinity
   }, {
     'force new connection': true
-  } );
+  });
   private userName: string;
   private isJogador: boolean;
   private conectado = true;
   private idSala = '';
   private timeUltEnvio = 0;
   private timeDesconect: number = new Date().getTime();
-  public isConfiguracao: boolean ;
+  public isConfiguracao: boolean;
 
   constructor(
     private authService: AuthService,
@@ -70,7 +71,7 @@ export class JogoService {
   getUsersConnect() {
     let iAmOn = false;
     const observable = new Observable(observer => {
-      this.socket.on('get-user', (ret: any ) => {
+      this.socket.on('get-user', (ret: any) => {
         const timeEnvio: number = ret.timeEnvio;
         const data: any = ret.users;
 
@@ -78,13 +79,13 @@ export class JogoService {
           this.timeUltEnvio = timeEnvio;
         }
 
-        const users: Array < User > = new  Array < User >();
+        const users: Array<User> = new Array<User>();
 
         data.forEach(d => {
           if (this.myId === d.idUser) {
             iAmOn = true;
           }
-          users.push( User.novo(d));
+          users.push(User.novo(d));
         });
 
         this.iAmOn = iAmOn;
@@ -150,7 +151,7 @@ export class JogoService {
     return !this.isConnected() || !this.iAmOn || this.timeUltEnvio < this.timeDesconect;
   }
 
-  public isPodeExcAcao(acao: string, isJogador: boolean , adms: Array<User>): boolean {
+  public isPodeExcAcao(acao: string, isJogador: boolean, adms: Array<User>): boolean {
     let ok: boolean = adms.length == 0 || acao == '3'
 
     if (!ok) {
@@ -161,58 +162,60 @@ export class JogoService {
   };
 
   public getIssueJira(idIssue: string): Promise<any> {
-    return this.http.get( '/api/jira/issue/' + idIssue, this.authService.httpOptions)
-    .toPromise()
-    .then( (resp: any) => {
-      return resp.fields.summary
-    })
-    .catch( err => {
-      console.error(err)
+    return this.http.get('/api/jira/issue/' + idIssue, this.authService.httpOptions)
+      .toPromise()
+      .then((resp: any) => {
+        return resp.fields.summary
+      })
+      .catch(err => {
+        console.error(err)
 
-      if (err.status == 401) {
-        this.poNotification.warning("Acesso não autorizado.")
-        this.authService.openLoginJira()
-      } else if (err.status == 404) {
-        this.poNotification.warning(`Issue: '${idIssue}' não encontrada.`)
-      } else {
-        this.poNotification.error("Sem resposta do servidor.")
-      }
+        if (err.status == 401) {
+          this.poNotification.warning("Acesso não autorizado.")
+          this.authService.openLoginJira()
+        } else if (err.status == 404) {
+          this.poNotification.warning(`Issue: '${idIssue}' não encontrada.`)
+        } else {
+          this.poNotification.error("Sem resposta do servidor.")
+        }
 
-      throw err;
-    })
+        throw err;
+      })
   }
 
   public sendStoryPoints(idIssue: string, point: string): Promise<any> {
-    if (!this.authService.fieldStoryPoints) return
+    let naoExecutado = { ok: false }
+
+    if (!this.authService.fieldStoryPoints) return Promise.resolve(naoExecutado)
 
     const pointInt = parseInt(point)
-    if (!pointInt && pointInt != 0 ) return
+    if (!pointInt && pointInt != 0) return Promise.resolve(naoExecutado)
 
-    const body = `{ 
+    const body = `{
       "fields": {
         "${this.authService.fieldStoryPoints}": ${pointInt}
       }
     }`
 
     return this.http.put('/api/jira/issue/' + idIssue, JSON.parse(body), this.authService.httpOptions)
-    .toPromise()
-    .then( (resp: any) => {
-      this.poNotification.success(`Issue: '${idIssue}' teve sua pontuação alterada para: ${point}`)
-      return true
-    })
-    .catch( err => {
-      console.error(err)
+      .toPromise()
+      .then((resp: any) => {
+        this.poNotification.success(`Issue: '${idIssue}' teve sua pontuação alterada para: ${point}`)
+        return { ok: true, idIssue: idIssue, voto: pointInt }
+      })
+      .catch(err => {
+        console.error(err)
 
-      if (err.status == 401) {
-        this.poNotification.warning("Acesso não autorizado.")
-        this.authService.openLoginJira()
-      } else if (err.status == 404) {
-        this.poNotification.warning(`Issue: '${idIssue}' não foi encontrada.`)
-      } else {
-        this.poNotification.error("Sem resposta do servidor.")
-      }
+        if (err.status == 401) {
+          this.poNotification.warning("Acesso não autorizado.")
+          this.authService.openLoginJira()
+        } else if (err.status == 404) {
+          this.poNotification.warning(`Issue: '${idIssue}' não foi encontrada.`)
+        } else {
+          this.poNotification.error("Sem resposta do servidor.")
+        }
 
-      throw err;
-    })
+        return naoExecutado
+      })
   }
 }

@@ -2,33 +2,14 @@
     <po-loading-overlay p-text="Entrando..."></po-loading-overlay>
 </div>
 
-<po-url
-    class="po-sm-12"
-    p-label="Base URL"
-    p-placeholder="https://seu-dominio.atlassian.net"
-    name="baseUrl"
-    [(ngModel)]="authService.baseUrlJira"
-    p-clean
-    p-required>
+<po-url class="po-sm-12" p-label="Base URL" p-placeholder="https://seu-dominio.atlassian.net" name="baseUrl"
+    [(ngModel)]="authService.baseUrlJira" p-clean p-required>
 </po-url>
 
-<po-login
-    class="po-sm-12"
-    p-label="Login"
-    p-placeholder="Usuário"
-    name="userLogin"
-    [(ngModel)]="authService.userJira"
-    p-clean
-    p-maxlength="100"
-    p-required>
+<po-login class="po-sm-12" p-label="Login" p-placeholder="Usuário" name="userLogin" [(ngModel)]="authService.userJira"
+    p-clean p-maxlength="100" p-required>
 </po-login>
 
-<po-password
-    class="po-sm-12"
-    p-label="Senha"
-    p-placeholder="Informe a senha"
-    name="senha"
-    [(ngModel)]="authService.passJira"
-    p-clean
-    p-required>
+<po-password class="po-sm-12" p-label="Senha" p-placeholder="Informe a senha" name="senha"
+    [(ngModel)]="authService.passJira" p-clean (keyup.enter)="keyUpPass()" p-required>
 </po-password>

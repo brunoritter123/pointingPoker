@@ -1,7 +1,7 @@
-import { Component, Input, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { User } from '../../models/user.model';
 import { JogoService } from '../jogo.service';
-import { PoDialogService, PoAccordionItemComponent } from '@portinari/portinari-ui';
+import { PoDialogService } from '@portinari/portinari-ui';
 import { Sala } from '../../models/sala.model';
 
 @Component({
@@ -10,8 +10,7 @@ import { Sala } from '../../models/sala.model';
   styleUrls: ['./votos.component.css'],
   providers: []
 })
-export class VotosComponent implements AfterViewInit {
-  @ViewChild(PoAccordionItemComponent, { static: true }) item: PoAccordionItemComponent;
+export class VotosComponent {
   @Input() jogadores: Array<User>;
   @Input() observadores: Array<User>;
   @Input() fimJogo: boolean;
@@ -38,11 +37,7 @@ export class VotosComponent implements AfterViewInit {
   }
 
   public podeRemover(jogador: User): boolean {
-    return jogador.status === 'OFF' && this.jogoService.isPodeExcAcao(this.configSala.removerJogador, this.isJogador, this.observadores)
-  }
-
-  ngAfterViewInit(): void {
-    this.item.expand()
+    return this.jogoService.isPodeExcAcao(this.configSala.removerJogador, this.isJogador, this.observadores)
   }
 
 }

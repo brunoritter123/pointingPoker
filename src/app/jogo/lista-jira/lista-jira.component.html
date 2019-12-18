@@ -1,5 +1,11 @@
-<po-accordion>
-	<po-accordion-item p-label="Issues para Pontuar" #item>
+<po-widget p-title="Issues para Pontuar">
+  <div class="row">
+    <app-input-load name="filtro" #filtro class="po-sm-12 po-md-12" pMaxlength="100" [isLoad]=isLoadFiltro
+      pPlaceholder="Filtro" [isValid]=isValidFiltro (execKeyUp)=filtroKeyUp($event)>
+    </app-input-load>
+  </div>
 
-	</po-accordion-item>
-</po-accordion>
+  <po-table class="po-sm-12 po-md-12 po-pb-1" [p-items]="listaIssue" [p-columns]="columnsIssue" [p-actions]="actions"
+    [p-striped]="true">
+  </po-table>
+</po-widget>

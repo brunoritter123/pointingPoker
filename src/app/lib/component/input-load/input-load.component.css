@@ -1,0 +1,7 @@
+:host /deep/
+.inputLoad input{
+    background-image:url(assets/gifLoad.gif);
+    background-repeat:no-repeat;
+    background-position: right;
+    background-size: 34px
+}

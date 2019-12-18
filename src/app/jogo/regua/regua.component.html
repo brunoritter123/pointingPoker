@@ -1,6 +1,4 @@
-<po-accordion>
-  <po-accordion-item p-label="Histórico de Pontuação" #item>
-    <po-table [p-items]="configSala.cartas" [p-columns]="columnsRegua">
-    </po-table>
-  </po-accordion-item>
-</po-accordion>
+<po-widget p-title="Histórico de Pontuação">
+  <po-table [p-items]="configSala.cartas" [p-columns]="columnsRegua" [p-striped]="true">
+  </po-table>
+</po-widget>

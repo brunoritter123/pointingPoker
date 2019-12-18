@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, HostListener, EventEmitter } from '@angular/core';
 import { JogoService } from './jogo.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Carta } from '../models/carta.model';
@@ -9,6 +9,9 @@ import { AuthService } from '../app.auth.service';
 import { Sala } from '../models/sala.model';
 import { Estatistica } from '../models/estatistica.model';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { InputLoadComponent } from '../lib/component/input-load/input-load.component';
+import { ListaJiraComponent } from './lista-jira/lista-jira.component';
+import { PoNotificationService } from '@portinari/portinari-ui';
 
 @Component({
 	selector: 'app-jogo',
@@ -19,6 +22,9 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 export class JogoComponent implements OnInit, OnDestroy {
 	@ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent;
+	@ViewChild('idIssue', { static: false }) idIssue: InputLoadComponent;
+	@ViewChild('listaJira', { static: false }) listaJira: ListaJiraComponent;
+
 	@HostListener('window:beforeunload', ['$event']) unloadHandler(event: Event) {
 		event.returnValue = false;
 	}
@@ -27,6 +33,7 @@ export class JogoComponent implements OnInit, OnDestroy {
 		private authService: AuthService,
 		public jogoService: JogoService,
 		private activateRoute: ActivatedRoute,
+		private poNotification: PoNotificationService,
 		private route: Router,
 	) { }
 
@@ -50,11 +57,10 @@ export class JogoComponent implements OnInit, OnDestroy {
 	public titleModel: string;
 	public primaryAction: PoModalAction;
 	public secondaryAction: PoModalAction;
-	public idIssue: string = '';
 	public content: string = 'teste';
+	public isValidIssue: boolean = true;
 
 	private subjectDescHist: Subject<string> = new Subject<string>()
-	private subjectIdIssue: Subject<string> = new Subject<string>()
 	private nameUser: string = this.authService.name
 	private conUsers: Subscription;
 	private conCarta: Subscription;
@@ -94,32 +100,6 @@ export class JogoComponent implements OnInit, OnDestroy {
 				this.jogoService.sendUpdateSala(this.configSala);
 			});
 
-		this.subjectIdIssue
-			.pipe(
-				debounceTime(1500) // executa a ação do switchMap após 1,5 segundo
-			).subscribe((idIssue: string) => {
-				if (!idIssue) {
-					this.isIssueValida = true
-					return
-				}
-
-				this.isLoadIssue = true;
-				this.jogoService.getIssueJira(idIssue)
-					.then((descricaoIssue: string) => {
-						if (!!descricaoIssue) {
-							this.nmHistoria = descricaoIssue.substr(0, 200);
-							this.jogoService.setNmHistoria(this.nmHistoria);
-						}
-						this.isIssueValida = true
-
-					}).catch(err => {
-						this.isIssueValida = false
-
-					}).then(() => {
-						this.isLoadIssue = false
-					})
-			});
-
 		// Quando uma carta é alterada
 		this.conCarta = this.jogoService.getCarta().subscribe((carta: any) => {
 			this.configSala.cartas.forEach(cartaCfg => {
@@ -136,6 +116,8 @@ export class JogoComponent implements OnInit, OnDestroy {
 
 			// Verifica a carta selecionada
 			let existCardSel = false;
+			let existMyUser = false;
+
 			users.forEach(us => {
 				if (us.idCarta) {
 					this.configSala.cartas.forEach((carta: Carta) => {
@@ -144,16 +126,26 @@ export class JogoComponent implements OnInit, OnDestroy {
 						}
 					});
 
-					if (us.idUser === this.myId) {
+				}
+
+				if (us.idUser === this.myId) {
+					if (us.idCarta) {
 						this.setCartaSel(us.idCarta);
-						this.isJogador = us.isJogador;
 						existCardSel = true;
 					}
+
+					existMyUser = true;
+					this.isJogador = us.isJogador;
 				}
 			});
 
 			if (!existCardSel) {
 				this.setCartaSel(undefined);
+			}
+
+			if (!existMyUser) {
+				this.poNotification.warning("Foi foi removido da sala.")
+				this.route.navigate([`/entrar-sala`]);
 			}
 
 			// Separa o tipo de usuário
@@ -223,14 +215,6 @@ export class JogoComponent implements OnInit, OnDestroy {
 	}
 
 	/**
-	 * emitIdIssue()
-	 * Metodo para emitir a ID Issue
-	 */
-	public emitIdIssue() {
-		this.subjectIdIssue.next(this.idIssue);
-	}
-
-	/**
 	 * fimDeJogo
 	 * Metodo para alterar o valor da propriedade fimJogo
 	 */
@@ -280,11 +264,10 @@ export class JogoComponent implements OnInit, OnDestroy {
 	 */
 	public resetClick(revotar: boolean = false): void {
 		if (this.isConnected) {
-			debugger
 			this.configSala.forceFimJogo = 0;
 			this.jogoService.sendReset();
 			if (!revotar) {
-				this.idIssue = ''
+				this.idIssue.texto = ''
 				this.isIssueValida = true
 				this.configSala.nmHistoria = '';
 			}
@@ -304,7 +287,12 @@ export class JogoComponent implements OnInit, OnDestroy {
 			}
 
 			if (this.isIssueValida) {
-				this.jogoService.sendStoryPoints(this.idIssue, this.cartaMaisVotada.label)
+				this.jogoService.sendStoryPoints(this.idIssue.texto, this.cartaMaisVotada.label)
+					.then(result => {
+						if (result.ok) {
+							this.listaJira.novaPontuacao(result.idIssue, result.voto)
+						}
+					})
 			}
 		}
 
@@ -369,9 +357,15 @@ export class JogoComponent implements OnInit, OnDestroy {
 				}
 
 				this.pontuacao.sort((a: Estatistica, b: Estatistica) => {
-					let ret: number = b.votos - a.votos;
-					if (ret === 0) {
-						ret = b.carta.value - a.carta.value;
+					let ret: number
+
+					if (a.carta.label === undefined) {
+						ret = 1
+					} else {
+						ret = b.votos - a.votos;
+						if (ret === 0) {
+							ret = b.carta.value - a.carta.value;
+						}
 					}
 
 					return ret;
@@ -407,5 +401,38 @@ export class JogoComponent implements OnInit, OnDestroy {
 
 		this.poModal.open();
 		return true;
+	}
+
+	/**
+	 * Função excutada após digitar a descrição da issue
+	 */
+	public descrKeyUp(idIssue: string): void {
+		if (!idIssue) {
+			this.isValidIssue = true
+			return
+		}
+
+		this.isLoadIssue = true
+		this.jogoService.getIssueJira(idIssue)
+			.then((descricaoIssue: string) => {
+				if (!!descricaoIssue) {
+					this.nmHistoria = descricaoIssue.substr(0, 200);
+					this.jogoService.setNmHistoria(this.nmHistoria);
+				}
+				this.isValidIssue = true
+			})
+			.catch(err => {
+				this.isValidIssue = false
+			})
+			.then(() => {
+				this.isLoadIssue = false
+			})
+	}
+
+	/**
+	 * Função ao executar o botão votar
+	 */
+	public votarIssue(idIssue: string): void {
+		this.idIssue.setValue(idIssue);
 	}
 }

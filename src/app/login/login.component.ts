@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { AuthService } from '../app.auth.service';
 import { PoPasswordComponent } from '@portinari/portinari-ui';
 
@@ -8,6 +8,7 @@ import { PoPasswordComponent } from '@portinari/portinari-ui';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+  @Output() conectar: EventEmitter<any> = new EventEmitter()
   @ViewChild(PoPasswordComponent, { static: true }) senha: PoPasswordComponent;
 
   constructor(public authService: AuthService) { }
@@ -16,6 +17,10 @@ export class LoginComponent implements OnInit {
     if (this.authService.getAuthJiraCookie()) {
       this.senha.focus()
     }
+  }
+
+  public keyUpPass() {
+    this.conectar.emit()
   }
 
 }
