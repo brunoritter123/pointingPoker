@@ -13,6 +13,7 @@ export class InputLoadComponent implements OnInit {
   @Input() pPlaceholder: string = '';
   @Input() isValid: Boolean = true;
   @Output() execKeyUp: EventEmitter<any> = new EventEmitter();
+  @Output() execEnter: EventEmitter<any> = new EventEmitter();
   public texto: string = '';
 
   private subjectEvent: Subject<any> = new Subject<any>()

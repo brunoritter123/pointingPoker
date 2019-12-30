@@ -1,6 +1,6 @@
 <div class="row" [ngClass]="{'inputLoad': isLoad}">
   <po-input [(ngModel)]="texto" ngmodel [p-maxlength]=pMaxlength [p-required]=false [p-placeholder]=pPlaceholder
     [p-readonly]=isLoad [p-no-autocomplete]=true [p-clean]=!isLoad p-icon="po-icon-search"
-    [ngClass]="{'ng-invalid': !isValid}" (keyup)="emitTexto()">
+    [ngClass]="{'ng-invalid': !isValid}" (keyup)="emitTexto()" (keyup.enter)="execEnter.emit(texto)">
   </po-input>
 </div>

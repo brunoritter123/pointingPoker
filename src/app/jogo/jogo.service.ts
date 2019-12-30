@@ -218,4 +218,34 @@ export class JogoService {
         return naoExecutado
       })
   }
+
+  public listaIssueJira(filtro: string): Promise<any> {
+    return this.http.get('/api/jira/search?jql=' + filtro, this.authService.httpOptions)
+      .toPromise()
+      .then((resp: any) => {
+        let listaIssue = []
+
+        resp.issues.forEach(issue => {
+          listaIssue.push(
+            { descricao: issue.fields.summary, id: issue.key, voto: issue.fields[this.authService.fieldStoryPoints] },
+          )
+        });
+
+        return listaIssue
+      })
+      .catch(err => {
+        console.error(err)
+
+        if (err.status == 401) {
+          this.poNotification.warning("Acesso não autorizado.")
+          this.authService.openLoginJira()
+        } else if (err.status == 404) {
+          this.poNotification.warning('Nenhuma Issue encontra para o filtro.')
+        } else {
+          this.poNotification.error("Sem resposta do servidor.")
+        }
+
+        throw err;
+      })
+  }
 }
