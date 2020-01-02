@@ -8,6 +8,7 @@ import { PoModalAction, PoModalComponent } from '@portinari/portinari-ui';
 import { AuthService } from '../app.auth.service';
 import { Sala } from '../models/sala.model';
 import { Estatistica } from '../models/estatistica.model';
+import { Issue } from '../models/issue.model';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { InputLoadComponent } from '../lib/component/input-load/input-load.component';
 import { ListaJiraComponent } from './lista-jira/lista-jira.component';
@@ -96,8 +97,7 @@ export class JogoComponent implements OnInit, OnDestroy {
 				debounceTime(1500) // executa a ação do switchMap após 1,5 segundo
 				, distinctUntilChanged() // não repetir o mesmo nome da história anterior.
 			).subscribe((nmHistoria: string) => {
-				this.configSala.nmHistoria = nmHistoria
-				this.jogoService.sendUpdateSala(this.configSala);
+				this.setNmHistoria(nmHistoria)
 			});
 
 		// Quando uma carta é alterada
@@ -144,7 +144,7 @@ export class JogoComponent implements OnInit, OnDestroy {
 			}
 
 			if (!existMyUser) {
-				this.poNotification.warning("Foi foi removido da sala.")
+				this.poNotification.warning("Você foi removido da sala.")
 				this.route.navigate([`/entrar-sala`]);
 			}
 
@@ -432,7 +432,17 @@ export class JogoComponent implements OnInit, OnDestroy {
 	/**
 	 * Função ao executar o botão votar
 	 */
-	public votarIssue(idIssue: string): void {
-		this.idIssue.setValue(idIssue);
+	public votarIssue(issue: Issue): void {
+		this.idIssue.texto = issue.id
+		this.setNmHistoria(issue.descricao)
+	}
+
+	/**
+	 * Seta o nome da história (descrição da issue)
+	 * @param nmHistoria
+	 */
+	public setNmHistoria(nmHistoria: string): void {
+		this.configSala.nmHistoria = nmHistoria
+		this.jogoService.sendUpdateSala(this.configSala);
 	}
 }

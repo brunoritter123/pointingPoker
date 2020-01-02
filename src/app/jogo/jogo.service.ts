@@ -9,6 +9,7 @@ import { HttpClient } from '@angular/common/http';
 import { PoNotificationService } from '@portinari/portinari-ui';
 import { CompileShallowModuleMetadata } from '@angular/compiler';
 import { promise } from 'protractor';
+import { Issue } from '../models/issue.model';
 
 @Injectable()
 export class JogoService {
@@ -219,16 +220,15 @@ export class JogoService {
       })
   }
 
-  public listaIssueJira(filtro: string): Promise<any> {
+  public listaIssueJira(filtro: string): Promise<Array<Issue>> {
     return this.http.get('/api/jira/search?jql=' + filtro, this.authService.httpOptions)
       .toPromise()
       .then((resp: any) => {
         let listaIssue = []
 
         resp.issues.forEach(issue => {
-          listaIssue.push(
-            { descricao: issue.fields.summary, id: issue.key, voto: issue.fields[this.authService.fieldStoryPoints] },
-          )
+          issue = new Issue(issue.key, issue.fields.summary, issue.fields[this.authService.fieldStoryPoints])
+          listaIssue.push(issue)
         });
 
         return listaIssue
