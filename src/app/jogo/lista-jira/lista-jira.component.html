@@ -1,14 +1,14 @@
-<po-widget p-title="Issues para Pontuar">
+<po-widget p-title="Issues para Votar">
   <div class="row">
     <app-input-load name="filtro" #filtro class="po-sm-8 p-md-10 p-lg-11 p-xl-11 po-pr-0" pMaxlength="100"
-      [isLoad]=isLoadFiltro pPlaceholder="Filtro" [isValid]=isValidFiltro (execEnter)=buscarFiltro()>
+      [isLoad]=isLoadFiltro pPlaceholder="Pesquisar" [isValid]=isValidFiltro (execEnter)=buscarFiltro()>
     </app-input-load>
     <po-button (p-click)="buscarFiltro()" class="po-sm-4 p-md-2 p-lg-1 p-xl-1 po-pl-0 po-pt-1" p-label="Buscar"
       p-type="primary">
     </po-button>
   </div>
 
-  <po-table class="po-sm-12 po-md-12 po-pb-1" [p-items]="listaIssue" [p-columns]="columnsIssue" [p-actions]="actions"
+  <po-table class="po-sm-12 po-md-12 po-pb-1" [p-items]="listaIssue" [p-columns]="columnsIssue"
     [p-striped]="true">
   </po-table>
 </po-widget>

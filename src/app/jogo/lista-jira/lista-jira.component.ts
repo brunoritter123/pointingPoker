@@ -18,17 +18,28 @@ export class ListaJiraComponent {
   public isValidFiltro: boolean = true;
   public conNovaPontuacao: Subscription;
 
-  private columnsIssue: Array<PoTableColumn> = [
+  private readonly columnsIssue: Array<PoTableColumn> = [
     //{ property: 'id', label: 'ID' },
-    { property: 'descricao', label: 'Descrição' },
-    { property: 'ponto', label: 'Pontos' }
+    { property: 'descricao', label: 'Descrição', color: this.corLinha },
+    { property: 'ponto', label: 'Pontos', color: this.corLinha },
+    { property: 'acao', label: 'Ações', type: 'icon', icons: [
+      {
+        action: this.removeIssue.bind(this),
+        color: 'color-07',
+        icon: 'po-icon-delete',
+        tooltip: 'Remover',
+        value: 'remover'
+      },
+      {
+        action: this.tableVotar.bind(this),
+        icon: 'po-icon-export',
+        tooltip: 'Votar',
+        value: 'votar'
+      }
+    ]}
   ]
 
   private listaIssue: Array<Issue> = []
-
-  public actions: Array<PoTableAction> = [
-    { action: this.tableVotar.bind(this), icon: 'po-icon-export', label: 'Votar' }
-  ];
 
   constructor(
     public jogoService: JogoService
@@ -52,6 +63,7 @@ export class ListaJiraComponent {
 
   private tableVotar(issue: Issue): void {
     this.votarIssue.emit(issue)
+    issue.votada = true
   }
 
   public buscarFiltro(): void {
@@ -75,5 +87,26 @@ export class ListaJiraComponent {
       .then(() => {
         this.isLoadFiltro = false
       })
+  }
+
+  /**
+   * Remove um item da tabela
+   * @param issue Objeto Issue do array da tabela
+   */
+  private removeIssue(issue: Issue): void {
+    const rmIndex = this.listaIssue.findIndex( element => issue.id == element.id)
+    this.listaIssue.splice(rmIndex, 1)
+  }
+
+  /**
+   * Muda a cor da linha
+   * @param issue
+   */
+  private corLinha(issue: Issue): string {
+    let cor = ''
+    if (issue.votada) {
+      cor = 'color-11'
+    }
+    return cor
   }
 }
