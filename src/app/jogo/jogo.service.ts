@@ -221,7 +221,10 @@ export class JogoService {
   }
 
   public listaIssueJira(filtro: string): Promise<Array<Issue>> {
-    // TODO: Colocar o ORDER BY Rank no filtro quando não tiver order by
+    if (!filtro.match(/ORDER BY/i)) {
+      filtro += ' ORDER BY Rank'
+    }
+
     return this.http.get('/api/jira/search?jql=' + filtro, this.authService.httpOptions)
       .toPromise()
       .then((resp: any) => {

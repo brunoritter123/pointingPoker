@@ -17,26 +17,29 @@ export class ListaJiraComponent {
   public isLoadFiltro: boolean = false;
   public isValidFiltro: boolean = true;
   public conNovaPontuacao: Subscription;
+  public heightTable: number = 0;
 
   private readonly columnsIssue: Array<PoTableColumn> = [
     //{ property: 'id', label: 'ID' },
     { property: 'descricao', label: 'Descrição', color: this.corLinha },
     { property: 'ponto', label: 'Pontos', color: this.corLinha },
-    { property: 'acao', label: 'Ações', type: 'icon', icons: [
-      {
-        action: this.removeIssue.bind(this),
-        color: 'color-07',
-        icon: 'po-icon-delete',
-        tooltip: 'Remover',
-        value: 'remover'
-      },
-      {
-        action: this.tableVotar.bind(this),
-        icon: 'po-icon-export',
-        tooltip: 'Votar',
-        value: 'votar'
-      }
-    ]}
+    {
+      property: 'acao', label: 'Ações', type: 'icon', icons: [
+        {
+          action: this.removeIssue.bind(this),
+          color: 'color-07',
+          icon: 'po-icon-delete',
+          tooltip: 'Remover',
+          value: 'remover'
+        },
+        {
+          action: this.tableVotar.bind(this),
+          icon: 'po-icon-export',
+          tooltip: 'Votar',
+          value: 'votar'
+        }
+      ]
+    }
   ]
 
   private listaIssue: Array<Issue> = []
@@ -80,6 +83,11 @@ export class ListaJiraComponent {
       .then((issues: Array<Issue>) => {
         this.listaIssue = issues
         this.isValidFiltro = true
+        if (this.listaIssue.length > 15) {
+          this.heightTable = 350
+        } else {
+          this.heightTable = 0
+        }
       })
       .catch(err => {
         this.isValidFiltro = false
@@ -94,7 +102,7 @@ export class ListaJiraComponent {
    * @param issue Objeto Issue do array da tabela
    */
   private removeIssue(issue: Issue): void {
-    const rmIndex = this.listaIssue.findIndex( element => issue.id == element.id)
+    const rmIndex = this.listaIssue.findIndex(element => issue.id == element.id)
     this.listaIssue.splice(rmIndex, 1)
   }
 

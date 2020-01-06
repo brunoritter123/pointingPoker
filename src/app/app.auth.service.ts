@@ -58,7 +58,7 @@ export class AuthService {
 
   private parseBaseUrl() {
     if (!this.baseUrlJira.match(/^http/i)) {
-      this.baseUrlJira = 'http://' + this.baseUrlJira
+      this.baseUrlJira = 'https://' + this.baseUrlJira
     }
     this.baseUrlJira = this.baseUrlJira.replace(new RegExp("/$", ""), "")
     this.baseUrlJira = this.baseUrlJira.replace(/www./i, "")

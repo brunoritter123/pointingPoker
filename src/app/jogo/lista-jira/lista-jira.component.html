@@ -4,11 +4,11 @@
       [isLoad]=isLoadFiltro pPlaceholder="Pesquisar" [isValid]=isValidFiltro (execEnter)=buscarFiltro()>
     </app-input-load>
     <po-button (p-click)="buscarFiltro()" class="po-sm-4 p-md-2 p-lg-1 p-xl-1 po-pl-0 po-pt-1" p-label="Buscar"
-      p-type="primary">
+      p-type="primary" [p-disabled]=isLoadFiltro>
     </po-button>
   </div>
 
-  <po-table class="po-sm-12 po-md-12 po-pb-1" [p-items]="listaIssue" [p-columns]="columnsIssue"
+  <po-table class="po-sm-12 po-md-12 po-pb-1" [p-height]=heightTable [p-items]="listaIssue" [p-columns]="columnsIssue"
     [p-striped]="true">
   </po-table>
 </po-widget>
