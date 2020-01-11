@@ -231,6 +231,9 @@ export class JogoService {
           listaSprint.push(new Sprint(sprint.id, sprint.name))
         });
 
+        if (listaSprint.length == 0) {
+          this.poNotification.warning('Nenhuma Sprint encontrada para o Board selecionado.')
+        }
         return listaSprint
       })
       .catch(err => {
@@ -240,7 +243,7 @@ export class JogoService {
           this.poNotification.warning("Acesso não autorizado.")
           this.authService.openLoginJira()
         } else if (err.status == 404) {
-          this.poNotification.warning('Nenhuma Sprint encontrado para o Board selecionado.')
+          this.poNotification.warning('Nenhuma Sprint encontrada para o Board selecionado.')
         } else {
           this.poNotification.error("Sem resposta do servidor.")
         }
@@ -250,7 +253,7 @@ export class JogoService {
   }
 
   public getBoardJira(projeto: string): Promise<Array<Board>> {
-    return this.http.get('/api/jira/rest/agile/1.0/board?type=scrum&projectKeyOrId=' + projeto, this.authService.httpOptions)
+    return this.http.get('/api/jira/rest/agile/1.0/board?type=scrum&projectKeyOrId=' + projeto.toUpperCase(), this.authService.httpOptions)
       .toPromise()
       .then(rest => {
         let boards: Array<Board> = []
@@ -258,6 +261,9 @@ export class JogoService {
           boards.push(new Board(board.id, board.name))
         });
 
+        if (boards.length == 0) {
+          this.poNotification.warning('Nenhum Board encontrado para o projeto selecionado.')
+        }
         return boards
       })
       .catch(err => {
@@ -267,7 +273,7 @@ export class JogoService {
           this.poNotification.warning("Acesso não autorizado.")
           this.authService.openLoginJira()
         } else {
-          this.poNotification.error("Nenhum Board encontrado para o projeto selecionado.")
+          this.poNotification.warning("Nenhum Board encontrado para o projeto selecionado.")
         }
 
         throw err;
@@ -288,6 +294,10 @@ export class JogoService {
             listaIssue.push(issue)
           }
         });
+
+        if (listaIssue.length == 0) {
+          this.poNotification.warning('Nenhuma Issue encontra para o filtro.')
+        }
 
         return listaIssue
       })

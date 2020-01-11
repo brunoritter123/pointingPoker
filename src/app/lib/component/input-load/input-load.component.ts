@@ -11,6 +11,7 @@ export class InputLoadComponent implements OnInit {
   @Input() pMaxlength: Number = 9999;
   @Input() isLoad: Boolean = false;
   @Input() pPlaceholder: string = '';
+  @Input() pTxtInit: string = '';
   @Input() isValid: Boolean = true;
   @Output() execKeyUp: EventEmitter<any> = new EventEmitter();
   @Output() execEnter: EventEmitter<any> = new EventEmitter();
@@ -22,6 +23,8 @@ export class InputLoadComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.texto = this.pTxtInit
+
     this.subjectEvent
       .pipe(
         debounceTime(1500) // executa a ação do switchMap após 1,5 segundo

@@ -1,18 +1,20 @@
-import { Component, Input, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, Input, ViewChild, Output, EventEmitter, ViewEncapsulation, OnInit } from '@angular/core';
 import { PoTableColumn, PoTableAction } from '@portinari/portinari-ui';
 import { InputLoadComponent } from '../../lib/component/input-load/input-load.component';
-import { Subscriber, Subscription } from 'rxjs';
+import { Subscriber, Subscription, Subject } from 'rxjs';
 import { JogoService } from '../jogo.service';
 import { Issue } from '../../models/issue.model';
 import { Board } from '../../models/board.model';
 import { Sprint } from '../../models/sprint.model';
+import { debounceTime } from 'rxjs/operators';
+import { AuthService } from '../../app.auth.service';
 
 @Component({
   selector: 'app-lista-jira',
   templateUrl: './lista-jira.component.html',
   styleUrls: ['./lista-jira.component.css']
 })
-export class ListaJiraComponent {
+export class ListaJiraComponent implements OnInit {
   @ViewChild('projeto', { static: false }) private projeto: InputLoadComponent;
   @Output() private votarIssue: EventEmitter<Issue> = new EventEmitter();
 
@@ -26,6 +28,7 @@ export class ListaJiraComponent {
   public board: Board;
   public opcoesBoard: Array<any> = [];
   public hasBoard: boolean = false;
+  public isLoadIssues: boolean = false;
 
   private readonly columnsIssue: Array<PoTableColumn> = [
     //{ property: 'id', label: 'ID' },
@@ -51,10 +54,33 @@ export class ListaJiraComponent {
   ]
 
   private listaIssue: Array<Issue> = []
+  private buscarIssueEvent: Subject<any> = new Subject<any>()
+  private buscarSprintEvent: Subject<any> = new Subject<any>()
 
   constructor(
-    public jogoService: JogoService
+    public jogoService: JogoService,
+    public authService: AuthService
   ) { }
+
+  ngOnInit(): void {
+    if (!!this.authService.projetoJira) {
+      this.buscarBoard(this.authService.projetoJira)
+    }
+
+    this.buscarIssueEvent
+      .pipe(
+        debounceTime(1000) // executa a ação do switchMap após 1,5 segundo
+      ).subscribe(() => {
+        this.buscarIssue()
+      });
+
+    this.buscarSprintEvent
+      .pipe(
+        debounceTime(1000) // executa a ação do switchMap após 1,5 segundo
+      ).subscribe(() => {
+        this.buscarSprint()
+      });
+  }
 
   /**
    * Seta um novo voto em um Issue para não precisar dar um get no JIRA
@@ -80,8 +106,7 @@ export class ListaJiraComponent {
   /**
    * Busca os boards do jira conforme o projeto informado
    */
-  public buscarBoard(): void {
-    let projeto: string = this.projeto.texto
+  public buscarBoard(projeto: string = this.projeto.texto): void {
 
     if (!projeto) {
       this.isValidProjeto = true;
@@ -93,8 +118,13 @@ export class ListaJiraComponent {
     this.jogoService.getBoardJira(projeto)
       .then((boards: Array<Board>) => {
         this.opcoesBoard = boards
+        this.board = undefined
         this.hasBoard = this.opcoesBoard.length > 0
-        this.isValidProjeto = true
+        this.isValidProjeto = this.hasBoard
+        if (this.isValidProjeto) {
+          this.authService.setProjetoCookie(projeto)
+        }
+
         if (this.opcoesBoard.length == 1) {
           this.board = this.opcoesBoard[0].value
           this.buscarSprint()
@@ -119,6 +149,7 @@ export class ListaJiraComponent {
       .then((listSprint: Array<Sprint>) => {
         this.opcoesSprint = listSprint
         this.hasSprint = this.opcoesSprint.length > 0
+        this.sprint = undefined
         if (this.opcoesSprint.length == 1) {
           this.sprint = this.opcoesSprint[0].value
           this.buscarIssue()
@@ -133,6 +164,8 @@ export class ListaJiraComponent {
       return
     }
 
+    this.isLoadIssues = true;
+
     this.jogoService.listaIssueJira(sprint)
       .then((issues: Array<Issue>) => {
         this.listaIssue = issues
@@ -141,6 +174,11 @@ export class ListaJiraComponent {
         } else {
           this.heightTable = 0
         }
+
+        this.isLoadIssues = false;
+      })
+      .catch(() => {
+        this.isLoadIssues = false;
       })
   }
 
