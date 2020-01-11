@@ -69,6 +69,7 @@ export class JogoComponent implements OnInit, OnDestroy {
 	private conRecnnect: any;
 	private conRecnnectSub: Subscription;
 	private conIsConfig: Subscription;
+	private mostrouJogVotaram: boolean = false;
 
 	/**
 	 * ngOnInit
@@ -152,7 +153,7 @@ export class JogoComponent implements OnInit, OnDestroy {
 			this.jogadores = users.filter(us => us.isJogador);
 			this.observadores = users.filter(us => !us.isJogador);
 
-			this.todosVotaram(users);
+			this.todosVotaram(this.jogadores, this.observadores);
 			this.GeraEstatistica()
 		});
 
@@ -267,7 +268,9 @@ export class JogoComponent implements OnInit, OnDestroy {
 			this.configSala.forceFimJogo = 0;
 			this.jogoService.sendReset();
 			if (!revotar) {
-				this.idIssue.texto = ''
+				if (!!this.idIssue) {
+					this.idIssue.texto = ''
+				}
 				this.isIssueValida = true
 				this.configSala.nmHistoria = '';
 			}
@@ -286,7 +289,7 @@ export class JogoComponent implements OnInit, OnDestroy {
 				this.jogoService.setCarta(this.cartaMaisVotada)
 			}
 
-			if (this.isIssueValida) {
+			if (!!this.idIssue && !!this.idIssue.texto && this.isIssueValida) {
 				this.jogoService.sendStoryPoints(this.idIssue.texto, this.cartaMaisVotada.label)
 					.then(result => {
 						if (result.ok) {
@@ -323,14 +326,23 @@ export class JogoComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	private todosVotaram(users: Array<User>): void {
-		const index = users.findIndex(us => us.voto.id === undefined);
+	private todosVotaram(jogadores: Array<User>, admins: Array<User>): void {
+		const index = jogadores.findIndex(us => us.voto.id === undefined);
 
 		if (index < 0) {
-			this.fimDeJogo(true);
-			this.GeraEstatistica()
+			if (admins.length == 0) {
+				this.fimDeJogo(true);
+				this.GeraEstatistica()
+			}
+
+			if (!this.isJogador && !this.mostrouJogVotaram) {
+				this.poNotification.success('Todos Jogadores votaram.')
+				this.mostrouJogVotaram = true
+			}
+
 		} else {
 			this.fimDeJogo(false);
+			this.mostrouJogVotaram = false
 		}
 	}
 
@@ -433,7 +445,9 @@ export class JogoComponent implements OnInit, OnDestroy {
 	 * Função ao executar o botão votar
 	 */
 	public votarIssue(issue: Issue): void {
-		this.idIssue.texto = issue.id
+		if (!!this.idIssue) {
+			this.idIssue.texto = issue.id
+		}
 		this.setNmHistoria(issue.descricao)
 	}
 
