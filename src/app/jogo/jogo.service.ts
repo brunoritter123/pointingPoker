@@ -187,7 +187,7 @@ export class JogoService {
   public sendStoryPoints(idIssue: string, point: string): Promise<any> {
     let naoExecutado = { ok: false }
 
-    if (!this.authService.fieldStoryPoints) return Promise.resolve(naoExecutado)
+    if (!idIssue || !this.authService.fieldStoryPoints) return Promise.resolve(naoExecutado)
 
     const pointInt = parseInt(point)
     if (!pointInt && pointInt != 0) return Promise.resolve(naoExecutado)
