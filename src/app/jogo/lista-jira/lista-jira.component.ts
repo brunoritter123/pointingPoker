@@ -29,6 +29,7 @@ export class ListaJiraComponent implements OnInit {
   public opcoesBoard: Array<any> = [];
   public hasBoard: boolean = false;
   public isLoadIssues: boolean = false;
+  public hasIssue: boolean = false;
 
   private readonly columnsIssue: Array<PoTableColumn> = [
     //{ property: 'id', label: 'ID' },
@@ -42,6 +43,12 @@ export class ListaJiraComponent implements OnInit {
           icon: 'po-icon-delete',
           tooltip: 'Remover',
           value: 'remover'
+        },
+        {
+          action: this.abrirIssueUnica.bind(this),
+          icon: 'po-icon-edit',
+          tooltip: 'Abrir Issue',
+          value: 'abrir'
         },
         {
           action: this.tableVotar.bind(this),
@@ -169,6 +176,7 @@ export class ListaJiraComponent implements OnInit {
     this.jogoService.listaIssueJira(sprint)
       .then((issues: Array<Issue>) => {
         this.listaIssue = issues
+        this.hasIssue = this.listaIssue.length > 0
         if (this.listaIssue.length > 15) {
           this.heightTable = 350
         } else {
@@ -202,5 +210,21 @@ export class ListaJiraComponent implements OnInit {
       cor = 'color-11'
     }
     return cor
+  }
+
+  /**
+   * Abri uma issue no browse
+   */
+  public abrirIssueUnica(issue: Issue) {
+    window.open(this.authService.baseUrlJira + '/browse/' + issue.id, '_blank')
+  }
+
+  /**
+   * Abri todas a issues da tabela no browse
+   */
+  public abrirIssue(issues: Array<Issue> = this.listaIssue) {
+    issues.forEach(issue => {
+      window.open(this.authService.baseUrlJira + '/browse/' + issue.id, '_blank');
+    });
   }
 }

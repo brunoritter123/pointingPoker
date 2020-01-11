@@ -4,7 +4,7 @@ export class Issue {
         public id: string = '',
         public descricao: string = '',
         public ponto: number | undefined,
-        public acao: Array<string> = ['remover', 'votar'],
+        public acao: Array<string> = ['remover', 'abrir', 'votar'],
         public votada: boolean = false
     ) { }
 

@@ -13,4 +13,8 @@
   <po-table class="po-sm-12 po-md-12 po-pb-1" [p-height]=heightTable [p-items]="listaIssue" [p-columns]="columnsIssue"
     [p-striped]="true" [p-loading]=isLoadIssues>
   </po-table>
+
+  <po-button class="po-offset-md-4 po-md-4 po-offset-lg-4 po-lg-4 po-offset-xl-4 po-xl-4" (p-click)="abrirIssue()"
+    p-label="Abrir Issues" p-type="primary" [p-disabled]="!hasIssue">
+  </po-button>
 </po-widget>
