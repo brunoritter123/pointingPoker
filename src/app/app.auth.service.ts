@@ -78,12 +78,12 @@ export class AuthService {
 
     this.httpOptions = {
       headers: new HttpHeaders({
-        'Base-Url': this.baseUrlJira + '/rest/api/2',
+        'Base-Url': this.baseUrlJira,
         'Authorization': `Basic ${btoa(this.userJira + ':' + this.passJira)}`
       })
     };
 
-    return this.http.get('/api/jira/user?username=' + this.userJira, this.httpOptions)
+    return this.http.get('/api/jira/rest/api/2/user?username=' + this.userJira, this.httpOptions)
       .toPromise()
       .then((resp: any) => {
 
@@ -119,7 +119,7 @@ export class AuthService {
   }
 
   private getFieldStoryPoints() {
-    return this.http.get('/api/jira/field', this.httpOptions)
+    return this.http.get('/api/jira/rest/api/2/field', this.httpOptions)
       .toPromise()
       .then((resp: any) => {
         const fieldStoryPoints = resp.find(field => field.name == 'Story Points')

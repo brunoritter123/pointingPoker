@@ -4,6 +4,8 @@ import { InputLoadComponent } from '../../lib/component/input-load/input-load.co
 import { Subscriber, Subscription } from 'rxjs';
 import { JogoService } from '../jogo.service';
 import { Issue } from '../../models/issue.model';
+import { Board } from '../../models/board.model';
+import { Sprint } from '../../models/sprint.model';
 
 @Component({
   selector: 'app-lista-jira',
@@ -11,13 +13,19 @@ import { Issue } from '../../models/issue.model';
   styleUrls: ['./lista-jira.component.css']
 })
 export class ListaJiraComponent {
-  @ViewChild('filtro', { static: false }) private filtro: InputLoadComponent;
+  @ViewChild('projeto', { static: false }) private projeto: InputLoadComponent;
   @Output() private votarIssue: EventEmitter<Issue> = new EventEmitter();
 
-  public isLoadFiltro: boolean = false;
-  public isValidFiltro: boolean = true;
+  public isLoadProjeto: boolean = false;
+  public isValidProjeto: boolean = true;
   public conNovaPontuacao: Subscription;
   public heightTable: number = 0;
+  public sprint: Sprint;
+  public opcoesSprint: Array<any> = [];
+  public hasSprint: boolean = false;
+  public board: Board;
+  public opcoesBoard: Array<any> = [];
+  public hasBoard: boolean = false;
 
   private readonly columnsIssue: Array<PoTableColumn> = [
     //{ property: 'id', label: 'ID' },
@@ -69,33 +77,73 @@ export class ListaJiraComponent {
     issue.votada = true
   }
 
-  public buscarFiltro(): void {
-    let filtro: string = this.filtro.texto
+  /**
+   * Busca os boards do jira conforme o projeto informado
+   */
+  public buscarBoard(): void {
+    let projeto: string = this.projeto.texto
 
-    if (!filtro) {
-      this.isValidFiltro = true;
+    if (!projeto) {
+      this.isValidProjeto = true;
       return
     }
 
-    this.isLoadFiltro = true;
+    this.isLoadProjeto = true;
 
-    this.jogoService.listaIssueJira(filtro)
+    this.jogoService.getBoardJira(projeto)
+      .then((boards: Array<Board>) => {
+        this.opcoesBoard = boards
+        this.hasBoard = this.opcoesBoard.length > 0
+        this.isValidProjeto = true
+        if (this.opcoesBoard.length == 1) {
+          this.board = this.opcoesBoard[0].value
+          this.buscarSprint()
+        }
+      })
+      .catch(err => {
+        this.isValidProjeto = false
+      })
+      .then(() => {
+        this.isLoadProjeto = false
+      })
+  }
+
+  public buscarSprint(): void {
+    let board: string = this.board.toString()
+
+    if (!board) {
+      return
+    }
+
+    this.jogoService.getSprintJira(board)
+      .then((listSprint: Array<Sprint>) => {
+        this.opcoesSprint = listSprint
+        this.hasSprint = this.opcoesSprint.length > 0
+        if (this.opcoesSprint.length == 1) {
+          this.sprint = this.opcoesSprint[0].value
+          this.buscarIssue()
+        }
+      })
+  }
+
+  public buscarIssue(): void {
+    let sprint: string = this.sprint.toString()
+
+    if (!sprint) {
+      return
+    }
+
+    this.jogoService.listaIssueJira(sprint)
       .then((issues: Array<Issue>) => {
         this.listaIssue = issues
-        this.isValidFiltro = true
         if (this.listaIssue.length > 15) {
           this.heightTable = 350
         } else {
           this.heightTable = 0
         }
       })
-      .catch(err => {
-        this.isValidFiltro = false
-      })
-      .then(() => {
-        this.isLoadFiltro = false
-      })
   }
+
 
   /**
    * Remove um item da tabela

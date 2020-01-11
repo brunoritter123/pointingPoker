@@ -1,11 +1,14 @@
 <po-widget p-title="Issues para Votar">
-  <div class="row">
-    <app-input-load name="filtro" #filtro class="po-sm-8 p-md-10 p-lg-11 p-xl-11 po-pr-0" pMaxlength="100"
-      [isLoad]=isLoadFiltro pPlaceholder="Pesquisar" [isValid]=isValidFiltro (execEnter)=buscarFiltro()>
+  <div class="sample-container">
+    <app-input-load name="projeto" #projeto class="po-sm-12 po-md-4 po-lg-4 po-xl-4" pMaxlength="20"
+      [isLoad]=isLoadProjeto pPlaceholder="Pesquisar" [isValid]=isValidProjeto (execKeyUp)=buscarBoard()>
     </app-input-load>
-    <po-button (p-click)="buscarFiltro()" class="po-sm-4 p-md-2 p-lg-1 p-xl-1 po-pl-0 po-pt-1" p-label="Buscar"
-      p-type="primary" [p-disabled]=isLoadFiltro>
-    </po-button>
+    <po-select name="board" class="po-sm-12 po-md-8 po-lg-8 po-xl-8" [(ngModel)]="board" p-placeholder="Selecione Board"
+      [p-options]="opcoesBoard" [p-disabled]=!hasBoard (p-change)="buscarSprint()">
+    </po-select>
+    <po-select name="sprint" class="po-sm-12 p-md-12 p-lg-12 p-xl-12" [(ngModel)]="sprint"
+      p-placeholder="Selecione Sprint" [p-options]="opcoesSprint" [p-disabled]=!hasSprint (p-change)="buscarIssue()">
+    </po-select>
   </div>
 
   <po-table class="po-sm-12 po-md-12 po-pb-1" [p-height]=heightTable [p-items]="listaIssue" [p-columns]="columnsIssue"

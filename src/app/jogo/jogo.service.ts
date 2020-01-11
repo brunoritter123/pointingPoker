@@ -7,9 +7,9 @@ import { Carta } from '../models/carta.model';
 import { AuthService } from '../app.auth.service';
 import { HttpClient } from '@angular/common/http';
 import { PoNotificationService } from '@portinari/portinari-ui';
-import { CompileShallowModuleMetadata } from '@angular/compiler';
-import { promise } from 'protractor';
 import { Issue } from '../models/issue.model';
+import { Board } from '../models/board.model';
+import { Sprint } from '../models/sprint.model';
 
 @Injectable()
 export class JogoService {
@@ -163,7 +163,7 @@ export class JogoService {
   };
 
   public getIssueJira(idIssue: string): Promise<any> {
-    return this.http.get('/api/jira/issue/' + idIssue, this.authService.httpOptions)
+    return this.http.get('/api/jira/rest/api/2/issue/' + idIssue, this.authService.httpOptions)
       .toPromise()
       .then((resp: any) => {
         return resp.fields.summary
@@ -198,7 +198,7 @@ export class JogoService {
       }
     }`
 
-    return this.http.put('/api/jira/issue/' + idIssue, JSON.parse(body), this.authService.httpOptions)
+    return this.http.put('/api/jira/rest/api/2/issue/' + idIssue, JSON.parse(body), this.authService.httpOptions)
       .toPromise()
       .then((resp: any) => {
         this.poNotification.success(`Issue: '${idIssue}' teve sua pontuação alterada para: ${point}`)
@@ -220,19 +220,73 @@ export class JogoService {
       })
   }
 
-  public listaIssueJira(filtro: string): Promise<Array<Issue>> {
-    if (!filtro.match(/ORDER BY/i)) {
-      filtro += ' ORDER BY Rank'
-    }
+  public getSprintJira(board: string): Promise<Array<Sprint>> {
 
-    return this.http.get('/api/jira/search?jql=' + filtro, this.authService.httpOptions)
+    return this.http.get(`/api/jira/rest/agile/1.0/board/${board}/sprint?state=future`, this.authService.httpOptions)
+      .toPromise()
+      .then((resp: any) => {
+        let listaSprint: Array<Sprint> = []
+
+        resp.values.forEach(sprint => {
+          listaSprint.push(new Sprint(sprint.id, sprint.name))
+        });
+
+        return listaSprint
+      })
+      .catch(err => {
+        console.error(err)
+
+        if (err.status == 401) {
+          this.poNotification.warning("Acesso não autorizado.")
+          this.authService.openLoginJira()
+        } else if (err.status == 404) {
+          this.poNotification.warning('Nenhuma Sprint encontrado para o Board selecionado.')
+        } else {
+          this.poNotification.error("Sem resposta do servidor.")
+        }
+
+        throw err;
+      })
+  }
+
+  public getBoardJira(projeto: string): Promise<Array<Board>> {
+    return this.http.get('/api/jira/rest/agile/1.0/board?type=scrum&projectKeyOrId=' + projeto, this.authService.httpOptions)
+      .toPromise()
+      .then(rest => {
+        let boards: Array<Board> = []
+        rest['values'].forEach(board => {
+          boards.push(new Board(board.id, board.name))
+        });
+
+        return boards
+      })
+      .catch(err => {
+        console.error(err)
+
+        if (err.status == 401) {
+          this.poNotification.warning("Acesso não autorizado.")
+          this.authService.openLoginJira()
+        } else {
+          this.poNotification.error("Nenhum Board encontrado para o projeto selecionado.")
+        }
+
+        throw err;
+      })
+  }
+
+  public listaIssueJira(sprint: string): Promise<Array<Issue>> {
+    let filtro = `Sprint=${sprint} ORDER BY Rank`
+
+    return this.http.get('/api/jira/rest/api/2/search?jql=' + filtro, this.authService.httpOptions)
       .toPromise()
       .then((resp: any) => {
         let listaIssue = []
 
         resp.issues.forEach(issue => {
-          issue = new Issue(issue.key, issue.fields.summary, issue.fields[this.authService.fieldStoryPoints])
-          listaIssue.push(issue)
+          if (!issue.fields.issuetype.subtask) {
+            issue = new Issue(issue.key, issue.fields.summary, issue.fields[this.authService.fieldStoryPoints])
+            listaIssue.push(issue)
+          }
         });
 
         return listaIssue
