@@ -94,7 +94,7 @@ export class AppComponent implements OnInit, OnDestroy {
     return true;
   }
 
-  private conJira(): void {
+  public conJira(): void {
     this.authService.conectarJira()
   }
 

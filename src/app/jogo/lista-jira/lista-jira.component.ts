@@ -31,7 +31,7 @@ export class ListaJiraComponent implements OnInit {
   public isLoadIssues: boolean = false;
   public hasIssue: boolean = false;
 
-  private readonly columnsIssue: Array<PoTableColumn> = [
+  public readonly columnsIssue: Array<PoTableColumn> = [
     //{ property: 'id', label: 'ID' },
     { property: 'descricao', label: 'Descrição', color: this.corLinha },
     { property: 'ponto', label: 'Pontos', color: this.corLinha },
@@ -60,9 +60,9 @@ export class ListaJiraComponent implements OnInit {
     }
   ]
 
-  private listaIssue: Array<Issue> = []
-  private buscarIssueEvent: Subject<any> = new Subject<any>()
-  private buscarSprintEvent: Subject<any> = new Subject<any>()
+  public listaIssue: Array<Issue> = []
+  public buscarIssueEvent: Subject<any> = new Subject<any>()
+  public buscarSprintEvent: Subject<any> = new Subject<any>()
 
   constructor(
     public jogoService: JogoService,
