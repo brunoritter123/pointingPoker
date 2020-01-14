@@ -40,14 +40,14 @@ export class ListaJiraComponent implements OnInit {
         {
           action: this.removeIssue.bind(this),
           color: 'color-07',
-          icon: 'po-icon-delete',
-          tooltip: 'Remover',
+          icon: 'po-icon-minus',
+          tooltip: 'Retirar',
           value: 'remover'
         },
         {
           action: this.abrirIssueUnica.bind(this),
           icon: 'po-icon-edit',
-          tooltip: 'Abrir Issue',
+          tooltip: 'Abrir',
           value: 'abrir'
         },
         {

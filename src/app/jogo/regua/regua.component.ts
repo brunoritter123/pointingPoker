@@ -8,7 +8,12 @@ import { PoTableColumn } from '@portinari/portinari-ui';
   styleUrls: ['./regua.component.css']
 })
 export class ReguaComponent {
-  @Input() configSala: Sala;
+  public regua: Array<any> = []
+
+  @Input()
+  set configSala(configSala: Sala){
+    this.regua = configSala.cartas.filter((carta) => !!carta.nmUltHist)
+  }
 
   columnsRegua: Array<PoTableColumn> = [
     { property: 'label', label: 'Ponto' },
