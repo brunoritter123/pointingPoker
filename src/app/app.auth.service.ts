@@ -16,6 +16,7 @@ export class AuthService {
   public userJira: string = '';
   public passJira: string = '';
   public projetoJira: string = '';
+  public boardJira: string = '';
   public jiraLoginOk: boolean = false;
   public httpOptions: any;
   public emitirAuth = new EventEmitter<PoToolbarProfile>();
@@ -46,6 +47,7 @@ export class AuthService {
     this.baseUrlJira = this.cookieService.get('baseUrlJira')
     this.userJira = this.cookieService.get('userJira')
     this.projetoJira = this.cookieService.get('projetoJira')
+    this.boardJira = this.cookieService.get('boardJira')
 
     if (!!this.idSala) {
       if (this.cookieService.check(this.idSala.toUpperCase())) {
@@ -202,7 +204,7 @@ export class AuthService {
     this.emitirAuth.emit(newProfile)
   }
 
-  public setProjetoCookie(projetoJira: string) {
-    this.cookieService.set('projetoJira', projetoJira, new Date(2100, 1, 1))
+  public setCookie(nameCokie: string, valorCookie: string) {
+    this.cookieService.set(nameCokie, valorCookie, new Date(2100, 1, 1))
   }
 }

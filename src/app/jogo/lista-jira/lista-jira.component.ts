@@ -25,7 +25,7 @@ export class ListaJiraComponent implements OnInit {
   public sprint: Sprint;
   public opcoesSprint: Array<any> = [];
   public hasSprint: boolean = false;
-  public board: Board;
+  public board: string;
   public opcoesBoard: Array<any> = [];
   public hasBoard: boolean = false;
   public isLoadIssues: boolean = false;
@@ -40,7 +40,7 @@ export class ListaJiraComponent implements OnInit {
         {
           action: this.removeIssue.bind(this),
           color: 'color-07',
-          icon: 'po-icon-minus',
+          icon: 'po-icon-close',
           tooltip: 'Retirar',
           value: 'remover'
         },
@@ -71,7 +71,7 @@ export class ListaJiraComponent implements OnInit {
 
   ngOnInit(): void {
     if (!!this.authService.projetoJira) {
-      this.buscarBoard(this.authService.projetoJira)
+      this.buscarBoard(this.authService.projetoJira, this.authService.boardJira)
     }
 
     this.buscarIssueEvent
@@ -112,8 +112,10 @@ export class ListaJiraComponent implements OnInit {
 
   /**
    * Busca os boards do jira conforme o projeto informado
+   * @param projeto Projeto para buscar os boards
+   * @param codBoard Código do Board do projeto para buscar as sprints
    */
-  public buscarBoard(projeto: string = this.projeto.texto): void {
+  public buscarBoard(projeto: string = this.projeto.texto, codBoard: string = ''): void {
 
     if (!projeto) {
       this.isValidProjeto = true;
@@ -129,10 +131,14 @@ export class ListaJiraComponent implements OnInit {
         this.hasBoard = this.opcoesBoard.length > 0
         this.isValidProjeto = this.hasBoard
         if (this.isValidProjeto) {
-          this.authService.setProjetoCookie(projeto)
+          this.authService.setCookie('projetoJira', projeto)
         }
 
-        if (this.opcoesBoard.length == 1) {
+        if (!!codBoard && this.opcoesBoard.filter(b => b.value == codBoard).length == 1) {
+          this.board = codBoard
+          this.buscarSprint()
+
+        } else if (this.opcoesBoard.length == 1) {
           this.board = this.opcoesBoard[0].value
           this.buscarSprint()
         }
@@ -145,9 +151,7 @@ export class ListaJiraComponent implements OnInit {
       })
   }
 
-  public buscarSprint(): void {
-    let board: string = this.board.toString()
-
+  public buscarSprint(board: string = this.board): void {
     if (!board) {
       return
     }
@@ -157,6 +161,11 @@ export class ListaJiraComponent implements OnInit {
         this.opcoesSprint = listSprint
         this.hasSprint = this.opcoesSprint.length > 0
         this.sprint = undefined
+  
+        if (this.hasSprint) {
+          this.authService.setCookie('boardJira', board)
+        }
+
         if (this.opcoesSprint.length == 1) {
           this.sprint = this.opcoesSprint[0].value
           this.buscarIssue()
@@ -177,7 +186,7 @@ export class ListaJiraComponent implements OnInit {
       .then((issues: Array<Issue>) => {
         this.listaIssue = issues
         this.hasIssue = this.listaIssue.length > 0
-        if (this.listaIssue.length > 15) {
+        if (this.listaIssue.length > 7) {
           this.heightTable = 350
         } else {
           this.heightTable = 0

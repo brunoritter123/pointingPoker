@@ -1,6 +1,6 @@
 <po-widget p-title="Issues para Votar">
   <app-input-load name="projeto" #projeto class="po-sm-12 po-md-12 po-lg-4 po-xl-4" pMaxlength="20"
-    [isLoad]=isLoadProjeto pPlaceholder="Pesquisar" [isValid]=isValidProjeto (execKeyUp)=buscarBoard()
+    [isLoad]=isLoadProjeto pPlaceholder="Projeto" [isValid]=isValidProjeto (execKeyUp)=buscarBoard()
     [pTxtInit]=authService.projetoJira>
   </app-input-load>
   <po-select name="board" class="po-sm-12 po-md-12 po-lg-8 po-xl-8" [(ngModel)]="board" p-placeholder="Selecione Board"
