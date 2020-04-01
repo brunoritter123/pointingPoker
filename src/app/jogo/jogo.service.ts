@@ -20,7 +20,7 @@ export class JogoService {
   private readonly url = environment.API;
 
   private socket = io(this.url, {
-    transports: ['websocket'],
+    transports: ['polling'],
     upgrade: false,
     reconnection: true,
     reconnectionDelay: 1000,
