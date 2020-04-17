@@ -32,7 +32,7 @@ export class ListaJiraComponent implements OnInit {
   public hasIssue: boolean = false;
 
   public readonly columnsIssue: Array<PoTableColumn> = [
-    //{ property: 'id', label: 'ID' },
+    { property: 'id', label: 'Issue', color: this.corLinha },
     { property: 'descricao', label: 'Descrição', color: this.corLinha },
     { property: 'ponto', label: 'Pontos', color: this.corLinha },
     {

@@ -79,8 +79,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
 
   public menus: Array<PoMenuItem> = [
-    { label: 'Início', link: '/', icon: 'home' },
-    { label: 'Sobre', action: this.openModal, icon: 'user' }
+    { label: 'Início', link: '/', icon: 'po-icon-home', shortLabel: 'Início' },
+    { label: 'Sobre', action: this.openModal, icon: 'po-icon-user', shortLabel: 'Sobre' }
   ];
 
 

@@ -1,7 +1,7 @@
 const proxy = [
   {
     context: ['/api', '/rest'],
-    target: 'http://www.scrumpoker.com.br:80/',
+    target: 'http://10.171.67.66:3000/',
     secure: false,
     loglevel: 'debug'
   }
